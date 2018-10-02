@@ -1,0 +1,30 @@
+obj_xfcq#:#FlashcardQuestions
+obj_xfcq_duplicate#:#FlashcardQuestions kopieren
+objs_xfcq#:#FlashcardQuestions's
+objs_xfcq_duplicate#:#FlashcardQuestions's kopieren
+rbac_create_xfcq#:#FlashcardQuestions anlegen
+xfcq_new#:#FlashcardQuestions anlegen
+xfcq_add#:#Hinzufügen
+activerecordconfig_configuration#:#Konfiguration
+activerecordconfig_configuration_saved#:#Konfiguration gespeichert
+activerecordconfig_save#:#Speichern
+object_contents#:#Inhalte
+object_offline#:#Offline
+object_permission_denied#:#Zugriff verweigert!
+object_show_contents#:#Inhalte anzeigen
+object_status#:#Status
+removeplugindataconfirm_cancel#:#Abbrechen
+removeplugindataconfirm_confirm_remove_data#:#Möchten Sie die %1$s-Daten auch entfernen? Allenfalls möchten Sie das %1$s-Plugin nur deaktivieren?
+removeplugindataconfirm_deactivate#:#%1$s-Plugin nur deaktivieren
+removeplugindataconfirm_data#:#%1$s-Daten
+removeplugindataconfirm_keep_data#:#%1$s-Daten behalten
+removeplugindataconfirm_msg_kept_data#:#Die %1$s-Daten wurden behalten!
+removeplugindataconfirm_msg_removed_data#:#Die %1$s-Daten wurden auch entfernt!
+removeplugindataconfirm_remove_data#:#Entferne %1$s-Daten
+settings_cancel#:#Abbrechen
+settings_description#:#Beschreibung
+settings_online#:#Online
+settings_save#:#Speichern
+settings_saved#:#Einstellungen gespeichert
+settings_settings#:#Settings
+settings_title#:#Titel

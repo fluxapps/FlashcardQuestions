@@ -1,0 +1,31 @@
+obj_
+settings_settings#:#Settingsxfcq#:#FlashcardQuestions
+obj_xfcq_duplicate#:#Copy FlashcardQuestions
+objs_xfcq#:#FlashcardQuestions's
+objs_xfcq_duplicate#:#Copy FlashcardQuestions's
+rbac_create_xfcq#:#Create FlashcardQuestions
+xfcq_new#:#Create FlashcardQuestions
+xfcq_add#:#Add
+activerecordconfig_configuration#:#Configuration
+activerecordconfig_configuration_saved#:#Configuration saved
+activerecordconfig_save#:#Save
+object_contents#:#Contents
+object_offline#:#Offline
+object_permission_denied#:#Permission denied!
+object_show_contents#:#Show contents
+object_status#:#Status
+removeplugindataconfirm_cancel#:#Cancel
+removeplugindataconfirm_confirm_remove_data#:#Do you want to remove the %1$s data as well? At most, you just want to disable the %1$s plugin?
+removeplugindataconfirm_deactivate#:#Just deactivate %1$s plugin
+removeplugindataconfirm_data#:#%1$s data
+removeplugindataconfirm_keep_data#:#Keep %1$s data
+removeplugindataconfirm_msg_kept_data#:#The %1$s data was kept!
+removeplugindataconfirm_msg_removed_data#:#The %1$s data was also removed!
+removeplugindataconfirm_remove_data#:#Remove %1$s data
+settings_cancel#:#Cancel
+settings_description#:#Description
+settings_online#:#Online
+settings_save#:#Save
+settings_saved#:#Settings saved
+settings_settings#:#Settings
+settings_title#:#Title
