@@ -10,7 +10,7 @@
  */
 
 $id = "xfcq";
-$version = "0.1.0";
+$version = "0.2.0";
 $ilias_min_version = "5.3.0";
 $ilias_max_version = "5.3.999";
 $responsible = "studer + raimann ag - Team Custom 1";

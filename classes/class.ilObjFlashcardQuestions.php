@@ -49,7 +49,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	public function doCreate()/*: void*/ {
         // create taxonomy
 	    $ilObjTaxonomy = new ilObjTaxonomy();
-        $ilObjTaxonomy->setTitle($this->getTitle());
+        $ilObjTaxonomy->setTitle("Taxonomie");
         $ilObjTaxonomy->create();
         ilObjTaxonomy::saveUsage($ilObjTaxonomy->getId(), $this->id);
 

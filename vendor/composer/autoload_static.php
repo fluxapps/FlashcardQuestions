@@ -62,11 +62,18 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
         'srag\\Plugins\\FlashcardQuestions\\Object\\Obj' => __DIR__ . '/../..' . '/src/Object/Obj.php',
         'srag\\Plugins\\FlashcardQuestions\\Object\\ObjSettingsFormGUI' => __DIR__ . '/../..' . '/src/Object/ObjSettingsFormGUI.php',
         'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => __DIR__ . '/../..' . '/src/Question/xfcqQuestion.php',
+        'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestionFormGUI' => __DIR__ . '/../..' . '/src/Question/xfcqQuestionFormGUI.php',
+        'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestionTableGUI' => __DIR__ . '/../..' . '/src/Question/xfcqQuestionTableGUI.php',
         'srag\\RemovePluginDataConfirm\\AbstractPluginUninstallTrait' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/AbstractPluginUninstallTrait.php',
         'srag\\RemovePluginDataConfirm\\AbstractRemovePluginDataConfirm' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/AbstractRemovePluginDataConfirm.php',
         'srag\\RemovePluginDataConfirm\\PluginUninstallTrait' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/PluginUninstallTrait.php',
         'srag\\RemovePluginDataConfirm\\RemovePluginDataConfirmException' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/RemovePluginDataConfirmException.php',
         'srag\\RemovePluginDataConfirm\\RepositoryObjectPluginUninstallTrait' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/RepositoryObjectPluginUninstallTrait.php',
+        'xfcqContentGUI' => __DIR__ . '/../..' . '/classes/class.xfcqContentGUI.php',
+        'xfcqPageObject' => __DIR__ . '/../..' . '/classes/PageObject/class.xfcqPageObject.php',
+        'xfcqPageObjectConfig' => __DIR__ . '/../..' . '/classes/PageObject/class.xfcqPageObjectConfig.php',
+        'xfcqPageObjectGUI' => __DIR__ . '/../..' . '/classes/PageObject/class.xfcqPageObjectGUI.php',
+        'xfcqQuestionGUI' => __DIR__ . '/../..' . '/classes/class.xfcqQuestionGUI.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

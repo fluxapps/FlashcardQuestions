@@ -14,3 +14,14 @@
 \srag\Plugins\FlashcardQuestions\Object\Obj::updateDB();
 \srag\Plugins\FlashcardQuestions\Question\xfcqQuestion::updateDB();
 ?>
+<#2>
+<?php
+global $DIC;
+$DIC->database()->modifyTableColumn('copg_pobj_def', 'component', array('length' => 120));
+$DIC->database()->insert('copg_pobj_def', array(
+'parent_type' => array('text', 'xfcq'),
+'class_name' => array('text', 'xfcqPageObject'),
+'directory' => array('text', 'classes/PageObject'),
+'component' => array('text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/FlashcardQuestions')
+));
+?>
