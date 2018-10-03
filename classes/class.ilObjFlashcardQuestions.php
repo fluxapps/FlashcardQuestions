@@ -47,10 +47,16 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	 *
 	 */
 	public function doCreate()/*: void*/ {
-		$this->object = new Obj();
+        // create taxonomy
+	    $ilObjTaxonomy = new ilObjTaxonomy();
+        $ilObjTaxonomy->setTitle($this->getTitle());
+        $ilObjTaxonomy->create();
+        ilObjTaxonomy::saveUsage($ilObjTaxonomy->getId(), $this->id);
 
-		$this->object->setObjId($this->id);
-
+        // create object settings
+        $this->object = new Obj();
+        $this->object->setObjId($this->id);
+		$this->object->setTaxId($ilObjTaxonomy->getId());
 		$this->object->store();
 	}
 
@@ -78,6 +84,11 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 		if ($this->object !== NULL) {
 			$this->object->delete();
 		}
+		$usage = ilObjTaxonomy::getUsageOfObject($this->id);
+		if (count($usage) == 1) {
+            $ilObjTaxonomy = new ilObjTaxonomy(array_shift($usage));
+            $ilObjTaxonomy->delete();
+        }
 	}
 
 

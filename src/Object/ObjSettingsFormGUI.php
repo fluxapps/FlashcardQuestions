@@ -56,8 +56,6 @@ class ObjSettingsFormGUI extends ilPropertyFormGUI {
 
 		$this->addCommandButton(ilObjFlashcardQuestionsGUI::CMD_SETTINGS_STORE, self::plugin()
 			->translate("save", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS));
-		$this->addCommandButton(ilObjFlashcardQuestionsGUI::CMD_MANAGE_CONTENTS, self::plugin()
-			->translate("cancel", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS));
 
 		$title = new ilTextInputGUI(self::plugin()->translate("title", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS), "title");
 		$title->setRequired(true);

@@ -1,19 +1,19 @@
-obj_
-settings_settings#:#Settingsxfcq#:#FlashcardQuestions
-obj_xfcq_duplicate#:#Copy FlashcardQuestions
-objs_xfcq#:#FlashcardQuestions's
-objs_xfcq_duplicate#:#Copy FlashcardQuestions's
-rbac_create_xfcq#:#Create FlashcardQuestions
-xfcq_new#:#Create FlashcardQuestions
+obj_xfcq#:#Flashcard Questionpool
+obj_xfcq_duplicate#:#Copy Flashcard Questionpool
+objs_xfcq#:#Flashcard Questionpools
+objs_xfcq_duplicate#:#Copy Flashcard Questionpools
+rbac_create_xfcq#:#Create Flashcard Questionpool
+xfcq_new#:#Create Flashcard Questionpool
 xfcq_add#:#Add
 activerecordconfig_configuration#:#Configuration
 activerecordconfig_configuration_saved#:#Configuration saved
 activerecordconfig_save#:#Save
 object_contents#:#Contents
 object_offline#:#Offline
-object_permission_denied#:#Permission denied!
-object_show_contents#:#Show contents
+object_permission_denied#:#Permission denied!z
+object_show_contents#:#Content
 object_status#:#Status
+object_taxonomy#:#Taxonomy >
 removeplugindataconfirm_cancel#:#Cancel
 removeplugindataconfirm_confirm_remove_data#:#Do you want to remove the %1$s data as well? At most, you just want to disable the %1$s plugin?
 removeplugindataconfirm_deactivate#:#Just deactivate %1$s plugin

@@ -1,18 +1,19 @@
-obj_xfcq#:#FlashcardQuestions
-obj_xfcq_duplicate#:#FlashcardQuestions kopieren
-objs_xfcq#:#FlashcardQuestions's
-objs_xfcq_duplicate#:#FlashcardQuestions's kopieren
-rbac_create_xfcq#:#FlashcardQuestions anlegen
-xfcq_new#:#FlashcardQuestions anlegen
+obj_xfcq#:#Lernkarten-Fragenpool
+obj_xfcq_duplicate#:#Lernkarten-Fragenpool kopieren
+objs_xfcq#:#Lernkarten-Fragenpools
+objs_xfcq_duplicate#:#Lernkarten-Fragenpools kopieren
+rbac_create_xfcq#:#Lernkarten-Fragenpool anlegen
+xfcq_new#:#Lernkarten-Fragenpool anlegen
 xfcq_add#:#Hinzufügen
 activerecordconfig_configuration#:#Konfiguration
 activerecordconfig_configuration_saved#:#Konfiguration gespeichert
 activerecordconfig_save#:#Speichern
 object_contents#:#Inhalte
 object_offline#:#Offline
-object_permission_denied#:#Zugriff verweigert!
-object_show_contents#:#Inhalte anzeigen
+object_permission_denied#:#Zugriff verweigert.
+object_show_contents#:#Inhalt
 object_status#:#Status
+object_taxonomy#:#Taxonomie >
 removeplugindataconfirm_cancel#:#Abbrechen
 removeplugindataconfirm_confirm_remove_data#:#Möchten Sie die %1$s-Daten auch entfernen? Allenfalls möchten Sie das %1$s-Plugin nur deaktivieren?
 removeplugindataconfirm_deactivate#:#%1$s-Plugin nur deaktivieren

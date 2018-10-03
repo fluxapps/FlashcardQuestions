@@ -61,6 +61,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
         'srag\\Plugins\\FlashcardQuestions\\Config\\ConfigFormGUI' => __DIR__ . '/../..' . '/src/Config/ConfigFormGUI.php',
         'srag\\Plugins\\FlashcardQuestions\\Object\\Obj' => __DIR__ . '/../..' . '/src/Object/Obj.php',
         'srag\\Plugins\\FlashcardQuestions\\Object\\ObjSettingsFormGUI' => __DIR__ . '/../..' . '/src/Object/ObjSettingsFormGUI.php',
+        'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => __DIR__ . '/../..' . '/src/Question/xfcqQuestion.php',
         'srag\\RemovePluginDataConfirm\\AbstractPluginUninstallTrait' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/AbstractPluginUninstallTrait.php',
         'srag\\RemovePluginDataConfirm\\AbstractRemovePluginDataConfirm' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/AbstractRemovePluginDataConfirm.php',
         'srag\\RemovePluginDataConfirm\\PluginUninstallTrait' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/PluginUninstallTrait.php',

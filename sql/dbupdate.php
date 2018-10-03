@@ -12,4 +12,5 @@
 
 \srag\Plugins\FlashcardQuestions\Config\Config::updateDB();
 \srag\Plugins\FlashcardQuestions\Object\Obj::updateDB();
+\srag\Plugins\FlashcardQuestions\Question\xfcqQuestion::updateDB();
 ?>

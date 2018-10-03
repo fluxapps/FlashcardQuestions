@@ -31,6 +31,7 @@ return array(
     'srag\\Plugins\\FlashcardQuestions\\Config\\ConfigFormGUI' => $baseDir . '/src/Config/ConfigFormGUI.php',
     'srag\\Plugins\\FlashcardQuestions\\Object\\Obj' => $baseDir . '/src/Object/Obj.php',
     'srag\\Plugins\\FlashcardQuestions\\Object\\ObjSettingsFormGUI' => $baseDir . '/src/Object/ObjSettingsFormGUI.php',
+    'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => $baseDir . '/src/Question/xfcqQuestion.php',
     'srag\\RemovePluginDataConfirm\\AbstractPluginUninstallTrait' => $vendorDir . '/srag/removeplugindataconfirm/src/AbstractPluginUninstallTrait.php',
     'srag\\RemovePluginDataConfirm\\AbstractRemovePluginDataConfirm' => $vendorDir . '/srag/removeplugindataconfirm/src/AbstractRemovePluginDataConfirm.php',
     'srag\\RemovePluginDataConfirm\\PluginUninstallTrait' => $vendorDir . '/srag/removeplugindataconfirm/src/PluginUninstallTrait.php',
