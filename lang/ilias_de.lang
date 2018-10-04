@@ -45,3 +45,6 @@ form_question_settings_form_title#:#Settings
 form_f_title#:#Titel
 form_f_active#:#Aktiv
 msg_success#:#Einstellungen erfolgreich gespeichert.
+msg_deleted_successfully#:#Objekt(e) erfolgreich gelöscht.
+msg_no_question_selected#:#Bitte wählen Sie mindestens eine Frage aus.
+delete_confirmation_text#:#Sind Sie sicher, dass folgende Objekte gelöscht werden sollen?

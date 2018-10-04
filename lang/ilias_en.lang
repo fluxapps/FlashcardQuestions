@@ -45,3 +45,6 @@ form_question_settings_form_title#:#Einstellungen
 form_f_title#:#Title
 form_f_active#:#Active
 msg_success#:#Settings successfully saved.
+msg_deleted_successfully#:#Object(s) deleted successfully.
+msg_no_question_selected#:#Please choose at least one question.
+delete_confirmation_text#:#Do you really want to delete the following objects?

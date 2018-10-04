@@ -127,14 +127,38 @@ class xfcqContentGUI {
      *
      */
     protected function delete() {
+        $confirmationGUI = new ilConfirmationGUI();
+        $confirmationGUI->setHeaderText(self::plugin()->translate('delete_confirmation_text'));
+        $confirmationGUI->setConfirm(self::dic()->language()->txt('delete'), self::CMD_CONFIRMED_DELETE);
+        $confirmationGUI->setCancel(self::dic()->language()->txt('cancel'), self::CMD_STANDARD);
+        $confirmationGUI->setFormAction(self::dic()->ctrl()->getFormAction($this));
 
+        $ids = count($_POST['id']) ? $_POST['id'] : array($_GET['qst_id']);
+        if (empty(array_filter($ids))) {
+            ilUtil::sendFailure(self::plugin()->translate('msg_no_question_selected'), true);
+            self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
+        }
+
+        foreach ($ids as $id) {
+            /** @var xfcqQuestion $xfcqQuestion */
+            $xfcqQuestion = xfcqQuestion::find($id);
+            $text = self::dic()->language()->txt('title') . ": {$xfcqQuestion->getTitle()}<br>";
+            $confirmationGUI->addItem('qst_id[]', $id, $text);
+        }
+
+        self::dic()->template()->setContent($confirmationGUI->getHTML());
     }
 
     /**
      *
      */
     protected function confirmedDelete() {
-
+        $ids = is_array($_POST['qst_id']) ? $_POST['qst_id'] : [$_POST['qst_id']];
+        foreach ($ids as $id) {
+            xfcqQuestion::find($id)->delete();
+        }
+        ilUtil::sendSuccess(self::plugin()->translate('msg_deleted_successfully'), true);
+        self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
     }
 
     /**
@@ -142,6 +166,10 @@ class xfcqContentGUI {
      */
     protected function activate() {
         $ids = count($_POST['id']) ? $_POST['id'] : array($_GET['qst_id']);
+        if (empty(array_filter($ids))) {
+            ilUtil::sendFailure(self::plugin()->translate('msg_no_question_selected'), true);
+            self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
+        }
         foreach ($ids as $id) {
             /** @var xfcqQuestion $xfcqQuestion */
             $xfcqQuestion = xfcqQuestion::find($id);
@@ -157,6 +185,10 @@ class xfcqContentGUI {
      */
     protected function deactivate() {
         $ids = count($_POST['id']) ? $_POST['id'] : array($_GET['qst_id']);
+        if (empty(array_filter($ids))) {
+            ilUtil::sendFailure(self::plugin()->translate('msg_no_question_selected'), true);
+            self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
+        }
         foreach ($ids as $id) {
             /** @var xfcqQuestion $xfcqQuestion */
             $xfcqQuestion = xfcqQuestion::find($id);
