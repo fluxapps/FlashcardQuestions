@@ -64,7 +64,9 @@ class xfcqQuestionGUI {
             case strtolower(xfcqPageObjectGUI::class):
                 $xudfPageObjectGUI = new xfcqPageObjectGUI($this, $_GET['step'] == 'qst' ? $this->question->getPageIdQuestion() : $this->question->getPageIdAnswer());
                 $html = self::dic()->ctrl()->forwardCommand($xudfPageObjectGUI);
-                self::dic()->template()->setContent($this->getHeader() . $html);
+                if ($html) {
+                    self::dic()->template()->setContent($this->getHeader() . $html);
+                }
                 break;
             default:
                 switch ($cmd) {

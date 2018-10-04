@@ -104,7 +104,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
      */
     protected function initColumns() {
         // checkbox column
-        $this->addColumn('', '', '', true);
+        $this->addColumn('', '', 10, true);
 
         foreach ($this->getSelectableColumns() as $title => $props) {
             if ($this->isColumnSelected($title)) {
@@ -113,7 +113,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         }
 
         // action column
-        $this->addColumn('', '', '', true);
+        $this->addColumn('', '', 30, true);
     }
 
     /**
