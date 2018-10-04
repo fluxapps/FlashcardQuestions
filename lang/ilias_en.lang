@@ -30,6 +30,14 @@ settings_saved#:#Settings saved
 settings_settings#:#Settings
 settings_title#:#Title
 table_question_table_title#:#Lernkarten-Fragen
+table_row_title#:#Title
+table_row_question#:#Question
+table_row_answer#:#Answer
+table_row_taxonomy#:#Taxonomy
+table_row_active#:#Active
+table_cmd_editSettings#:#Edit Settings
+table_cmd_editQuestion#:#Edit Question
+table_cmd_editAnswer#:#Edit Answer
 button_add_new_question#:#Add New Question
 button_saveSettings#:#Save
 button_saveSettingsAndContinue#:#Save And Continue

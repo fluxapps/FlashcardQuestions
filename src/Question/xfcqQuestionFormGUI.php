@@ -72,6 +72,7 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
         $this->addItem($input);
 
         $input = new ilCheckboxInputGUI(self::plugin()->translate(self::F_ACTIVE, self::LANG_MODULE), self::F_ACTIVE);
+        $input->setChecked(true);
         $this->addItem($input);
 
         $this->addCommandButton(xfcqQuestionGUI::CMD_SAVE_SETTINGS, self::plugin()->translate(xfcqQuestionGUI::CMD_SAVE_SETTINGS, 'button'));

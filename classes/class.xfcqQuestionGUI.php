@@ -17,12 +17,12 @@ class xfcqQuestionGUI {
     use DICTrait;
     const PLUGIN_CLASS_NAME = ilFlashcardQuestionsPlugin::class;
 
-    const CMD_STANDARD = self::CMD_SETTINGS;
-    const CMD_SETTINGS = 'editSettings';
+    const CMD_STANDARD = self::CMD_EDIT_SETTINGS;
+    const CMD_EDIT_SETTINGS = 'editSettings';
     const CMD_SAVE_SETTINGS = 'saveSettings';
     const CMD_SAVE_SETTINGS_AND_CONTINUE = 'saveSettingsAndContinue';
-    const CMD_QUESTION = 'editQuestion';
-    const CMD_ANSWER = 'editAnswer';
+    const CMD_EDIT_QUESTION = 'editQuestion';
+    const CMD_EDIT_ANSWER = 'editAnswer';
 
     /**
      * @var xfcqQuestion
@@ -51,12 +51,14 @@ class xfcqQuestionGUI {
      *
      */
     function executeCommand() {
+        $cmd = self::dic()->ctrl()->getCmd(self::CMD_STANDARD);
+        $next_class = self::dic()->ctrl()->getNextClass();
+        
         self::dic()->tabs()->clearTargets();
         self::dic()->tabs()->setBackTarget(self::dic()->language()->txt('back'), self::dic()->ctrl()->getLinkTargetByClass(xfcqContentGUI::class));
         self::dic()->ctrl()->saveParameter($this, 'qst_id');
+        self::dic()->ctrl()->saveParameter($this, 'step');
 
-        $cmd = self::dic()->ctrl()->getCmd(self::CMD_STANDARD);
-        $next_class = self::dic()->ctrl()->getNextClass();
 
         switch ($next_class) {
             case strtolower(xfcqPageObjectGUI::class):
@@ -68,9 +70,9 @@ class xfcqQuestionGUI {
                 switch ($cmd) {
                     case self::CMD_SAVE_SETTINGS:
                     case self::CMD_SAVE_SETTINGS_AND_CONTINUE:
-                    case self::CMD_SETTINGS:
-                    case self::CMD_QUESTION;
-                    case self::CMD_ANSWER;
+                    case self::CMD_EDIT_SETTINGS:
+                    case self::CMD_EDIT_QUESTION;
+                    case self::CMD_EDIT_ANSWER;
                         $this->$cmd();
                         break;
                     default:
@@ -85,11 +87,14 @@ class xfcqQuestionGUI {
         self::dic()->tabs()->removeTab('pg');
     }
 
+    /**
+     * @return string
+     */
     protected function getHeader() {
-        if ($_GET['step'] == 'qst') {
+        if ($_GET['step'] == 'qst' && $_GET['cmd'] != self::CMD_EDIT_SETTINGS) {
             $qst_bold = '<b>';
             $qst_bold_closed = '</b>';
-        } elseif ($_GET['step'] == 'ans') {
+        } elseif ($_GET['step'] == 'ans' && $_GET['cmd'] != self::CMD_EDIT_SETTINGS) {
             $ans_bold = '<b>';
             $ans_bold_closed = '</b>';
         } else {
@@ -97,15 +102,15 @@ class xfcqQuestionGUI {
             $settings_bold_closed = '</b>';
         }
 
-        $link_settings = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_SETTINGS) .'">';
+        $link_settings = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_SETTINGS) .'">';
         $link_settings_closed = '</a>';
 
 
         if (!$this->is_new) {
-            $link_qst = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_QUESTION) .'">';
+            $link_qst = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_QUESTION) .'">';
             $link_qst_closed = '</a>';
 
-            $link_ans = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_ANSWER) .'">';
+            $link_ans = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_ANSWER) .'">';
             $link_ans_closed = '</a>';
         }
         return '<h1 style=font-size:30px>'
@@ -132,7 +137,7 @@ class xfcqQuestionGUI {
         $xfcqQuestionFormGUI->setValuesByPost();
         if ($xfcqQuestionFormGUI->saveForm()) {
             ilUtil::sendSuccess(self::plugin()->translate('msg_success'), true);
-            self::dic()->ctrl()->redirect($this, self::CMD_SETTINGS);
+            self::dic()->ctrl()->redirect($this, self::CMD_EDIT_SETTINGS);
         }
         self::dic()->template()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
     }
@@ -145,7 +150,7 @@ class xfcqQuestionGUI {
         $xfcqQuestionFormGUI->setValuesByPost();
         if ($xfcqQuestionFormGUI->saveForm()) {
             ilUtil::sendSuccess(self::plugin()->translate('msg_success'), true);
-            self::dic()->ctrl()->redirect($this, self::CMD_QUESTION);
+            self::dic()->ctrl()->redirect($this, self::CMD_EDIT_QUESTION);
         }
         self::dic()->template()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
     }

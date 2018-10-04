@@ -23,6 +23,8 @@ class xfcqContentGUI {
     const CMD_UPDATE = 'update';
     const CMD_DELETE = 'delete';
     const CMD_CONFIRMED_DELETE = 'confirmedDelete';
+    const CMD_ACTIVATE = 'activate';
+    const CMD_DEACTIVATE = 'deactivate';
 
     /**
      * @var ilObjFlashcardQuestionsGUI
@@ -62,6 +64,8 @@ class xfcqContentGUI {
                     case self::CMD_UPDATE;
                     case self::CMD_DELETE;
                     case self::CMD_CONFIRMED_DELETE;
+                    case self::CMD_ACTIVATE;
+                    case self::CMD_DEACTIVATE;
                         $this->$cmd();
                         break;
                     default:
@@ -131,6 +135,36 @@ class xfcqContentGUI {
      */
     protected function confirmedDelete() {
 
+    }
+
+    /**
+     *
+     */
+    protected function activate() {
+        $ids = count($_POST['id']) ? $_POST['id'] : array($_GET['qst_id']);
+        foreach ($ids as $id) {
+            /** @var xfcqQuestion $xfcqQuestion */
+            $xfcqQuestion = xfcqQuestion::find($id);
+            $xfcqQuestion->setActive(1);
+            $xfcqQuestion->update();
+        }
+
+        self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
+    }
+
+    /**
+     *
+     */
+    protected function deactivate() {
+        $ids = count($_POST['id']) ? $_POST['id'] : array($_GET['qst_id']);
+        foreach ($ids as $id) {
+            /** @var xfcqQuestion $xfcqQuestion */
+            $xfcqQuestion = xfcqQuestion::find($id);
+            $xfcqQuestion->setActive(0);
+            $xfcqQuestion->update();
+        }
+
+        self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
     }
 
     /**
