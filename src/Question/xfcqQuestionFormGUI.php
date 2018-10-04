@@ -49,8 +49,8 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
         $this->question = $question;
         $this->parent_gui = $parent_gui;
         $this->is_new = !(bool) ($question->getId());
-//        $this->setTitle(self::plugin()->translate('question_settings_form_title', self::LANG_MODULE));
-        $this->setTitle('&nbsp;');
+        $this->setTitle(self::plugin()->translate('question_settings_form_title', self::LANG_MODULE));
+//        $this->setTitle('&nbsp;');
         parent::__construct();
         $this->setFormAction(self::dic()->ctrl()->getFormAction($parent_gui));
         $this->initForm();

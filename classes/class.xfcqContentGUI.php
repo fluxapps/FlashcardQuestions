@@ -18,13 +18,12 @@ class xfcqContentGUI {
 
     const CMD_STANDARD = 'show';
     const CMD_ADD = 'add';
-    const CMD_CREATE = 'create';
-    const CMD_EDIT = 'edit';
-    const CMD_UPDATE = 'update';
     const CMD_DELETE = 'delete';
     const CMD_CONFIRMED_DELETE = 'confirmedDelete';
     const CMD_ACTIVATE = 'activate';
     const CMD_DEACTIVATE = 'deactivate';
+    const CMD_APPLY_FILTER = 'applyFilter';
+    const CMD_RESET_FILTER = 'resetFilter';
 
     /**
      * @var ilObjFlashcardQuestionsGUI
@@ -59,13 +58,12 @@ class xfcqContentGUI {
                         $this->$cmd();
                         break;
                     case self::CMD_ADD;
-                    case self::CMD_CREATE;
-                    case self::CMD_EDIT;
-                    case self::CMD_UPDATE;
                     case self::CMD_DELETE;
                     case self::CMD_CONFIRMED_DELETE;
                     case self::CMD_ACTIVATE;
                     case self::CMD_DEACTIVATE;
+                    case self::CMD_APPLY_FILTER;
+                    case self::CMD_RESET_FILTER;
                         $this->$cmd();
                         break;
                     default:
@@ -86,7 +84,8 @@ class xfcqContentGUI {
     }
 
     /**
-     *
+     * @throws \srag\DIC\Exception\DICException
+     * @throws ilTaxonomyException
      */
     protected function show() {
         $xfcqQuestionTableGUI = new xfcqQuestionTableGUI($this);
@@ -94,33 +93,32 @@ class xfcqContentGUI {
     }
 
     /**
+     * @throws \srag\DIC\Exception\DICException
+     * @throws ilTaxonomyException
+     */
+    protected function applyFilter() {
+        $xfcqQuestionTableGUI = new xfcqQuestionTableGUI($this);
+        $xfcqQuestionTableGUI->resetOffset();
+        $xfcqQuestionTableGUI->writeFilterToSession();
+        self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
+    }
+
+    /**
+     * @throws \srag\DIC\Exception\DICException
+     * @throws ilTaxonomyException
+     */
+    protected function resetFilter() {
+        $xfcqQuestionTableGUI = new xfcqQuestionTableGUI($this);
+        $xfcqQuestionTableGUI->resetOffset();
+        $xfcqQuestionTableGUI->resetFilter();
+        self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
+    }
+
+    /**
      *
      */
     protected function add() {
         self::dic()->ctrl()->redirectByClass(xfcqQuestionGUI::class);
-//        $xfcqQuestionFormGUI = new xfcqQuestionFormGUI($this, new xfcqQuestion());
-//        self::dic()->template()->setContent($xfcqQuestionFormGUI->getHTML());
-    }
-
-    /**
-     *
-     */
-    protected function create() {
-
-    }
-
-    /**
-     *
-     */
-    protected function edit() {
-
-    }
-
-    /**
-     *
-     */
-    protected function update() {
-
     }
 
     /**

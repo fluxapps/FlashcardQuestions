@@ -41,7 +41,7 @@ table_cmd_editAnswer#:#Antwort bearbeiten
 button_add_new_question#:#Neue Frage hinzufügen
 button_saveSettings#:#Speichern
 button_saveSettingsAndContinue#:#Speichern und Weiter
-form_question_settings_form_title#:#Settings
+form_question_settings_form_title#:#Einstellungen
 form_f_title#:#Titel
 form_f_active#:#Aktiv
 msg_success#:#Einstellungen erfolgreich gespeichert.
