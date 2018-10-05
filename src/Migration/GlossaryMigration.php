@@ -32,9 +32,6 @@ class GlossaryMigration {
     public function run() {
         $glossaries = $this->fetchGlossaries();
         foreach ($glossaries as $glossary) {
-            if ($glossary->getRefId() != 3957) {
-                continue;
-            }
             $parent_id = self::dic()->tree()->getParentId($glossary->getRefId());
             $ilObjFlashcardQuestions = new ilObjFlashcardQuestions();
             $ilObjFlashcardQuestions->setTitle($glossary->getTitle());
@@ -82,6 +79,8 @@ class GlossaryMigration {
                 $xfcqQuestion->create(true);
             }
 
+            // move glossary to trash
+            self::dic()->tree()->moveToTrash($glossary->getRefId());
         }
     }
 
