@@ -68,7 +68,7 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
         $input->setRequired(true);
         $this->addItem($input);
 
-        $input = new ilTaxSelectInputGUI(array_shift(\ilObjTaxonomy::getUsageOfObject($this->parent_gui->getObjId())), self::F_TAXONOMY, true);
+        $input = new ilTaxSelectInputGUI($this->parent_gui->getObject()->getTaxonomyId(), self::F_TAXONOMY, true);
         $this->addItem($input);
 
         $input = new ilCheckboxInputGUI(self::plugin()->translate(self::F_ACTIVE, self::LANG_MODULE), self::F_ACTIVE);

@@ -7,7 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'FlashcardQuestionsRemoveDataConfirm' => $baseDir . '/classes/uninstall/class.FlashcardQuestionsRemoveDataConfirm.php',
-    'ilFlashcardQuestionsConfigGUI' => $baseDir . '/classes/class.ilFlashcardQuestionsConfigGUI.php',
+    'ilFlashcardQuestionsConfigGUI' => $baseDir . '/classes/class.ilFlashcardQuestionsConfigGUI_.php',
     'ilFlashcardQuestionsPlugin' => $baseDir . '/classes/class.ilFlashcardQuestionsPlugin.php',
     'ilObjFlashcardQuestions' => $baseDir . '/classes/class.ilObjFlashcardQuestions.php',
     'ilObjFlashcardQuestionsAccess' => $baseDir . '/classes/class.ilObjFlashcardQuestionsAccess.php',
@@ -29,6 +29,7 @@ return array(
     'srag\\DIC\\Plugin\\PluginInterface' => $vendorDir . '/srag/dic/src/Plugin/PluginInterface.php',
     'srag\\Plugins\\FlashcardQuestions\\Config\\Config' => $baseDir . '/src/Config/Config.php',
     'srag\\Plugins\\FlashcardQuestions\\Config\\ConfigFormGUI' => $baseDir . '/src/Config/ConfigFormGUI.php',
+    'srag\\Plugins\\FlashcardQuestions\\GlossaryMigration\\GlossaryMigration' => $baseDir . '/src/Migration/GlossaryMigration.php',
     'srag\\Plugins\\FlashcardQuestions\\Object\\Obj' => $baseDir . '/src/Object/Obj.php',
     'srag\\Plugins\\FlashcardQuestions\\Object\\ObjSettingsFormGUI' => $baseDir . '/src/Object/ObjSettingsFormGUI.php',
     'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => $baseDir . '/src/Question/xfcqQuestion.php',

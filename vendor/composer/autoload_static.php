@@ -37,7 +37,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
 
     public static $classMap = array (
         'FlashcardQuestionsRemoveDataConfirm' => __DIR__ . '/../..' . '/classes/uninstall/class.FlashcardQuestionsRemoveDataConfirm.php',
-        'ilFlashcardQuestionsConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilFlashcardQuestionsConfigGUI.php',
+        'ilFlashcardQuestionsConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilFlashcardQuestionsConfigGUI_.php',
         'ilFlashcardQuestionsPlugin' => __DIR__ . '/../..' . '/classes/class.ilFlashcardQuestionsPlugin.php',
         'ilObjFlashcardQuestions' => __DIR__ . '/../..' . '/classes/class.ilObjFlashcardQuestions.php',
         'ilObjFlashcardQuestionsAccess' => __DIR__ . '/../..' . '/classes/class.ilObjFlashcardQuestionsAccess.php',
@@ -59,6 +59,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
         'srag\\DIC\\Plugin\\PluginInterface' => __DIR__ . '/..' . '/srag/dic/src/Plugin/PluginInterface.php',
         'srag\\Plugins\\FlashcardQuestions\\Config\\Config' => __DIR__ . '/../..' . '/src/Config/Config.php',
         'srag\\Plugins\\FlashcardQuestions\\Config\\ConfigFormGUI' => __DIR__ . '/../..' . '/src/Config/ConfigFormGUI.php',
+        'srag\\Plugins\\FlashcardQuestions\\GlossaryMigration\\GlossaryMigration' => __DIR__ . '/../..' . '/src/Migration/GlossaryMigration.php',
         'srag\\Plugins\\FlashcardQuestions\\Object\\Obj' => __DIR__ . '/../..' . '/src/Object/Obj.php',
         'srag\\Plugins\\FlashcardQuestions\\Object\\ObjSettingsFormGUI' => __DIR__ . '/../..' . '/src/Object/ObjSettingsFormGUI.php',
         'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => __DIR__ . '/../..' . '/src/Question/xfcqQuestion.php',

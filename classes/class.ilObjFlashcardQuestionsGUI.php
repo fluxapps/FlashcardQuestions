@@ -31,6 +31,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	const CMD_SETTINGS = "settings";
 	const CMD_SETTINGS_STORE = "settingsStore";
 	const CMD_SHOW_CONTENTS = "showContents";
+    const CMD_MIGRATE = 'migrate';
 
 	// TABS
 	const TAB_PERMISSIONS = "perm_settings";
@@ -104,6 +105,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 
 					case self::CMD_SETTINGS:
 					case self::CMD_SETTINGS_STORE:
+					case self::CMD_MIGRATE:
 						// Write commands
 						if (!ilObjFlashcardQuestionsAccess::hasWriteAccess()) {
 							ilObjFlashcardQuestionsAccess::redirectNonAccess($this);
@@ -229,7 +231,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		}
 
         if (ilObjFlashcardQuestionsAccess::hasWriteAccess()) {
-            self::dic()->ctrl()->setParameterByClass(ilObjTaxonomyGUI::class, 'tax_id', array_shift(ilObjTaxonomy::getUsageOfObject($this->obj_id)));
+            self::dic()->ctrl()->setParameterByClass(ilObjTaxonomyGUI::class, 'tax_id', $this->object->getTaxonomyId());
             self::dic()->tabs()->addTab(self::TAB_TAXONOMY, self::plugin()->translate("taxonomy", self::LANG_MODULE_OBJECT) . ilGlyphGUI::get('next'), self::dic()->ctrl()
                 ->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listNodes'));
         }
@@ -272,5 +274,13 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
      */
     public function getObject(): ilObjFlashcardQuestions {
         return $this->object;
+	}
+
+    /**
+     *
+     */
+    protected function migrate() {
+        $migration = new \srag\Plugins\FlashcardQuestions\GlossaryMigration\GlossaryMigration();
+        $migration->run();
 	}
 }

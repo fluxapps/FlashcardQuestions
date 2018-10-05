@@ -49,25 +49,29 @@ class xfcqQuestion extends ActiveRecord {
     /**
      *
      */
-    public function create() {
-        $id_qst = $this->getNextFreePageId();
-        $id_ans = $id_qst + 1;
+    public function create($omit_creating_page_object = false) {
+        if (!$omit_creating_page_object) {
+            $id_qst = $this->getNextFreePageId();
+            $id_ans = $id_qst + 1;
 
-        $this->setPageIdQuestion($id_qst);
-        $this->setPageIdAnswer($id_ans);
+            $this->setPageIdQuestion($id_qst);
+            $this->setPageIdAnswer($id_ans);
+        }
 
         parent::create();
 
-        // create page object for question
-        $page_obj = new xfcqPageObject();
-        $page_obj->setId($id_qst);
-        $page_obj->setParentId($this->getObjId());
-        $page_obj->create();
-        // create page object for answer
-        $page_obj = new xfcqPageObject();
-        $page_obj->setId($id_ans);
-        $page_obj->setParentId($this->getObjId());
-        $page_obj->create();
+        if (!$omit_creating_page_object) {
+            // create page object for question
+            $page_obj = new xfcqPageObject();
+            $page_obj->setId($id_qst);
+            $page_obj->setParentId($this->getObjId());
+            $page_obj->create();
+            // create page object for answer
+            $page_obj = new xfcqPageObject();
+            $page_obj->setId($id_ans);
+            $page_obj->setParentId($this->getObjId());
+            $page_obj->create();
+        }
     }
 
     /**

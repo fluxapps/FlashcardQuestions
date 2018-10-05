@@ -135,7 +135,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         ]);
         $this->addAndReadFilterItem($filter_item);
 
-        $filter_item = new ilTaxSelectInputGUI(array_shift(ilObjTaxonomy::getUsageOfObject($this->parent_gui->getObjId())),'taxonomy', true);
+        $filter_item = new ilTaxSelectInputGUI($this->parent_gui->getObject()->getTaxonomyId(),'taxonomy', true);
         $this->addAndReadFilterItem($filter_item);
     }
 

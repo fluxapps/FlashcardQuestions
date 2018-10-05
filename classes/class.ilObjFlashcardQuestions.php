@@ -42,6 +42,12 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 		$this->setType(ilFlashcardQuestionsPlugin::PLUGIN_ID);
 	}
 
+    /**
+     * @return int
+     */
+    public function getTaxonomyId(): int {
+        return array_shift(ilObjTaxonomy::getUsageOfObject($this->id));
+	}
 
 	/**
 	 *
@@ -56,7 +62,6 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
         // create object settings
         $this->object = new Obj();
         $this->object->setObjId($this->id);
-		$this->object->setTaxId($ilObjTaxonomy->getId());
 		$this->object->store();
 	}
 
@@ -84,19 +89,20 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 		if ($this->object !== NULL) {
 			$this->object->delete();
 		}
-		$usage = ilObjTaxonomy::getUsageOfObject($this->id);
-		if (count($usage) == 1) {
-            $ilObjTaxonomy = new ilObjTaxonomy(array_shift($usage));
-            $ilObjTaxonomy->delete();
-        }
+
+        $ilObjTaxonomy = new ilObjTaxonomy($this->getTaxonomyId());
+        $ilObjTaxonomy->delete();
+
+        // TODO: delete page objects
 	}
 
 
-	/**
-	 * @param ilObjFlashcardQuestions $new_obj
-	 * @param int                  $a_target_id
-	 * @param int                  $a_copy_id
-	 */
+    /**
+     * @param $new_obj
+     * @param $a_target_id
+     * @param null $a_copy_id
+     * @throws arException
+     */
 	protected function doCloneObject(/*ilObjFlashcardQuestions*/
 		$new_obj, /*int*/
 		$a_target_id, /*?int*/

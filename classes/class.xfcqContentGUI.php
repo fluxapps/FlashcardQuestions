@@ -208,6 +208,6 @@ class xfcqContentGUI {
      * @return ilObjFlashcardQuestions
      */
     public function getObject(): ilObjFlashcardQuestions {
-        $this->parent_gui->getObject();
+        return $this->parent_gui->getObject();
     }
 }
