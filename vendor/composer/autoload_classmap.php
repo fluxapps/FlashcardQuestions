@@ -9,6 +9,7 @@ return array(
     'FlashcardQuestionsRemoveDataConfirm' => $baseDir . '/classes/uninstall/class.FlashcardQuestionsRemoveDataConfirm.php',
     'ilFlashcardQuestionsConfigGUI' => $baseDir . '/classes/class.ilFlashcardQuestionsConfigGUI_.php',
     'ilFlashcardQuestionsPlugin' => $baseDir . '/classes/class.ilFlashcardQuestionsPlugin.php',
+    'ilFlashcardQuestionsSelectorInputGUI' => $baseDir . '/classes/Input/class.ilFlashcardQuestionsSelectorInputGUI.php',
     'ilObjFlashcardQuestions' => $baseDir . '/classes/class.ilObjFlashcardQuestions.php',
     'ilObjFlashcardQuestionsAccess' => $baseDir . '/classes/class.ilObjFlashcardQuestionsAccess.php',
     'ilObjFlashcardQuestionsGUI' => $baseDir . '/classes/class.ilObjFlashcardQuestionsGUI.php',

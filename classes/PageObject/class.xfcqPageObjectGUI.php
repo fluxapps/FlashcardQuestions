@@ -13,10 +13,10 @@ class xfcqPageObjectGUI extends ilPageObjectGUI {
 
     /**
      * xfcqPageObjectGUI constructor.
-     * @param xfcqQuestionGUI $parent_gui
      * @param $page_id
+     * @param $obj_id
      */
-    public function __construct(xfcqQuestionGUI $parent_gui, $page_id) {
+    public function __construct($page_id, $obj_id) {
         parent::__construct(xfcqPageObject::PARENT_TYPE, $page_id);
 
         // content style
@@ -31,7 +31,7 @@ class xfcqPageObjectGUI extends ilPageObjectGUI {
 
         $tpl->setCurrentBlock("ContentStyle");
         $tpl->setVariable("LOCATION_CONTENT_STYLESHEET",
-            ilObjStyleSheet::getContentStylePath(ilObjStyleSheet::lookupObjectStyle($parent_gui->getObjId())));
+            ilObjStyleSheet::getContentStylePath(ilObjStyleSheet::lookupObjectStyle($obj_id)));
         $tpl->parseCurrentBlock();
     }
 

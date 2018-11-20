@@ -10,6 +10,7 @@ use \ilObjTaxonomy;
 use  srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
 use \ilGlossaryTerm;
 use \ilTaxNodeAssignment;
+use \ilObjFlashcards;
 /**
  * Class GlossaryMigration
  *
@@ -30,6 +31,8 @@ class GlossaryMigration {
      *
      */
     public function run() {
+        $mapping_ref_ids = array();
+        $mapping_term_ids = array();
         $glossaries = $this->fetchGlossaries();
         foreach ($glossaries as $glossary) {
             $parent_id = self::dic()->tree()->getParentId($glossary->getRefId());
@@ -61,10 +64,6 @@ class GlossaryMigration {
                 $question_definition = $definitions[0];
                 $answer_definition = $definitions[1];
 
-
-                self::dic()->log()->write('term_id: ' . $term['id']);
-                self::dic()->log()->write('page_id: ' . $question_definition['id']);
-                self::dic()->log()->write('page_id: ' . $answer_definition['id']);
                 $this->migratePageObject($question_definition['id'], $ilObjFlashcardQuestions->getId());
                 $this->migratePageObject($answer_definition['id'], $ilObjFlashcardQuestions->getId());
 
@@ -77,10 +76,52 @@ class GlossaryMigration {
                 $xfcqQuestion->setPageIdQuestion($question_definition['id']);
                 $xfcqQuestion->setPageIdAnswer($answer_definition['id']);
                 $xfcqQuestion->create(true);
+
+                $mapping_term_ids[$term['id']] = $xfcqQuestion->getId();
             }
+
+            $mapping_ref_ids[$glossary->getRefId()] = $ilObjFlashcardQuestions->getRefId();
 
             // move glossary to trash
             self::dic()->tree()->moveToTrash($glossary->getRefId());
+        }
+
+        $migrated_obj_ids = $this->migrateFlashCardObjects($mapping_ref_ids);
+        $this->migrateFlashCards($migrated_obj_ids, $mapping_term_ids);
+    }
+
+    /**
+     * @param array $mapping_ref_ids
+     * @return array
+     */
+    protected function migrateFlashCardObjects(array $mapping_ref_ids) {
+        $migrated_obj_ids = array();
+        $query = self::dic()->database()->query('SELECT obj_id, glossary_ref_id, card_pool_type, xfcq_ref_id FROM rep_robj_xflc_data');
+        while ($set = self::dic()->database()->fetchAssoc($query)) {
+            if (($set['glossary_ref_id'] != 0) && ($set['card_pool_type'] == 0) && ($set['xfcq_ref_id'] == 0)) {
+                self::dic()->database()->query(
+                    'UPDATE rep_robj_xflc_data 
+                            SET card_pool_type = 1, xfcq_ref_id = ' . $mapping_ref_ids[$set['glossary_ref_id']] . ' 
+                            WHERE obj_id = ' . $set['obj_id']
+                );
+                $migrated_obj_ids[] = $set['obj_id'];
+            }
+        }
+        return $migrated_obj_ids;
+    }
+
+    /**
+     * @param array $migrated_obj_ids
+     * @param array $mapping_term_ids
+     */
+    protected function migrateFlashCards(array $migrated_obj_ids, array $mapping_term_ids) {
+        $query = self::dic()->database()->query('SELECT * FROM rep_robj_xflc_cards WHERE obj_id IN (' . implode(',', $migrated_obj_ids) . ')');
+        while ($set = self::dic()->database()->fetchAssoc($query)) {
+            self::dic()->database()->query(
+                'UPDATE rep_robj_xflc_cards 
+                            SET term_id = ' . $mapping_term_ids[$set['term_id']] . ' 
+                            WHERE card_id = ' . $set['card_id']
+            );
         }
     }
 
