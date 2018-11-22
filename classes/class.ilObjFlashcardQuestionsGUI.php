@@ -128,12 +128,12 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
      */
     protected function renderTitleAndDescription() {
         if (!self::dic()->ctrl()->isAsynch()) {
-            self::dic()->template()->setTitle($this->object->getTitle());
+            self::dic()->ui()->mainTemplate()->setTitle($this->object->getTitle());
 
-            self::dic()->template()->setDescription($this->object->getDescription());
+            self::dic()->ui()->mainTemplate()->setDescription($this->object->getDescription());
 
             if (!$this->object->isOnline()) {
-                self::dic()->template()->setAlertProperties([
+                self::dic()->ui()->mainTemplate()->setAlertProperties([
                     [
                         "alert" => true,
                         "property" => self::plugin()->translate("status", self::LANG_MODULE_OBJECT),

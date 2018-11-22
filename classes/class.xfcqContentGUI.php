@@ -89,7 +89,7 @@ class xfcqContentGUI {
      */
     protected function show() {
         $xfcqQuestionTableGUI = new xfcqQuestionTableGUI($this);
-        self::dic()->template()->setContent($xfcqQuestionTableGUI->getHTML());
+        self::dic()->ui()->mainTemplate()->setContent($xfcqQuestionTableGUI->getHTML());
     }
 
     /**
@@ -144,7 +144,7 @@ class xfcqContentGUI {
             $confirmationGUI->addItem('qst_id[]', $id, $text);
         }
 
-        self::dic()->template()->setContent($confirmationGUI->getHTML());
+        self::dic()->ui()->mainTemplate()->setContent($confirmationGUI->getHTML());
     }
 
     /**

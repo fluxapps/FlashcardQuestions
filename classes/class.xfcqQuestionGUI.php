@@ -65,7 +65,7 @@ class xfcqQuestionGUI {
                 $xudfPageObjectGUI = new xfcqPageObjectGUI($_GET['step'] == 'qst' ? $this->question->getPageIdQuestion() : $this->question->getPageIdAnswer(), $this->getObjId());
                 $html = self::dic()->ctrl()->forwardCommand($xudfPageObjectGUI);
                 if ($html) {
-                    self::dic()->template()->setContent($this->getHeader() . $html);
+                    self::dic()->ui()->mainTemplate()->setContent($this->getHeader() . $html);
                 }
                 break;
             default:
@@ -128,7 +128,7 @@ class xfcqQuestionGUI {
      */
     protected function editSettings() {
         $xfcqQuestionFormGUI = new xfcqQuestionFormGUI($this, $this->question);
-        self::dic()->template()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
+        self::dic()->ui()->mainTemplate()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
     }
 
     /**
@@ -141,7 +141,7 @@ class xfcqQuestionGUI {
             ilUtil::sendSuccess(self::plugin()->translate('msg_success'), true);
             self::dic()->ctrl()->redirect($this, self::CMD_EDIT_SETTINGS);
         }
-        self::dic()->template()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
+        self::dic()->ui()->mainTemplate()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
     }
 
     /**
@@ -154,7 +154,7 @@ class xfcqQuestionGUI {
             ilUtil::sendSuccess(self::plugin()->translate('msg_success'), true);
             self::dic()->ctrl()->redirect($this, self::CMD_EDIT_QUESTION);
         }
-        self::dic()->template()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
+        self::dic()->ui()->mainTemplate()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
     }
 
     /**

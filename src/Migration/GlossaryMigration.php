@@ -129,7 +129,13 @@ class GlossaryMigration {
      * @return ilObjGlossary[]
      */
     protected function fetchGlossaries(): array {
-        $query = self::dic()->database()->query('SELECT ref_id from object_data d inner join object_reference r on d.obj_id = r.obj_id where type = "glo" and deleted is null');
+        $query = self::dic()->database()->query(
+            'SELECT ref_id from object_data d 
+                    inner join object_reference r on d.obj_id = r.obj_id 
+                    where type = "glo" 
+                    and d.title LIKE "%Offizielle Prüfungsfragen%"
+                    and deleted is null'
+        );
         $glossaries = [];
         while ($set = self::dic()->database()->fetchAssoc($query)) {
             $glossaries[] = new ilObjGlossary($set['ref_id']);

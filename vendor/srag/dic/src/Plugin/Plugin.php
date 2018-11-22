@@ -103,10 +103,10 @@ final class Plugin implements PluginInterface {
 					echo $html;
 				} else {
 					if ($main) {
-						self::dic()->template()->getStandardTemplate();
+						self::dic()->ui()->mainTemplate()->getStandardTemplate();
 					}
-					self::dic()->template()->setContent($html);
-					self::dic()->template()->show();
+					self::dic()->ui()->mainTemplate()->setContent($html);
+					self::dic()->ui()->mainTemplate()->show();
 				}
 
 				break;
