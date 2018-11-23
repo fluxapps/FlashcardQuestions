@@ -35,9 +35,6 @@ table_row_question#:#Question
 table_row_answer#:#Answer
 table_row_taxonomy#:#Taxonomy
 table_row_active#:#Active
-table_cmd_editSettings#:#Edit Settings
-table_cmd_editQuestion#:#Edit Question
-table_cmd_editAnswer#:#Edit Answer
 button_add_new_question#:#Add New Question
 button_saveSettings#:#Save
 button_saveSettingsAndContinue#:#Save And Continue
@@ -47,4 +44,6 @@ form_f_active#:#Active
 msg_success#:#Settings successfully saved.
 msg_deleted_successfully#:#Object(s) deleted successfully.
 msg_no_question_selected#:#Please choose at least one question.
+msg_enter_title_first#:#Please set a title and save the form first.
 delete_confirmation_text#:#Do you really want to delete the following objects?
+exit_button#:#Beenden

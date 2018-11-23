@@ -76,7 +76,6 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
         $this->addItem($input);
 
         $this->addCommandButton(xfcqQuestionGUI::CMD_SAVE_SETTINGS, self::plugin()->translate(xfcqQuestionGUI::CMD_SAVE_SETTINGS, 'button'));
-        $this->addCommandButton(xfcqQuestionGUI::CMD_SAVE_SETTINGS_AND_CONTINUE, self::plugin()->translate(xfcqQuestionGUI::CMD_SAVE_SETTINGS_AND_CONTINUE, 'button'));
     }
 
     /**

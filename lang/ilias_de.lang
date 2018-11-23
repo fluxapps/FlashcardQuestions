@@ -35,9 +35,6 @@ table_row_question#:#Frage
 table_row_answer#:#Antwort
 table_row_taxonomy#:#Taxonomie
 table_row_active#:#Aktiv
-table_cmd_editSettings#:#Einstellungen bearbeiten
-table_cmd_editQuestion#:#Frage bearbeiten
-table_cmd_editAnswer#:#Antwort bearbeiten
 button_add_new_question#:#Neue Frage hinzufügen
 button_saveSettings#:#Speichern
 button_saveSettingsAndContinue#:#Speichern und Weiter
@@ -47,4 +44,6 @@ form_f_active#:#Aktiv
 msg_success#:#Einstellungen erfolgreich gespeichert.
 msg_deleted_successfully#:#Objekt(e) erfolgreich gelöscht.
 msg_no_question_selected#:#Bitte wählen Sie mindestens eine Frage aus.
+msg_enter_title_first#:#Bitte geben Sie erst einen Titel ein und speichern Sie das Formular.
 delete_confirmation_text#:#Sind Sie sicher, dass folgende Objekte gelöscht werden sollen?
+exit_button#:#Beenden

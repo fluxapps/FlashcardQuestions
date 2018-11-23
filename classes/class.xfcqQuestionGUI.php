@@ -24,6 +24,9 @@ class xfcqQuestionGUI {
     const CMD_EDIT_QUESTION = 'editQuestion';
     const CMD_EDIT_ANSWER = 'editAnswer';
 
+    const GET_QUESTION_ID = 'qst_id';
+    const GET_PAGE_ID = 'xfcq_page_id';
+
     /**
      * @var xfcqQuestion
      */
@@ -42,8 +45,8 @@ class xfcqQuestionGUI {
      * @param xfcqContentGUI $parent_gui
      */
     public function __construct(xfcqContentGUI $parent_gui) {
-        $this->question = new xfcqQuestion((int) $_GET['qst_id']);
-        $this->is_new = !(bool) $_GET['qst_id'];
+        $this->question = new xfcqQuestion((int) $_GET[self::GET_QUESTION_ID]);
+        $this->is_new = !(bool) $_GET[self::GET_QUESTION_ID];
         $this->parent_gui = $parent_gui;
     }
 
@@ -56,16 +59,15 @@ class xfcqQuestionGUI {
         
         self::dic()->tabs()->clearTargets();
         self::dic()->tabs()->setBackTarget(self::dic()->language()->txt('back'), self::dic()->ctrl()->getLinkTargetByClass(xfcqContentGUI::class));
-        self::dic()->ctrl()->saveParameter($this, 'qst_id');
-        self::dic()->ctrl()->saveParameter($this, 'step');
-
+        self::dic()->ctrl()->saveParameter($this, self::GET_QUESTION_ID);
+        self::dic()->ctrl()->saveParameter($this, self::GET_PAGE_ID);
 
         switch ($next_class) {
             case strtolower(xfcqPageObjectGUI::class):
-                $xudfPageObjectGUI = new xfcqPageObjectGUI($_GET['step'] == 'qst' ? $this->question->getPageIdQuestion() : $this->question->getPageIdAnswer(), $this->getObjId());
+                $xudfPageObjectGUI = new xfcqPageObjectGUI($_GET[self::GET_PAGE_ID], $this->getObjId());
                 $html = self::dic()->ctrl()->forwardCommand($xudfPageObjectGUI);
                 if ($html) {
-                    self::dic()->ui()->mainTemplate()->setContent($this->getHeader() . $html);
+                    $this->showEdit($html);
                 }
                 break;
             default:
@@ -82,53 +84,127 @@ class xfcqQuestionGUI {
                 }
                 break;
         }
-        // these are automatically rendered by the pageobject gui
-        self::dic()->tabs()->removeTab('edit');
-        self::dic()->tabs()->removeTab('history');
-        self::dic()->tabs()->removeTab('clipboard');
-        self::dic()->tabs()->removeTab('pg');
+        $this->removePageEditorTabs();
     }
 
-    /**
-     * @return string
-     */
-    protected function getHeader() {
-        if ($_GET['step'] == 'qst' && $_GET['cmd'] != self::CMD_EDIT_SETTINGS) {
-            $qst_bold = '<b>';
-            $qst_bold_closed = '</b>';
-        } elseif ($_GET['step'] == 'ans' && $_GET['cmd'] != self::CMD_EDIT_SETTINGS) {
-            $ans_bold = '<b>';
-            $ans_bold_closed = '</b>';
-        } else {
-            $settings_bold = '<b>';
-            $settings_bold_closed = '</b>';
-        }
-
-        $link_settings = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_SETTINGS) .'">';
-        $link_settings_closed = '</a>';
-
-
-        if (!$this->is_new) {
-            $link_qst = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_QUESTION) .'">';
-            $link_qst_closed = '</a>';
-
-            $link_ans = '<a href="' . self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_ANSWER) .'">';
-            $link_ans_closed = '</a>';
-        }
-        return '<h1 style=font-size:30px>'
-            . $link_settings . $settings_bold . 'Einstellungen' . $settings_bold_closed . $link_settings_closed
-            . ' &rarr; '
-            . $link_qst. $qst_bold . 'Frage' . $qst_bold_closed . $link_qst_closed
-            . ' &rarr; '
-            . $link_ans . $ans_bold . 'Antwort' . $ans_bold_closed . $link_ans_closed
-            . '</h1>';
-    }
     /**
      *
      */
     protected function editSettings() {
+        self::dic()->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/css/edit_question.css');
+        $template = self::plugin()->template('default/tpl.edit_settings.html');
+
         $xfcqQuestionFormGUI = new xfcqQuestionFormGUI($this, $this->question);
-        self::dic()->ui()->mainTemplate()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
+        $template->setVariable('SETTINGS', $xfcqQuestionFormGUI->getHTML());
+
+        $template->setVariable('QUESTION_HEADER', self::dic()->language()->txt('question'));
+        $template->setVariable('ANSWER_HEADER', self::dic()->language()->txt('answer', 'assessment'));
+        if (!$this->is_new) {
+            $question_gui = new xfcqPageObjectGUI($this->question->getPageIdQuestion(), $this->getObjId());
+            $template->setVariable('QUESTION', $question_gui->getHTML());
+            $template->setVariable('LINK_EDIT_QUESTION', self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_QUESTION));
+
+            $answer_gui = new xfcqPageObjectGUI($this->question->getPageIdAnswer(), $this->getObjId());
+            $template->setVariable('ANSWER', $answer_gui->getHTML());
+            $template->setVariable('LINK_EDIT_ANSWER', self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_ANSWER));
+
+            $template->setVariable('LABEL_EDIT', self::dic()->language()->txt('edit'));
+        } else {
+            $template->setVariable('LABEL_EDIT', self::plugin()->translate('msg_enter_title_first'));
+        }
+
+        self::dic()->ui()->mainTemplate()->setContent($template->get());
+    }
+
+    /**
+     *
+     */
+    protected function editQuestion() {
+        self::dic()->ctrl()->setParameter($this, self::GET_PAGE_ID, $this->question->getPageIdQuestion());
+        self::dic()->ctrl()->setParameterByClass(xfcqPageObjectGUI::class, 'ref_id', $_GET['ref_id']);
+        self::dic()->ctrl()->redirectByClass(xfcqPageObjectGUI::class, 'edit');
+    }
+
+    /**
+     *
+     */
+    protected function editAnswer() {
+        self::dic()->ctrl()->setParameter($this, self::GET_PAGE_ID, $this->question->getPageIdAnswer());
+        self::dic()->ctrl()->setParameterByClass(xfcqPageObjectGUI::class, 'ref_id', $_GET['ref_id']);
+        self::dic()->ctrl()->redirectByClass(xfcqPageObjectGUI::class, 'edit');
+    }
+
+    /**
+     * @param $page_id
+     * @throws ilException
+     */
+    protected function showEdit($html) {
+        if ($_GET[self::GET_PAGE_ID] == $this->question->getPageIdQuestion()) {
+            $this->showEditQuestion($html);
+        } elseif ($_GET[self::GET_PAGE_ID] == $this->question->getPageIdAnswer()) {
+            $this->showEditAnswer($html);
+        } else {
+            throw new ilException('Page ID does not match question or answer');
+        }
+    }
+
+    /**
+     * @throws \srag\DIC\Exception\DICException
+     * @throws ilTemplateException
+     */
+    protected function showEditQuestion($html) {
+        self::dic()->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/css/edit_question.css');
+        $template = self::plugin()->template('default/tpl.edit_question.html');
+
+        $xfcqQuestionFormGUI = new xfcqQuestionFormGUI($this, $this->question);
+        $template->setVariable('SETTINGS', $xfcqQuestionFormGUI->getHTML());
+
+        $template->setVariable('QUESTION_HEADER', self::dic()->language()->txt('question'));
+        $template->setVariable('QUESTION', $html);
+
+        $answer_gui = new xfcqPageObjectGUI($this->question->getPageIdAnswer(), $this->getObjId());
+        $template->setVariable('ANSWER_HEADER', self::dic()->language()->txt('answer', 'assessment'));
+        $template->setVariable('ANSWER', $answer_gui->getHTML());
+        $template->setVariable('LINK_EDIT_ANSWER', self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_ANSWER));
+
+        $template->setVariable('LABEL_EDIT', self::dic()->language()->txt('edit'));
+
+        $back_button = ilLinkButton::getInstance();
+        $back_button->setUrl(self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_SETTINGS));
+        $back_button->setCaption(self::plugin()->translate('exit_button'), false);
+        $template->setVariable('EXIT_BUTTON', $back_button->getToolbarHTML());
+
+        self::dic()->ui()->mainTemplate()->setContent($template->get());
+    }
+
+    /**
+     * @throws \srag\DIC\Exception\DICException
+     * @throws ilTemplateException
+     */
+    protected function showEditAnswer($html) {
+        self::dic()->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/css/edit_question.css');
+        $template = self::plugin()->template('default/tpl.edit_answer.html');
+
+        $xfcqQuestionFormGUI = new xfcqQuestionFormGUI($this, $this->question);
+        $template->setVariable('SETTINGS', $xfcqQuestionFormGUI->getHTML());
+
+        $question_gui = new xfcqPageObjectGUI($this->question->getPageIdQuestion(), $this->getObjId());
+        $template->setVariable('QUESTION_HEADER', self::dic()->language()->txt('question'));
+        $template->setVariable('QUESTION', $question_gui->getHTML());
+        $template->setVariable('LINK_EDIT_QUESTION', self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_QUESTION));
+
+        $template->setVariable('ANSWER_HEADER', self::dic()->language()->txt('answer', 'assessment'));
+        $template->setVariable('ANSWER', $html);
+
+        $template->setVariable('LABEL_EDIT', self::dic()->language()->txt('edit'));
+
+        $back_button = ilLinkButton::getInstance();
+        $back_button->setUrl(self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_SETTINGS));
+        $back_button->setCaption(self::plugin()->translate('exit_button'), false);
+        $template->setVariable('EXIT_BUTTON', $back_button->getToolbarHTML());
+
+
+        self::dic()->ui()->mainTemplate()->setContent($template->get());
     }
 
     /**
@@ -157,23 +233,6 @@ class xfcqQuestionGUI {
         self::dic()->ui()->mainTemplate()->setContent($this->getHeader() . $xfcqQuestionFormGUI->getHTML());
     }
 
-    /**
-     *
-     */
-    protected function editQuestion() {
-        self::dic()->ctrl()->setParameter($this, 'step', 'qst');
-        self::dic()->ctrl()->setParameterByClass(xfcqPageObjectGUI::class, 'ref_id', $_GET['ref_id']);
-        self::dic()->ctrl()->redirectByClass(xfcqPageObjectGUI::class, 'edit');
-    }
-
-    /**
-     *
-     */
-    protected function editAnswer() {
-        self::dic()->ctrl()->setParameter($this, 'step', 'ans');
-        self::dic()->ctrl()->setParameterByClass(xfcqPageObjectGUI::class, 'ref_id', $_GET['ref_id']);
-        self::dic()->ctrl()->redirectByClass(xfcqPageObjectGUI::class, 'edit');
-    }
 
     /**
      * @return int
@@ -187,5 +246,21 @@ class xfcqQuestionGUI {
      */
     public function getObject(): ilObjFlashcardQuestions {
         return $this->parent_gui->getObject();
+    }
+
+    /**
+     *
+     */
+    protected function removePageEditorTabs() {
+// these are automatically rendered by the pageobject gui
+        self::dic()->tabs()->removeTab('edit');
+        self::dic()->tabs()->removeTab('history');
+        self::dic()->tabs()->removeTab('clipboard');
+        self::dic()->tabs()->removeTab('pg');
+        // and we have to do it two times, since there are two page editors :)
+        self::dic()->tabs()->removeTab('edit');
+        self::dic()->tabs()->removeTab('history');
+        self::dic()->tabs()->removeTab('clipboard');
+        self::dic()->tabs()->removeTab('pg');
     }
 }

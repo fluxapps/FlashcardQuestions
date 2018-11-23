@@ -278,9 +278,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         $actions = new ilAdvancedSelectionListGUI();
 
         $actions->setListTitle(self::dic()->language()->txt('actions'));
-        $actions->addItem(self::plugin()->translate('cmd_' . xfcqQuestionGUI::CMD_EDIT_SETTINGS, self::LANG_MODULE), xfcqQuestionGUI::CMD_EDIT_SETTINGS, self::dic()->ctrl()->getLinkTargetByClass(xfcqQuestionGUI::class, xfcqQuestionGUI::CMD_EDIT_SETTINGS));
-        $actions->addItem(self::plugin()->translate('cmd_' . xfcqQuestionGUI::CMD_EDIT_QUESTION, self::LANG_MODULE), xfcqQuestionGUI::CMD_EDIT_QUESTION, self::dic()->ctrl()->getLinkTargetByClass(xfcqQuestionGUI::class, xfcqQuestionGUI::CMD_EDIT_QUESTION));
-        $actions->addItem(self::plugin()->translate('cmd_' . xfcqQuestionGUI::CMD_EDIT_ANSWER, self::LANG_MODULE), xfcqQuestionGUI::CMD_EDIT_ANSWER, self::dic()->ctrl()->getLinkTargetByClass(xfcqQuestionGUI::class, xfcqQuestionGUI::CMD_EDIT_ANSWER));
+        $actions->addItem(self::dic()->language()->txt('edit'), xfcqQuestionGUI::CMD_EDIT_SETTINGS, self::dic()->ctrl()->getLinkTargetByClass(xfcqQuestionGUI::class, xfcqQuestionGUI::CMD_EDIT_SETTINGS));
         $actions->addItem(self::dic()->language()->txt('delete'), 'delete', self::dic()->ctrl()->getLinkTargetByClass(xfcqContentGUI::class, xfcqContentGUI::CMD_DELETE));
         if ($a_set['active']) {
             $actions->addItem(self::dic()->language()->txt('deactivate'), 'deactivate', self::dic()->ctrl()->getLinkTargetByClass(xfcqContentGUI::class, xfcqContentGUI::CMD_DEACTIVATE));
