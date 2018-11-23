@@ -26,7 +26,7 @@ class xfcqQuestion extends ActiveRecord {
     public function sleep($field_name) {
         switch ($field_name) {
             case 'tax_nodes':
-                return implode(',', $this->tax_nodes);
+                return serialize($this->tax_nodes);
             default:
                 return null;
         }
@@ -40,7 +40,7 @@ class xfcqQuestion extends ActiveRecord {
     public function wakeUp($field_name, $field_value) {
         switch ($field_name) {
             case 'tax_nodes':
-                return explode(',', $field_value);
+                return unserialize($field_value);
             default:
                 return null;
         }
@@ -240,5 +240,24 @@ class xfcqQuestion extends ActiveRecord {
      */
     public function setTaxNodes(array $tax_nodes) {
         $this->tax_nodes = $tax_nodes;
+    }
+
+    /**
+     * @param Int $tax_id
+     * @return array
+     */
+    public function getTaxNodesForTaxId(Int $tax_id): array {
+        if (isset($this->tax_nodes[$tax_id])) {
+            return $this->tax_nodes[$tax_id];
+        }
+        return array();
+    }
+
+    /**
+     * @param array $tax_nodes
+     * @param Int $tax_id
+     */
+    public function setTaxNodesForTaxId(array $tax_nodes, Int $tax_id) {
+        $this->tax_nodes[$tax_id] = $tax_nodes;
     }
 }

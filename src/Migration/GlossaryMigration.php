@@ -47,7 +47,7 @@ class GlossaryMigration {
             $ilObjFlashcardQuestions->update();
 
             $old_taxonomy = new ilObjTaxonomy($glossary->getTaxonomyId());
-            $new_taxonomy = new ilObjTaxonomy($ilObjFlashcardQuestions->getTaxonomyId());
+            $new_taxonomy = new ilObjTaxonomy($ilObjFlashcardQuestions->getTaxonomyIds());
             $old_taxonomy->cloneNodes($new_taxonomy, $old_taxonomy->getTree()->getRootId(), $new_taxonomy->getTree()->getRootId());
             $new_taxonomy->setSortingMode($old_taxonomy->getSortingMode());
             $new_taxonomy->setItemSorting($old_taxonomy->getItemSorting());

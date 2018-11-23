@@ -43,10 +43,10 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	}
 
     /**
-     * @return int
+     * @return array
      */
-    public function getTaxonomyId(): int {
-        return array_shift(ilObjTaxonomy::getUsageOfObject($this->id));
+    public function getTaxonomyIds(): array {
+        return ilObjTaxonomy::getUsageOfObject($this->id);
 	}
 
 	/**
@@ -90,8 +90,10 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 			$this->object->delete();
 		}
 
-        $ilObjTaxonomy = new ilObjTaxonomy($this->getTaxonomyId());
-        $ilObjTaxonomy->delete();
+        foreach ($this->getTaxonomyIds() as $tax_id) {
+            $ilObjTaxonomy = new ilObjTaxonomy($tax_id);
+            $ilObjTaxonomy->delete();
+        }
 
         // TODO: delete page objects
 	}

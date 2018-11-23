@@ -85,6 +85,12 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 
         $this->tpl->setVariable('ROW_ID', $a_set['id']);
 
+        if ($this->isColumnSelected('active')) {
+            $this->tpl->setCurrentBlock('row');
+            $this->tpl->setVariable('VALUE', $this->getActiveIcon($a_set['active']));
+            $this->tpl->parseCurrentBlock();
+        }
+
         if ($this->isColumnSelected('title')) {
             $this->tpl->setCurrentBlock('row');
             $this->tpl->setVariable('VALUE', $this->formatTitle($a_set));
@@ -103,16 +109,16 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
             $this->tpl->parseCurrentBlock();
         }
 
-        if ($this->isColumnSelected('taxonomy')) {
-            $this->tpl->setCurrentBlock('row');
-            $this->tpl->setVariable('VALUE', implode(', ', array_map('ilTaxonomyNode::_lookupTitle', $a_set['tax_nodes'])));
-            $this->tpl->parseCurrentBlock();
-        }
-
-        if ($this->isColumnSelected('active')) {
-            $this->tpl->setCurrentBlock('row');
-            $this->tpl->setVariable('VALUE', $this->getActiveIcon($a_set['active']));
-            $this->tpl->parseCurrentBlock();
+        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+            if ($this->isColumnSelected('taxonomy_' . $tax_id)) {
+                $this->tpl->setCurrentBlock('row');
+                if (isset($a_set['tax_nodes'][$tax_id])) {
+                    $this->tpl->setVariable('VALUE', implode(', ', array_map('ilTaxonomyNode::_lookupTitle', $a_set['tax_nodes'][$tax_id])));
+                } else {
+                    $this->tpl->setVariable('VALUE', '&nbsp');
+                }
+                $this->tpl->parseCurrentBlock();
+            }
         }
 
         $this->tpl->setCurrentBlock('row');
@@ -135,8 +141,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         ]);
         $this->addAndReadFilterItem($filter_item);
 
-        $filter_item = new ilTaxSelectInputGUI($this->parent_gui->getObject()->getTaxonomyId(),'taxonomy', true);
-        $this->addAndReadFilterItem($filter_item);
+        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+            $filter_item = new ilTaxSelectInputGUI($tax_id,"taxonomy_$tax_id", true);
+            $this->addAndReadFilterItem($filter_item);
+        }
     }
 
 
@@ -148,9 +156,11 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
             if ($filter_title && strpos($set['title'], $filter_title) === false) {
                 continue;
             }
-            //taxonomy
-            if (count(array_filter($this->filter['taxonomy'])) && empty(array_intersect($set['tax_nodes'], $this->filter['taxonomy']))){
-                continue;
+            //taxonomies
+            foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+                if (count(array_filter($this->filter['taxonomy_' . $tax_id])) && empty(array_intersect($set['tax_nodes'][$tax_id], $this->filter['taxonomy_' . $tax_id]))){
+                    continue 2;
+                }
             }
             // active
             if ($this->filter['active'] == self::FILTER_ACTIVE_TRUE && !$set['active']) {
@@ -228,13 +238,17 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
      * @throws \srag\DIC\Exception\DICException
      */
     public function getSelectableColumns(): array {
-        return [
+        $columns = [
+            'active' => ['txt' => self::plugin()->translate('row_active', self::LANG_MODULE), 'sort_field' => false, 'width' => '', 'default' => true],
             'title' => ['txt' => self::plugin()->translate('row_title', self::LANG_MODULE), 'sort_field' => 'title', 'width' => '', 'default' => true],
             'question' => ['txt' => self::plugin()->translate('row_question', self::LANG_MODULE), 'sort_field' => false, 'width' => '', 'default' => true],
             'answer' => ['txt' => self::plugin()->translate('row_answer', self::LANG_MODULE), 'sort_field' => false, 'width' => '', 'default' => true],
-            'taxonomy' => ['txt' => self::plugin()->translate('row_taxonomy', self::LANG_MODULE), 'sort_field' => false, 'width' => '', 'default' => true],
-            'active' => ['txt' => self::plugin()->translate('row_active', self::LANG_MODULE), 'sort_field' => false, 'width' => '', 'default' => true],
         ];
+        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+            $ilObjTaxonomy = new ilObjTaxonomy($tax_id);
+            $columns['taxonomy_' . $tax_id] = ['txt' => $ilObjTaxonomy->getTitle(), 'sort_field' => false, 'width' => '', 'default' => true];
+        }
+        return $columns;
     }
 
     /**

@@ -68,8 +68,10 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
         $input->setRequired(true);
         $this->addItem($input);
 
-        $input = new ilTaxSelectInputGUI($this->parent_gui->getObject()->getTaxonomyId(), self::F_TAXONOMY, true);
-        $this->addItem($input);
+        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+            $input = new ilTaxSelectInputGUI($tax_id, self::F_TAXONOMY . "_$tax_id", true);
+            $this->addItem($input);
+        }
 
         $input = new ilCheckboxInputGUI(self::plugin()->translate(self::F_ACTIVE, self::LANG_MODULE), self::F_ACTIVE);
         $input->setChecked(true);
@@ -82,11 +84,14 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
      *
      */
     protected function fillForm() {
-        $this->setValuesByArray(array(
-           self::F_TITLE => $this->question->getTitle(),
-           self::F_TAXONOMY => $this->question->getTaxNodes(),
-           self::F_ACTIVE => $this->question->isActive()
-        ));
+        $array = array(
+            self::F_TITLE => $this->question->getTitle(),
+            self::F_ACTIVE => $this->question->isActive()
+        );
+        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+            $array[self::F_TAXONOMY . "_$tax_id"] = $this->question->getTaxNodesForTaxId($tax_id);
+        }
+        $this->setValuesByArray($array);
     }
 
     /**
@@ -98,9 +103,11 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
         }
 
         $this->question->setTitle($this->getInput(self::F_TITLE));
-        $this->question->setTaxNodes($this->getInput(self::F_TAXONOMY));
         $this->question->setActive($this->getInput(self::F_ACTIVE));
         $this->question->setObjId($this->parent_gui->getObjId());
+        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+            $this->question->setTaxNodesForTaxId($this->getInput(self::F_TAXONOMY . "_$tax_id"), $tax_id);
+        }
 
         $this->question->store();
         self::dic()->ctrl()->setParameter($this->parent_gui, 'qst_id', $this->question->getId());

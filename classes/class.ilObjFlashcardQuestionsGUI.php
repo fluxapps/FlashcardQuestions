@@ -64,6 +64,16 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		return ilFlashcardQuestionsPlugin::PLUGIN_ID;
 	}
 
+    function executeCommand() {
+	    // this is a bit hacky but has to be done, since the 'save' cmd is caught up in the parent::executeCommand()
+	    $cmd = self::dic()->ctrl()->getCmd();
+	    $next_class = self::dic()->ctrl()->getNextClass($this);
+	    if ($next_class == strtolower(ilObjTaxonomyGUI::class) && $cmd == 'save') {
+	        $this->performCommand($cmd);
+        }
+        return parent::executeCommand();
+    }
+
 
     /**
      * @param string $cmd
@@ -76,13 +86,14 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 
 		switch (strtolower($next_class)) {
             case strtolower(ilObjTaxonomyGUI::class):
+                self::dic()->tabs()->activateTab(self::TAB_TAXONOMY);
                 switch ($cmd) {
-                    case 'listTaxonomies':
-                        self::dic()->ctrl()->redirect($this, self::CMD_SHOW_CONTENTS);
-                        break;
                     default:
                         $ilObjTaxonomyGUI = new ilObjTaxonomyGUI();
                         $ilObjTaxonomyGUI->setAssignedObject($this->object->getId());
+                        $ilObjTaxonomyGUI->setMultiple(true);
+                        $ilObjTaxonomyGUI->setFormAction(self::dic()->ctrl()->getFormActionByClass([self::class, ilObjTaxonomyGUI::class], 'saveTaxonomy'), 'saveTaxonomy');
+                        self::dic()->ctrl()->setReturn($this, self::TAB_TAXONOMY);
                         self::dic()->ctrl()->forwardCommand($ilObjTaxonomyGUI);
                         break;
                 }
@@ -231,9 +242,8 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		}
 
         if (ilObjFlashcardQuestionsAccess::hasWriteAccess()) {
-            self::dic()->ctrl()->setParameterByClass(ilObjTaxonomyGUI::class, 'tax_id', $this->object->getTaxonomyId());
             self::dic()->tabs()->addTab(self::TAB_TAXONOMY, self::plugin()->translate("taxonomy", self::LANG_MODULE_OBJECT) . ilGlyphGUI::get('next'), self::dic()->ctrl()
-                ->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listNodes'));
+                ->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listTaxonomies'));
         }
 
 		self::dic()->tabs()->manual_activation = true; // Show all tabs as links when no activation
