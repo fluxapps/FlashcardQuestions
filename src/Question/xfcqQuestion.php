@@ -144,6 +144,22 @@ class xfcqQuestion extends ActiveRecord {
      * @db_length           8
      */
     protected $page_id_ans;
+    /**
+     * @var int
+     *
+     * @db_has_field        true
+     * @db_fieldtype        integer
+     * @db_length           8
+     */
+    protected $origin_glo_id;
+    /**
+     * @var int
+     *
+     * @db_has_field        true
+     * @db_fieldtype        integer
+     * @db_length           8
+     */
+    protected $origin_term_id;
 
     /**
      * @return int
@@ -226,6 +242,34 @@ class xfcqQuestion extends ActiveRecord {
      */
     public function setActive(bool $active) {
         $this->active = $active;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOriginGloId(): int {
+        return $this->origin_glo_id;
+    }
+
+    /**
+     * @param int $origin_glo_id
+     */
+    public function setOriginGloId(int $origin_glo_id) {
+        $this->origin_glo_id = $origin_glo_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOriginTermId(): int {
+        return $this->origin_term_id;
+    }
+
+    /**
+     * @param int $origin_term_id
+     */
+    public function setOriginTermId(int $origin_term_id) {
+        $this->origin_term_id = $origin_term_id;
     }
 
     /**

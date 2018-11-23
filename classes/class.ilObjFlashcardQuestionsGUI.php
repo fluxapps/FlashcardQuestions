@@ -65,6 +65,10 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	}
 
     function executeCommand() {
+	    // TODO: remove after dev
+//	    $migration = new \srag\Plugins\FlashcardQuestions\GlossaryMigration\GlossaryMigrationWKV();
+//	    $migration->run();
+
 	    // this is a bit hacky but has to be done, since the 'save' cmd is caught up in the parent::executeCommand()
 	    $cmd = self::dic()->ctrl()->getCmd();
 	    $next_class = self::dic()->ctrl()->getNextClass($this);

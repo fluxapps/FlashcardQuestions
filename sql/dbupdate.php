@@ -25,3 +25,7 @@ $DIC->database()->insert('copg_pobj_def', array(
 'component' => array('text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/FlashcardQuestions')
 ));
 ?>
+<#3>
+<?php
+\srag\Plugins\FlashcardQuestions\Question\xfcqQuestion::updateDB();
+?>
