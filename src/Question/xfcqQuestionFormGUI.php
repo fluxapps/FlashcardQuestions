@@ -8,6 +8,7 @@ use ilPropertyFormGUI;
 use ilTaxSelectInputGUI;
 use ilTextInputGUI;
 use srag\DIC\DICTrait;
+use srag\DIC\Exception\DICException;
 use xfcqQuestionGUI;
 
 /**
@@ -45,7 +46,7 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
 	 * @param xfcqQuestionGUI $parent_gui
 	 * @param xfcqQuestion    $question
 	 *
-	 * @throws \srag\DIC\Exception\DICException
+	 * @throws DICException
 	 */
 	public function __construct(xfcqQuestionGUI $parent_gui, xfcqQuestion $question) {
 		$this->question = $question;

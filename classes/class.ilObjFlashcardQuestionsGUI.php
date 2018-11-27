@@ -5,6 +5,7 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use srag\DIC\DICTrait;
+use srag\DIC\Exception\DICException;
 use srag\Plugins\FlashcardQuestions\GlossaryMigration\GlossaryMigration;
 use srag\Plugins\FlashcardQuestions\Object\ObjSettingsFormGUI;
 
@@ -84,7 +85,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	/**
 	 * @param string $cmd
 	 *
-	 * @throws \srag\DIC\Exception\DICException
+	 * @throws DICException
 	 * @throws ilCtrlException
 	 */
 	public function performCommand(string $cmd)/*: void*/ {
@@ -146,7 +147,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 
 
 	/**
-	 * @throws \srag\DIC\Exception\DICException
+	 * @throws DICException
 	 */
 	protected function renderTitleAndDescription() {
 		if (!self::dic()->ctrl()->isAsynch()) {
