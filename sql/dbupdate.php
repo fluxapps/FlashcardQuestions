@@ -21,7 +21,7 @@
 	'parent_type' => array( 'text', 'xfcq' ),
 	'class_name' => array( 'text', 'xfcqPageObject' ),
 	'directory' => array( 'text', 'classes/PageObject' ),
-	'component' => array( 'text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/FlashcardQuestions' )
+	'component' => array( 'text', substr(\srag\DIC\DICStatic::plugin(\ilFlashcardQuestionsPlugin::class)->directory(), 2) )
 ));
 ?>
 <#3>

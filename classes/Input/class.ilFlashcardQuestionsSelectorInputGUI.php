@@ -12,6 +12,7 @@ use srag\DIC\DICTrait;
 class ilFlashcardQuestionsSelectorInputGUI extends ilRepositorySelectorInputGUI {
 
 	use DICTrait;
+	const PLUGIN_CLASS_NAME = ilFlashcardQuestionsPlugin::class;
 
 
 	/**
@@ -32,7 +33,7 @@ class ilFlashcardQuestionsSelectorInputGUI extends ilRepositorySelectorInputGUI 
 	 */
 	function render($a_mode = "property_form") {
 		// modification:
-		$tpl = new ilTemplate("tpl.prop_xfcq_select.html", true, true, "Customizing/global/plugins/Services/Repository/RepositoryObject/FlashcardQuestions");
+		$tpl = new ilTemplate("tpl.prop_xfcq_select.html", true, true, self::plugin()->directory());
 		// modification.
 
 		$tpl->setVariable("POST_VAR", $this->getPostVar());
