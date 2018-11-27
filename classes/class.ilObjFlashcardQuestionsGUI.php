@@ -89,6 +89,8 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	 * @throws ilCtrlException
 	 */
 	public function performCommand(string $cmd)/*: void*/ {
+		self::dic()->help()->setScreenIdComponent(ilFlashcardQuestionsPlugin::PLUGIN_ID);
+
 		$next_class = self::dic()->ctrl()->getNextClass($this);
 		$this->renderTitleAndDescription();
 
