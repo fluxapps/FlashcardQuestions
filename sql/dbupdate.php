@@ -16,13 +16,12 @@
 ?>
 <#2>
 <?php
-global $DIC;
-$DIC->database()->modifyTableColumn('copg_pobj_def', 'component', array('length' => 120));
-$DIC->database()->insert('copg_pobj_def', array(
-'parent_type' => array('text', 'xfcq'),
-'class_name' => array('text', 'xfcqPageObject'),
-'directory' => array('text', 'classes/PageObject'),
-'component' => array('text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/FlashcardQuestions')
+\srag\DIC\DICStatic::dic()->database()->modifyTableColumn('copg_pobj_def', 'component', array( 'length' => 120 ));
+\srag\DIC\DICStatic::dic()->database()->insert('copg_pobj_def', array(
+	'parent_type' => array( 'text', 'xfcq' ),
+	'class_name' => array( 'text', 'xfcqPageObject' ),
+	'directory' => array( 'text', 'classes/PageObject' ),
+	'component' => array( 'text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/FlashcardQuestions' )
 ));
 ?>
 <#3>

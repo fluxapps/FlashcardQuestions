@@ -4,8 +4,8 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\Plugins\FlashcardQuestions\Config\ConfigFormGUI;
 use srag\ActiveRecordConfig\ActiveRecordConfigGUI;
+use srag\Plugins\FlashcardQuestions\Config\ConfigFormGUI;
 
 /**
  * Class ilFlashcardQuestionsConfigGUI

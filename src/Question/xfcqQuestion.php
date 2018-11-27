@@ -1,8 +1,11 @@
 <?php
+
 namespace srag\Plugins\FlashcardQuestions\Question;
 
 use ActiveRecord;
-use \xfcqPageObject;
+use srag\DIC\DICTrait;
+use xfcqPageObject;
+
 /**
  * Class xfcqQuestion
  *
@@ -10,298 +13,331 @@ use \xfcqPageObject;
  */
 class xfcqQuestion extends ActiveRecord {
 
-    const TABLE_NAME = 'xfcq_question';
+	use DICTrait;
+	const TABLE_NAME = 'xfcq_question';
 
-    /**
-     * @return string
-     */
-    public function getConnectorContainerName() {
-        return self::TABLE_NAME;
-    }
 
-    /**
-     * @param $field_name
-     * @return mixed|null|string
-     */
-    public function sleep($field_name) {
-        switch ($field_name) {
-            case 'tax_nodes':
-                return serialize($this->tax_nodes);
-            default:
-                return null;
-        }
-    }
+	/**
+	 * @return string
+	 */
+	public function getConnectorContainerName() {
+		return self::TABLE_NAME;
+	}
 
-    /**
-     * @param $field_name
-     * @param $field_value
-     * @return array|mixed|null
-     */
-    public function wakeUp($field_name, $field_value) {
-        switch ($field_name) {
-            case 'tax_nodes':
-                return unserialize($field_value);
-            default:
-                return null;
-        }
-    }
 
-    /**
-     *
-     */
-    public function create($omit_creating_page_object = false) {
-        if (!$omit_creating_page_object) {
-            $id_qst = $this->getNextFreePageId();
-            $id_ans = $id_qst + 1;
+	/**
+	 * @param $field_name
+	 *
+	 * @return mixed|null|string
+	 */
+	public function sleep($field_name) {
+		switch ($field_name) {
+			case 'tax_nodes':
+				return serialize($this->tax_nodes);
+			default:
+				return NULL;
+		}
+	}
 
-            $this->setPageIdQuestion($id_qst);
-            $this->setPageIdAnswer($id_ans);
-        }
 
-        parent::create();
+	/**
+	 * @param $field_name
+	 * @param $field_value
+	 *
+	 * @return array|mixed|null
+	 */
+	public function wakeUp($field_name, $field_value) {
+		switch ($field_name) {
+			case 'tax_nodes':
+				return unserialize($field_value);
+			default:
+				return NULL;
+		}
+	}
 
-        if (!$omit_creating_page_object) {
-            // create page object for question
-            $page_obj = new xfcqPageObject();
-            $page_obj->setId($id_qst);
-            $page_obj->setParentId($this->getObjId());
-            $page_obj->create();
-            // create page object for answer
-            $page_obj = new xfcqPageObject();
-            $page_obj->setId($id_ans);
-            $page_obj->setParentId($this->getObjId());
-            $page_obj->create();
-        }
-    }
 
-    /**
-     * @return int
-     */
-    public function getNextFreePageId() {
-        global $DIC;
-        $query = $DIC->database()->query("select max(page_id) id from page_object where parent_type = 'xfcq'");
-        $set = $DIC->database()->fetchAssoc($query);
-        return $set['id'] + 1;
-    }
-    /**
-     * @var int
-     *
-     * @db_has_field          true
-     * @db_is_unique          true
-     * @db_is_primary         true
-     * @db_fieldtype          integer
-     * @db_length             8
-     * @db_sequence           true
-     */
-    protected $id = 0;
-    /**
-     * @var int
-     *
-     * @db_has_field        true
-     * @db_fieldtype        integer
-     * @db_is_notnull       true
-     * @db_length           8
-     */
-    protected $obj_id;
-    /**
-     * @var string
-     *
-     * @db_has_field           true
-     * @db_is_notnull          true
-     * @db_fieldtype           text
-     * @db_length              2048
-     */
-    protected $title;
-    /**
-     * @var bool
-     *
-     * @db_has_field           true
-     * @db_fieldtype           integer
-     * @db_length              1
-     */
-    protected $active = 0;
-    /**
-     * @var array
-     *
-     * @db_has_field           true
-     * @db_fieldtype           text
-     * @db_length              4000
-     */
-    protected $tax_nodes = array();
-    /**
-     * @var int
-     *
-     * @db_has_field        true
-     * @db_fieldtype        integer
-     * @db_length           8
-     */
-    protected $page_id_qst;
-    /**
-     * @var int
-     *
-     * @db_has_field        true
-     * @db_fieldtype        integer
-     * @db_length           8
-     */
-    protected $page_id_ans;
-    /**
-     * @var int
-     *
-     * @db_has_field        true
-     * @db_fieldtype        integer
-     * @db_length           8
-     */
-    protected $origin_glo_id;
-    /**
-     * @var int
-     *
-     * @db_has_field        true
-     * @db_fieldtype        integer
-     * @db_length           8
-     */
-    protected $origin_term_id;
+	/**
+	 *
+	 */
+	public function create($omit_creating_page_object = false) {
+		if (!$omit_creating_page_object) {
+			$id_qst = $this->getNextFreePageId();
+			$id_ans = $id_qst + 1;
 
-    /**
-     * @return int
-     */
-    public function getPageIdQuestion(): int {
-        return $this->page_id_qst;
-    }
+			$this->setPageIdQuestion($id_qst);
+			$this->setPageIdAnswer($id_ans);
+		}
 
-    /**
-     * @param int $page_id_qst
-     */
-    public function setPageIdQuestion(int $page_id_qst) {
-        $this->page_id_qst = $page_id_qst;
-    }
+		parent::create();
 
-    /**
-     * @return int
-     */
-    public function getPageIdAnswer(): int {
-        return $this->page_id_ans;
-    }
+		if (!$omit_creating_page_object) {
+			// create page object for question
+			$page_obj = new xfcqPageObject();
+			$page_obj->setId($id_qst);
+			$page_obj->setParentId($this->getObjId());
+			$page_obj->create();
+			// create page object for answer
+			$page_obj = new xfcqPageObject();
+			$page_obj->setId($id_ans);
+			$page_obj->setParentId($this->getObjId());
+			$page_obj->create();
+		}
+	}
 
-    /**
-     * @param int $page_id_ans
-     */
-    public function setPageIdAnswer(int $page_id_ans) {
-        $this->page_id_ans = $page_id_ans;
-    }
-    /**
-     * @return int
-     */
-    public function getId(): int {
-        return $this->id;
-    }
 
-    /**
-     * @param int $id
-     */
-    public function setId(int $id) {
-        $this->id = $id;
-    }
+	/**
+	 * @return int
+	 */
+	public function getNextFreePageId() {
+		$query = self::dic()->database()->query("select max(page_id) id from page_object where parent_type = 'xfcq'");
+		$set = self::dic()->database()->fetchAssoc($query);
 
-    /**
-     * @return int
-     */
-    public function getObjId(): int {
-        return $this->obj_id;
-    }
+		return $set['id'] + 1;
+	}
 
-    /**
-     * @param int $obj_id
-     */
-    public function setObjId(int $obj_id) {
-        $this->obj_id = $obj_id;
-    }
 
-    /**
-     * @return string
-     */
-    public function getTitle(): string {
-        return $this->title;
-    }
+	/**
+	 * @var int
+	 *
+	 * @db_has_field          true
+	 * @db_is_unique          true
+	 * @db_is_primary         true
+	 * @db_fieldtype          integer
+	 * @db_length             8
+	 * @db_sequence           true
+	 */
+	protected $id = 0;
+	/**
+	 * @var int
+	 *
+	 * @db_has_field        true
+	 * @db_fieldtype        integer
+	 * @db_is_notnull       true
+	 * @db_length           8
+	 */
+	protected $obj_id;
+	/**
+	 * @var string
+	 *
+	 * @db_has_field           true
+	 * @db_is_notnull          true
+	 * @db_fieldtype           text
+	 * @db_length              2048
+	 */
+	protected $title;
+	/**
+	 * @var bool
+	 *
+	 * @db_has_field           true
+	 * @db_fieldtype           integer
+	 * @db_length              1
+	 */
+	protected $active = 0;
+	/**
+	 * @var array
+	 *
+	 * @db_has_field           true
+	 * @db_fieldtype           text
+	 * @db_length              4000
+	 */
+	protected $tax_nodes = array();
+	/**
+	 * @var int
+	 *
+	 * @db_has_field        true
+	 * @db_fieldtype        integer
+	 * @db_length           8
+	 */
+	protected $page_id_qst;
+	/**
+	 * @var int
+	 *
+	 * @db_has_field        true
+	 * @db_fieldtype        integer
+	 * @db_length           8
+	 */
+	protected $page_id_ans;
+	/**
+	 * @var int
+	 *
+	 * @db_has_field        true
+	 * @db_fieldtype        integer
+	 * @db_length           8
+	 */
+	protected $origin_glo_id;
+	/**
+	 * @var int
+	 *
+	 * @db_has_field        true
+	 * @db_fieldtype        integer
+	 * @db_length           8
+	 */
+	protected $origin_term_id;
 
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title) {
-        $this->title = $title;
-    }
 
-    /**
-     * @return bool
-     */
-    public function isActive(): bool {
-        return $this->active;
-    }
+	/**
+	 * @return int
+	 */
+	public function getPageIdQuestion(): int {
+		return $this->page_id_qst;
+	}
 
-    /**
-     * @param bool $active
-     */
-    public function setActive(bool $active) {
-        $this->active = $active;
-    }
 
-    /**
-     * @return int
-     */
-    public function getOriginGloId(): int {
-        return $this->origin_glo_id;
-    }
+	/**
+	 * @param int $page_id_qst
+	 */
+	public function setPageIdQuestion(int $page_id_qst) {
+		$this->page_id_qst = $page_id_qst;
+	}
 
-    /**
-     * @param int $origin_glo_id
-     */
-    public function setOriginGloId(int $origin_glo_id) {
-        $this->origin_glo_id = $origin_glo_id;
-    }
 
-    /**
-     * @return int
-     */
-    public function getOriginTermId(): int {
-        return $this->origin_term_id;
-    }
+	/**
+	 * @return int
+	 */
+	public function getPageIdAnswer(): int {
+		return $this->page_id_ans;
+	}
 
-    /**
-     * @param int $origin_term_id
-     */
-    public function setOriginTermId(int $origin_term_id) {
-        $this->origin_term_id = $origin_term_id;
-    }
 
-    /**
-     * @return array
-     */
-    public function getTaxNodes(): array {
-        return $this->tax_nodes;
-    }
+	/**
+	 * @param int $page_id_ans
+	 */
+	public function setPageIdAnswer(int $page_id_ans) {
+		$this->page_id_ans = $page_id_ans;
+	}
 
-    /**
-     * @param array $tax_nodes
-     */
-    public function setTaxNodes(array $tax_nodes) {
-        $this->tax_nodes = $tax_nodes;
-    }
 
-    /**
-     * @param Int $tax_id
-     * @return array
-     */
-    public function getTaxNodesForTaxId(Int $tax_id): array {
-        if (isset($this->tax_nodes[$tax_id])) {
-            return $this->tax_nodes[$tax_id];
-        }
-        return array();
-    }
+	/**
+	 * @return int
+	 */
+	public function getId(): int {
+		return $this->id;
+	}
 
-    /**
-     * @param array $tax_nodes
-     * @param Int $tax_id
-     */
-    public function setTaxNodesForTaxId(array $tax_nodes, Int $tax_id) {
-        $this->tax_nodes[$tax_id] = $tax_nodes;
-    }
+
+	/**
+	 * @param int $id
+	 */
+	public function setId(int $id) {
+		$this->id = $id;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getObjId(): int {
+		return $this->obj_id;
+	}
+
+
+	/**
+	 * @param int $obj_id
+	 */
+	public function setObjId(int $obj_id) {
+		$this->obj_id = $obj_id;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getTitle(): string {
+		return $this->title;
+	}
+
+
+	/**
+	 * @param string $title
+	 */
+	public function setTitle(string $title) {
+		$this->title = $title;
+	}
+
+
+	/**
+	 * @return bool
+	 */
+	public function isActive(): bool {
+		return $this->active;
+	}
+
+
+	/**
+	 * @param bool $active
+	 */
+	public function setActive(bool $active) {
+		$this->active = $active;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getOriginGloId(): int {
+		return $this->origin_glo_id;
+	}
+
+
+	/**
+	 * @param int $origin_glo_id
+	 */
+	public function setOriginGloId(int $origin_glo_id) {
+		$this->origin_glo_id = $origin_glo_id;
+	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getOriginTermId(): int {
+		return $this->origin_term_id;
+	}
+
+
+	/**
+	 * @param int $origin_term_id
+	 */
+	public function setOriginTermId(int $origin_term_id) {
+		$this->origin_term_id = $origin_term_id;
+	}
+
+
+	/**
+	 * @return array
+	 */
+	public function getTaxNodes(): array {
+		return $this->tax_nodes;
+	}
+
+
+	/**
+	 * @param array $tax_nodes
+	 */
+	public function setTaxNodes(array $tax_nodes) {
+		$this->tax_nodes = $tax_nodes;
+	}
+
+
+	/**
+	 * @param Int $tax_id
+	 *
+	 * @return array
+	 */
+	public function getTaxNodesForTaxId(Int $tax_id): array {
+		if (isset($this->tax_nodes[$tax_id])) {
+			return $this->tax_nodes[$tax_id];
+		}
+
+		return array();
+	}
+
+
+	/**
+	 * @param array $tax_nodes
+	 * @param Int   $tax_id
+	 */
+	public function setTaxNodesForTaxId(array $tax_nodes, Int $tax_id) {
+		$this->tax_nodes[$tax_id] = $tax_nodes;
+	}
 }

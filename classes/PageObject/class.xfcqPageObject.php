@@ -7,9 +7,10 @@
  */
 class xfcqPageObject extends ilPageObject {
 
-    const PARENT_TYPE = 'xfcq';
+	const PARENT_TYPE = 'xfcq';
 
-    function getParentType() {
-        return self::PARENT_TYPE;
-    }
+
+	function getParentType() {
+		return self::PARENT_TYPE;
+	}
 }

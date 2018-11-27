@@ -4,8 +4,8 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\Plugins\FlashcardQuestions\Object\Obj;
 use srag\DIC\DICTrait;
+use srag\Plugins\FlashcardQuestions\Object\Obj;
 
 /**
  * Class ilObjFlashcardQuestionsAccess

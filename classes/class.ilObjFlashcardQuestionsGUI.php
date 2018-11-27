@@ -4,8 +4,10 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\Plugins\FlashcardQuestions\Object\ObjSettingsFormGUI;
 use srag\DIC\DICTrait;
+use srag\Plugins\FlashcardQuestions\GlossaryMigration\GlossaryMigration;
+use srag\Plugins\FlashcardQuestions\Object\ObjSettingsFormGUI;
+
 /**
  * Class ilObjFlashcardQuestionsGUI
  *
@@ -31,14 +33,12 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	const CMD_SETTINGS = "settings";
 	const CMD_SETTINGS_STORE = "settingsStore";
 	const CMD_SHOW_CONTENTS = "showContents";
-    const CMD_MIGRATE = 'migrate';
-
+	const CMD_MIGRATE = 'migrate';
 	// TABS
 	const TAB_PERMISSIONS = "perm_settings";
 	const TAB_SETTINGS = "settings";
 	const TAB_SHOW_CONTENTS = "showContent";
 	const TAB_TAXONOMY = "taxonomy";
-
 	const LANG_MODULE_OBJECT = "object";
 	const LANG_MODULE_SETTINGS = "settings";
 	/**
@@ -64,50 +64,56 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		return ilFlashcardQuestionsPlugin::PLUGIN_ID;
 	}
 
-    function executeCommand() {
-	    // TODO: remove after dev
-//	    $migration = new \srag\Plugins\FlashcardQuestions\GlossaryMigration\GlossaryMigrationWKV();
-//	    $migration->run();
 
-	    // this is a bit hacky but has to be done, since the 'save' cmd is caught up in the parent::executeCommand()
-	    $cmd = self::dic()->ctrl()->getCmd();
-	    $next_class = self::dic()->ctrl()->getNextClass($this);
-	    if ($next_class == strtolower(ilObjTaxonomyGUI::class) && $cmd == 'save') {
-	        $this->performCommand($cmd);
-        }
-        return parent::executeCommand();
-    }
+	function executeCommand() {
+		// TODO: remove after dev
+		//	    $migration = new GlossaryMigrationWKV();
+		//	    $migration->run();
+
+		// this is a bit hacky but has to be done, since the 'save' cmd is caught up in the parent::executeCommand()
+		$cmd = self::dic()->ctrl()->getCmd();
+		$next_class = self::dic()->ctrl()->getNextClass($this);
+		if ($next_class == strtolower(ilObjTaxonomyGUI::class) && $cmd == 'save') {
+			$this->performCommand($cmd);
+		}
+
+		return parent::executeCommand();
+	}
 
 
-    /**
-     * @param string $cmd
-     * @throws \srag\DIC\Exception\DICException
-     * @throws ilCtrlException
-     */
+	/**
+	 * @param string $cmd
+	 *
+	 * @throws \srag\DIC\Exception\DICException
+	 * @throws ilCtrlException
+	 */
 	public function performCommand(string $cmd)/*: void*/ {
 		$next_class = self::dic()->ctrl()->getNextClass($this);
 		$this->renderTitleAndDescription();
 
 		switch (strtolower($next_class)) {
-            case strtolower(ilObjTaxonomyGUI::class):
-                self::dic()->tabs()->activateTab(self::TAB_TAXONOMY);
-                switch ($cmd) {
-                    default:
-                        $ilObjTaxonomyGUI = new ilObjTaxonomyGUI();
-                        $ilObjTaxonomyGUI->setAssignedObject($this->object->getId());
-                        $ilObjTaxonomyGUI->setMultiple(true);
-                        $ilObjTaxonomyGUI->setFormAction(self::dic()->ctrl()->getFormActionByClass([self::class, ilObjTaxonomyGUI::class], 'saveTaxonomy'), 'saveTaxonomy');
-                        self::dic()->ctrl()->setReturn($this, self::TAB_TAXONOMY);
-                        self::dic()->ctrl()->forwardCommand($ilObjTaxonomyGUI);
-                        break;
-                }
-                break;
-            case strtolower(xfcqContentGUI::class):
-                self::dic()->tabs()->activateTab(self::TAB_SHOW_CONTENTS);
-                $xfcqContentGUI = new xfcqContentGUI($this);
-                self::dic()->ctrl()->forwardCommand($xfcqContentGUI);
-                break;
-            default:
+			case strtolower(ilObjTaxonomyGUI::class):
+				self::dic()->tabs()->activateTab(self::TAB_TAXONOMY);
+				switch ($cmd) {
+					default:
+						$ilObjTaxonomyGUI = new ilObjTaxonomyGUI();
+						$ilObjTaxonomyGUI->setAssignedObject($this->object->getId());
+						$ilObjTaxonomyGUI->setMultiple(true);
+						$ilObjTaxonomyGUI->setFormAction(self::dic()->ctrl()->getFormActionByClass([
+							self::class,
+							ilObjTaxonomyGUI::class
+						], 'saveTaxonomy'), 'saveTaxonomy');
+						self::dic()->ctrl()->setReturn($this, self::TAB_TAXONOMY);
+						self::dic()->ctrl()->forwardCommand($ilObjTaxonomyGUI);
+						break;
+				}
+				break;
+			case strtolower(xfcqContentGUI::class):
+				self::dic()->tabs()->activateTab(self::TAB_SHOW_CONTENTS);
+				$xfcqContentGUI = new xfcqContentGUI($this);
+				self::dic()->ctrl()->forwardCommand($xfcqContentGUI);
+				break;
+			default:
 				switch ($cmd) {
 					case self::CMD_SHOW_CONTENTS:
 						// Read commands
@@ -138,26 +144,28 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		}
 	}
 
-    /**
-     * @throws \srag\DIC\Exception\DICException
-     */
-    protected function renderTitleAndDescription() {
-        if (!self::dic()->ctrl()->isAsynch()) {
-            self::dic()->ui()->mainTemplate()->setTitle($this->object->getTitle());
 
-            self::dic()->ui()->mainTemplate()->setDescription($this->object->getDescription());
+	/**
+	 * @throws \srag\DIC\Exception\DICException
+	 */
+	protected function renderTitleAndDescription() {
+		if (!self::dic()->ctrl()->isAsynch()) {
+			self::dic()->ui()->mainTemplate()->setTitle($this->object->getTitle());
 
-            if (!$this->object->isOnline()) {
-                self::dic()->ui()->mainTemplate()->setAlertProperties([
-                    [
-                        "alert" => true,
-                        "property" => self::plugin()->translate("status", self::LANG_MODULE_OBJECT),
-                        "value" => self::plugin()->translate("offline", self::LANG_MODULE_OBJECT)
-                    ]
-                ]);
-            }
-        }
+			self::dic()->ui()->mainTemplate()->setDescription($this->object->getDescription());
+
+			if (!$this->object->isOnline()) {
+				self::dic()->ui()->mainTemplate()->setAlertProperties([
+					[
+						"alert" => true,
+						"property" => self::plugin()->translate("status", self::LANG_MODULE_OBJECT),
+						"value" => self::plugin()->translate("offline", self::LANG_MODULE_OBJECT)
+					]
+				]);
+			}
+		}
 	}
+
 
 	/**
 	 * @param string $a_new_type
@@ -170,6 +178,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 
 		return $form;
 	}
+
 
 	/**
 	 *
@@ -245,19 +254,20 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 				], self::CMD_PERMISSIONS));
 		}
 
-        if (ilObjFlashcardQuestionsAccess::hasWriteAccess()) {
-            self::dic()->tabs()->addTab(self::TAB_TAXONOMY, self::plugin()->translate("taxonomy", self::LANG_MODULE_OBJECT) . ilGlyphGUI::get('next'), self::dic()->ctrl()
-                ->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listTaxonomies'));
-        }
+		if (ilObjFlashcardQuestionsAccess::hasWriteAccess()) {
+			self::dic()->tabs()->addTab(self::TAB_TAXONOMY, self::plugin()->translate("taxonomy", self::LANG_MODULE_OBJECT)
+				. ilGlyphGUI::get('next'), self::dic()->ctrl()->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listTaxonomies'));
+		}
 
 		self::dic()->tabs()->manual_activation = true; // Show all tabs as links when no activation
 	}
 
-    /**
+
+	/**
 	 * @return string
 	 */
 	public static function getStartCmd(): string {
-	    return self::CMD_SHOW_CONTENTS;
+		return self::CMD_SHOW_CONTENTS;
 	}
 
 
@@ -276,26 +286,29 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		return self::getStartCmd();
 	}
 
-    /**
-     * @return int
-     */
-    public function getObjId(): int {
-        return $this->obj_id;
+
+	/**
+	 * @return int
+	 */
+	public function getObjId(): int {
+		return $this->obj_id;
 	}
 
-    /**
-     * @return ilObjFlashcardQuestions
-     */
-    public function getObject(): ilObjFlashcardQuestions {
-        return $this->object;
+
+	/**
+	 * @return ilObjFlashcardQuestions
+	 */
+	public function getObject(): ilObjFlashcardQuestions {
+		return $this->object;
 	}
 
-    /**
-     *
-     */
-    protected function migrate() {
-        // TODO: start migration via config
-        $migration = new \srag\Plugins\FlashcardQuestions\GlossaryMigration\GlossaryMigration();
-        $migration->run();
+
+	/**
+	 *
+	 */
+	protected function migrate() {
+		// TODO: start migration via config
+		$migration = new GlossaryMigration();
+		$migration->run();
 	}
 }

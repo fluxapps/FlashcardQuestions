@@ -1,4 +1,5 @@
 <?php
+
 namespace srag\Plugins\FlashcardQuestions\Glossary;
 
 /**
@@ -6,29 +7,25 @@ namespace srag\Plugins\FlashcardQuestions\Glossary;
  *
  * @author Stefan Wanzenried <sw@studer-raimann.ch>
  */
-class gl2tstModule
-{
+class gl2tstModule {
 
-    /**
-     * @var ilTaxonomyNode
-     */
-    protected $node;
-
-
-    /**
-     * @param ilTaxonomyNode $node
-     */
-    public function __construct(ilTaxonomyNode $node)
-    {
-        $this->node = $node;
-    }
+	/**
+	 * @var ilTaxonomyNode
+	 */
+	protected $node;
 
 
-    public function __call($method, $args)
-    {
-        if (method_exists($this->node, $method)) {
-            return call_user_func_array(array($this->node, $method), $args);
-        }
-    }
+	/**
+	 * @param ilTaxonomyNode $node
+	 */
+	public function __construct(ilTaxonomyNode $node) {
+		$this->node = $node;
+	}
 
+
+	public function __call($method, $args) {
+		if (method_exists($this->node, $method)) {
+			return call_user_func_array(array( $this->node, $method ), $args);
+		}
+	}
 }

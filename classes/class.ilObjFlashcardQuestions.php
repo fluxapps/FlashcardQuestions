@@ -4,8 +4,8 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\Plugins\FlashcardQuestions\Object\Obj;
 use srag\DIC\DICTrait;
+use srag\Plugins\FlashcardQuestions\Object\Obj;
 
 /**
  * Class ilObjFlashcardQuestions
@@ -42,26 +42,28 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 		$this->setType(ilFlashcardQuestionsPlugin::PLUGIN_ID);
 	}
 
-    /**
-     * @return array
-     */
-    public function getTaxonomyIds(): array {
-        return ilObjTaxonomy::getUsageOfObject($this->id);
+
+	/**
+	 * @return array
+	 */
+	public function getTaxonomyIds(): array {
+		return ilObjTaxonomy::getUsageOfObject($this->id);
 	}
+
 
 	/**
 	 *
 	 */
 	public function doCreate()/*: void*/ {
-//        // create taxonomy
-//	    $ilObjTaxonomy = new ilObjTaxonomy();
-//        $ilObjTaxonomy->setTitle("Taxonomie");
-//        $ilObjTaxonomy->create();
-//        ilObjTaxonomy::saveUsage($ilObjTaxonomy->getId(), $this->id);
+		//        // create taxonomy
+		//	    $ilObjTaxonomy = new ilObjTaxonomy();
+		//        $ilObjTaxonomy->setTitle("Taxonomie");
+		//        $ilObjTaxonomy->create();
+		//        ilObjTaxonomy::saveUsage($ilObjTaxonomy->getId(), $this->id);
 
-        // create object settings
-        $this->object = new Obj();
-        $this->object->setObjId($this->id);
+		// create object settings
+		$this->object = new Obj();
+		$this->object->setObjId($this->id);
 		$this->object->store();
 	}
 
@@ -90,21 +92,21 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 			$this->object->delete();
 		}
 
-        foreach ($this->getTaxonomyIds() as $tax_id) {
-            $ilObjTaxonomy = new ilObjTaxonomy($tax_id);
-            $ilObjTaxonomy->delete();
-        }
-
-        // TODO: delete page objects
+		foreach ($this->getTaxonomyIds() as $tax_id) {
+			$ilObjTaxonomy = new ilObjTaxonomy($tax_id);
+			$ilObjTaxonomy->delete();
+		}
+		// TODO: delete page objects
 	}
 
 
-    /**
-     * @param $new_obj
-     * @param $a_target_id
-     * @param null $a_copy_id
-     * @throws arException
-     */
+	/**
+	 * @param      $new_obj
+	 * @param      $a_target_id
+	 * @param null $a_copy_id
+	 *
+	 * @throws arException
+	 */
 	protected function doCloneObject(/*ilObjFlashcardQuestions*/
 		$new_obj, /*int*/
 		$a_target_id, /*?int*/

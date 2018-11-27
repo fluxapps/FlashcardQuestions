@@ -4,8 +4,8 @@
 
 namespace srag\Plugins\FlashcardQuestions\Object;
 
-use ilFlashcardQuestionsPlugin;
 use ilCheckboxInputGUI;
+use ilFlashcardQuestionsPlugin;
 use ilObjFlashcardQuestionsGUI;
 use ilPropertyFormGUI;
 use ilTextAreaInputGUI;
@@ -62,7 +62,8 @@ class ObjSettingsFormGUI extends ilPropertyFormGUI {
 		$title->setValue($this->parent->object->getTitle());
 		$this->addItem($title);
 
-		$description = new ilTextAreaInputGUI(self::plugin()->translate("description", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS), "description");
+		$description = new ilTextAreaInputGUI(self::plugin()
+			->translate("description", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS), "description");
 		$description->setValue($this->parent->object->getLongDescription());
 		$this->addItem($description);
 

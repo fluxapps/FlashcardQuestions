@@ -82,6 +82,7 @@ class Obj extends ActiveRecord {
 	 */
 	protected $is_online = false;
 
+
 	/**
 	 * Obj constructor
 	 *
