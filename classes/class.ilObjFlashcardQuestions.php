@@ -6,7 +6,7 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use srag\Plugins\FlashcardQuestions\Object\Obj;
 use srag\DIC\DICTrait;
-
+use srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
 /**
  * Class ilObjFlashcardQuestions
  *
@@ -53,7 +53,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	 *
 	 */
 	public function doCreate()/*: void*/ {
-//        // create taxonomy
+//        // create taxonomy // TODO: move this to gui, maybe create two taxonomies (for WKV)
 //	    $ilObjTaxonomy = new ilObjTaxonomy();
 //        $ilObjTaxonomy->setTitle("Taxonomie");
 //        $ilObjTaxonomy->create();
@@ -85,7 +85,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	/**
 	 *
 	 */
-	public function doDelete()/*: void*/ {
+	public function beforeDelete()/*: void*/ {
 		if ($this->object !== NULL) {
 			$this->object->delete();
 		}
@@ -95,7 +95,10 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
             $ilObjTaxonomy->delete();
         }
 
-        // TODO: delete page objects
+        foreach ($this->getQuestions() as $xfcqQuestion) {
+            /** @var $xfcqQuestion xfcqQuestion */
+            $xfcqQuestion->delete();
+        }
 	}
 
 
@@ -130,5 +133,12 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	 */
 	public function setOnline(bool $is_online = true)/*: void*/ {
 		$this->object->setOnline($is_online);
+	}
+
+    /**
+     * @return xfcqQuestion[]
+     */
+    public function getQuestions(): array {
+        return xfcqQuestion::where(['obj_id' => $this->id])->get();
 	}
 }

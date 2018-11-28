@@ -37,7 +37,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
 
     public static $classMap = array (
         'FlashcardQuestionsRemoveDataConfirm' => __DIR__ . '/../..' . '/classes/uninstall/class.FlashcardQuestionsRemoveDataConfirm.php',
-        'ilFlashcardQuestionsConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilFlashcardQuestionsConfigGUI_.php',
+        'ilFlashcardQuestionsConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilFlashcardQuestionsConfigGUI.php',
         'ilFlashcardQuestionsPlugin' => __DIR__ . '/../..' . '/classes/class.ilFlashcardQuestionsPlugin.php',
         'ilFlashcardQuestionsSelectorInputGUI' => __DIR__ . '/../..' . '/classes/Input/class.ilFlashcardQuestionsSelectorInputGUI.php',
         'ilObjFlashcardQuestions' => __DIR__ . '/../..' . '/classes/class.ilObjFlashcardQuestions.php',

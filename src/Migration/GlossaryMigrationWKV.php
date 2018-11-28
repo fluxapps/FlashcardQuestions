@@ -1,6 +1,7 @@
 <?php
 namespace srag\Plugins\FlashcardQuestions\GlossaryMigration;
 
+use gl2tstTest;
 use srag\DIC\DICTrait;
 use \ilFlashcardQuestionsPlugin;
 use \ilObjGlossary;
@@ -11,6 +12,8 @@ use  srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
 use \ilGlossaryTerm;
 use \ilTaxNodeAssignment;
 use \ilObjFlashcards;
+
+require_once "Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Glossary2Test/classes/Test/class.gl2tstTest.php";
 /**
  * Class GlossaryMigrationWKV
  *
@@ -59,7 +62,7 @@ class GlossaryMigrationWKV {
                 $new_taxonomy->create();
                 ilObjTaxonomy::saveUsage($new_taxonomy->getId(), $ilObjFlashcardQuestions->getId());
 
-                $old_taxonomy->cloneNodes($new_taxonomy, $node_id, $new_taxonomy->getTree()->getRootId());
+                $old_taxonomy->cloneNodes($new_taxonomy, $this->getRootNode($new_taxonomy), $node_id);
 
                 $new_taxonomy->setSortingMode($old_taxonomy->getSortingMode());
                 $new_taxonomy->setItemSorting($old_taxonomy->getItemSorting());
@@ -84,12 +87,18 @@ class GlossaryMigrationWKV {
                 $xfcqQuestion = new xfcqQuestion();
                 $xfcqQuestion->setTitle($term['term'] ? $term['term'] : 'Frage');
                 $xfcqQuestion->setActive(true);
+                $xfcqQuestion->setObjId($ilObjFlashcardQuestions->getId());
+                $xfcqQuestion->setOriginGloId($glossary->getId());
+                $xfcqQuestion->setOriginTermId($term['id']);
 
                 $new_question_id = $xfcqQuestion->getNextFreePageId();
                 $this->migratePageObject($question_definition['id'], $new_question_id, $ilObjFlashcardQuestions->getId());
+                $xfcqQuestion->setPageIdQuestion($new_question_id);
 
                 $new_answer_id = $xfcqQuestion->getNextFreePageId();
                 $this->migratePageObject($answer_definition['id'], $new_answer_id, $ilObjFlashcardQuestions->getId());
+                $xfcqQuestion->setPageIdAnswer($new_answer_id);
+
 
                 $new_tax_nodes = [];
                 foreach ($this->getTaxNodeIds($glossary, $term) as $old_node_id) {
@@ -103,11 +112,6 @@ class GlossaryMigrationWKV {
                 }
 
                 $xfcqQuestion->setTaxNodes($new_tax_nodes);
-                $xfcqQuestion->setObjId($ilObjFlashcardQuestions->getId());
-                $xfcqQuestion->setPageIdQuestion($new_question_id);
-                $xfcqQuestion->setPageIdAnswer($new_answer_id);
-                $xfcqQuestion->setOriginGloId($glossary->getId());
-                $xfcqQuestion->setOriginTermId($term['id']);
                 $xfcqQuestion->create(true);
 
                 $this->migrateFlashCards($term['id'], $xfcqQuestion->getId());
@@ -115,6 +119,7 @@ class GlossaryMigrationWKV {
             }
 
             $this->migrateFlashCardObjects($glossary->getRefId(), $ilObjFlashcardQuestions->getRefId());
+            $this->migrateGl2Tests($glossary->getRefId(), $ilObjFlashcardQuestions->getRefId(), $node_mapping);
 
             $mapping_ref_ids[$glossary->getRefId()] = $ilObjFlashcardQuestions->getRefId();
 
@@ -206,14 +211,54 @@ class GlossaryMigrationWKV {
         return $node_ids;
     }
 
+    /**
+     * @param $title
+     * @param ilObjTaxonomy $taxonomy
+     * @return int
+     */
     protected function getNodeIdForTitle($title, ilObjTaxonomy $taxonomy): int {
-        $query = self::dic()->database()->query('SELECT child FROM tax_tree WHERE parent = 0 AND tax_tree_id = ' . $taxonomy->getTree()->getTreeId());
-        $root_node = self::dic()->database()->fetchAssoc($query)['child'];
+        $root_node = $this->getRootNode($taxonomy);
         foreach ($taxonomy->getTree()->getChilds($root_node) as $child) {
             if ($child['title'] == $title) {
                 return $child['child'];
             }
         }
         return 0;
+    }
+
+    /**
+     * @param ilObjTaxonomy $taxonomy
+     * @return mixed
+     */
+    protected function getRootNode(ilObjTaxonomy $taxonomy) {
+        $query = self::dic()->database()->query('SELECT child FROM tax_tree WHERE parent = 0 AND tax_tree_id = ' . $taxonomy->getTree()->getTreeId());
+        return self::dic()->database()->fetchAssoc($query)['child'];
+    }
+
+    /**
+     * @param $glo_ref_id
+     * @param $xfcq_ref_id
+     * @param $node_mapping
+     */
+    protected function migrateGl2Tests($glo_ref_id, $xfcq_ref_id, $node_mapping) {
+        /** @var gl2tstTest $gl2tstTest */
+        foreach (gl2tstTest::where(array('glossary_ref_id' => $glo_ref_id))->get() as $gl2tstTest) {
+            $new_content = array();
+            foreach ($gl2tstTest->getContent() as $old_content) {
+                if ($module = $old_content['module']) {
+                    $old_content['module'] = $node_mapping[$old_content['module']];
+                }
+                if ($module = $old_content['topic']) {
+                    $old_content['topic'] = $node_mapping[$old_content['topic']];
+                }
+                if ($module = $old_content['section']) {
+                    $old_content['section'] = $node_mapping[$old_content['section']];
+                }
+                $new_content[] = $old_content;
+            }
+            $gl2tstTest->setContent($new_content);
+            $gl2tstTest->setGlossaryRefId($xfcq_ref_id);
+            $gl2tstTest->update();
+        }
     }
 }

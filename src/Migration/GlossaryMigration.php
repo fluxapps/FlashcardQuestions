@@ -48,7 +48,7 @@ class GlossaryMigration {
 
             $old_taxonomy = new ilObjTaxonomy($glossary->getTaxonomyId());
             $new_taxonomy = new ilObjTaxonomy(array_shift($ilObjFlashcardQuestions->getTaxonomyIds()));
-            $old_taxonomy->cloneNodes($new_taxonomy, $old_taxonomy->getTree()->getRootId(), $new_taxonomy->getTree()->getRootId());
+            $old_taxonomy->cloneNodes($new_taxonomy, $this->getRootNode($new_taxonomy), $this->getRootNode($old_taxonomy));
             $new_taxonomy->setSortingMode($old_taxonomy->getSortingMode());
             $new_taxonomy->setItemSorting($old_taxonomy->getItemSorting());
             $new_taxonomy->update();
@@ -66,24 +66,27 @@ class GlossaryMigration {
                 $question_definition = $definitions[0];
                 $answer_definition = $definitions[1];
 
-                $this->migratePageObject($question_definition['id'], $ilObjFlashcardQuestions->getId());
-                $this->migratePageObject($answer_definition['id'], $ilObjFlashcardQuestions->getId());
-
                 $xfcqQuestion = new xfcqQuestion();
                 $xfcqQuestion->setTitle($term['term']);
                 $xfcqQuestion->setActive(true);
+                $xfcqQuestion->setObjId($ilObjFlashcardQuestions->getId());
+                $xfcqQuestion->setOriginGloId($glossary->getId());
+                $xfcqQuestion->setOriginTermId($term['id']);
+
+                $new_question_id = $xfcqQuestion->getNextFreePageId();
+                $this->migratePageObject($question_definition['id'], $new_question_id, $ilObjFlashcardQuestions->getId());
+                $xfcqQuestion->setPageIdQuestion($new_question_id);
+
+                $new_answer_id = $xfcqQuestion->getNextFreePageId();
+                $this->migratePageObject($answer_definition['id'], $new_answer_id, $ilObjFlashcardQuestions->getId());
+                $xfcqQuestion->setPageIdAnswer($new_answer_id);
 
                 foreach ($this->getTaxNodeIds($glossary, $term) as $old_node_id) {
                     $new_node_id = $node_mapping[$old_node_id];
                     $new_tax_nodes[$new_taxonomy->getId()][] = $new_node_id;
                 }
 
-                $xfcqQuestion->setTaxNodesForTaxId($this->getTaxNodeIds($glossary, $term), array_shift($ilObjFlashcardQuestions->getTaxonomyIds()));
-                $xfcqQuestion->setObjId($ilObjFlashcardQuestions->getId());
-                $xfcqQuestion->setPageIdQuestion($question_definition['id']);
-                $xfcqQuestion->setPageIdAnswer($answer_definition['id']);
-                $xfcqQuestion->setOriginGloId($glossary->getId());
-                $xfcqQuestion->setOriginTermId($term['id']);
+                $xfcqQuestion->setTaxNodes($new_tax_nodes);
                 $xfcqQuestion->create(true);
 
                 $this->migrateFlashCards($term['id'], $xfcqQuestion->getId());
@@ -138,7 +141,7 @@ class GlossaryMigration {
      * @return ilObjGlossary[]
      */
     protected function fetchGlossaries(): array {
-        $query = self::dic()->database()->query(
+        $query = self::dic()->database()->query(        // TODO: evtl. via config ein Suchwort eingeben (Statt "Offizielle Prüfungsfragen")
             'SELECT ref_id from object_data d 
                     inner join object_reference r on d.obj_id = r.obj_id 
                     where type = "glo" 
@@ -153,15 +156,16 @@ class GlossaryMigration {
     }
 
     /**
-     * @param int $page_id
+     * @param int $old_page_id
+     * @param int $new_page_id
      * @param int $new_parent_id
      */
-    protected function migratePageObject(int $page_id, int $new_parent_id) {
+    protected function migratePageObject(int $old_page_id, int $new_page_id, int $new_parent_id) {
         self::dic()->database()->query(
             'INSERT INTO page_object (page_id, parent_id, content, parent_type, last_change_user, view_cnt, last_change, created, create_user, render_md5, rendered_content, rendered_time, activation_start, activation_end, active, is_empty, inactive_elements, int_links, show_activation_info, lang, edit_lock_user, edit_lock_ts)'
-            . ' select page_id, ' . $new_parent_id . ', content, "xfcq", last_change_user, view_cnt, last_change, created, create_user, render_md5, rendered_content, rendered_time, activation_start, activation_end, active, is_empty, inactive_elements, int_links, show_activation_info, lang, edit_lock_user, edit_lock_ts'
+            . ' select ' . $new_page_id . ', ' . $new_parent_id . ', content, "xfcq", last_change_user, view_cnt, last_change, created, create_user, render_md5, rendered_content, rendered_time, activation_start, activation_end, active, is_empty, inactive_elements, int_links, show_activation_info, lang, edit_lock_user, edit_lock_ts'
             . ' from page_object'
-            . ' where parent_type = "gdf" and page_id = ' . $page_id
+            . ' where parent_type = "gdf" and page_id = ' . $old_page_id
         );
         
     }
@@ -180,5 +184,12 @@ class GlossaryMigration {
             $node_ids[] = $a["node_id"];
         }
         return $node_ids;
+    }
+
+
+
+    protected function getRootNode(ilObjTaxonomy $taxonomy) {
+        $query = self::dic()->database()->query('SELECT child FROM tax_tree WHERE parent = 0 AND tax_tree_id = ' . $taxonomy->getTree()->getTreeId());
+        return self::dic()->database()->fetchAssoc($query)['child'];
     }
 }

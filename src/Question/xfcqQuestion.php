@@ -75,6 +75,18 @@ class xfcqQuestion extends ActiveRecord {
     }
 
     /**
+     *
+     */
+    public function delete() {
+        $xfcqPageObject = new xfcqPageObject($this->getPageIdQuestion());
+        $xfcqPageObject->delete();
+        $xfcqPageObject = new xfcqPageObject($this->getPageIdAnswer());
+        $xfcqPageObject->delete();
+        parent::delete();
+    }
+
+
+    /**
      * @return int
      */
     public function getNextFreePageId() {
