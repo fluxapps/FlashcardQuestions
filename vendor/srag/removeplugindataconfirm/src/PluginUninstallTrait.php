@@ -1,11 +1,11 @@
 <?php
 
-namespace srag\RemovePluginDataConfirm;
+namespace srag\RemovePluginDataConfirm\FlashcardQuestions;
 
 /**
  * Trait PluginUninstallTrait
  *
- * @package srag\RemovePluginDataConfirm
+ * @package srag\RemovePluginDataConfirm\FlashcardQuestions
  *
  * @author  studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  */
@@ -18,7 +18,7 @@ trait PluginUninstallTrait {
 	 * @return bool
 	 * @throws RemovePluginDataConfirmException
 	 *
-	 * @access namespace
+	 * @internal
 	 */
 	protected final function beforeUninstall()/*: bool*/ {
 		return $this->pluginUninstall();
@@ -26,7 +26,7 @@ trait PluginUninstallTrait {
 
 
 	/**
-	 * @access namespace
+	 * @internal
 	 */
 	protected final function afterUninstall()/*: void*/ {
 

@@ -7,7 +7,7 @@ namespace srag\Plugins\FlashcardQuestions\Object;
 use ActiveRecord;
 use arConnector;
 use ilFlashcardQuestionsPlugin;
-use srag\DIC\DICTrait;
+use srag\DIC\FlashcardQuestions\DICTrait;
 
 /**
  * Class Obj
@@ -29,7 +29,7 @@ class Obj extends ActiveRecord {
 	/**
 	 * @return string
 	 */
-	public function getConnectorContainerName(): string {
+	public function getConnectorContainerName() {
 		return self::TABLE_NAME;
 	}
 
@@ -39,7 +39,7 @@ class Obj extends ActiveRecord {
 	 *
 	 * @deprecated
 	 */
-	public static function returnDbTableName(): string {
+	public static function returnDbTableName() {
 		return self::TABLE_NAME;
 	}
 
@@ -81,6 +81,7 @@ class Obj extends ActiveRecord {
 	 * @con_is_notnull   true
 	 */
 	protected $is_online = false;
+
 
 	/**
 	 * Obj constructor
@@ -139,7 +140,7 @@ class Obj extends ActiveRecord {
 	/**
 	 * @return int
 	 */
-	public function getObjId(): int {
+	public function getObjId() {
 		return $this->obj_id;
 	}
 
@@ -155,7 +156,7 @@ class Obj extends ActiveRecord {
 	/**
 	 * @return bool
 	 */
-	public function isOnline(): bool {
+	public function isOnline() {
 		return $this->is_online;
 	}
 
@@ -163,7 +164,7 @@ class Obj extends ActiveRecord {
 	/**
 	 * @param bool $is_online
 	 */
-	public function setOnline(bool $is_online = true)/*: void*/ {
+	public function setOnline($is_online = true)/*: void*/ {
 		$this->is_online = $is_online;
 	}
 }

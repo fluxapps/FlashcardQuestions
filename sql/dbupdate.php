@@ -10,19 +10,17 @@
  * @author studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  */
 
-\srag\Plugins\FlashcardQuestions\Config\Config::updateDB();
 \srag\Plugins\FlashcardQuestions\Object\Obj::updateDB();
 \srag\Plugins\FlashcardQuestions\Question\xfcqQuestion::updateDB();
 ?>
 <#2>
 <?php
-global $DIC;
-$DIC->database()->modifyTableColumn('copg_pobj_def', 'component', array('length' => 120));
-$DIC->database()->insert('copg_pobj_def', array(
-'parent_type' => array('text', 'xfcq'),
-'class_name' => array('text', 'xfcqPageObject'),
-'directory' => array('text', 'classes/PageObject'),
-'component' => array('text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/FlashcardQuestions')
+\srag\DIC\FlashcardQuestions\DICStatic::dic()->database()->modifyTableColumn('copg_pobj_def', 'component', array( 'length' => 120 ));
+\srag\DIC\FlashcardQuestions\DICStatic::dic()->database()->insert('copg_pobj_def', array(
+	'parent_type' => array( 'text', ilFlashcardQuestionsPlugin::PLUGIN_ID ),
+	'class_name' => array( 'text', 'xfcqPageObject' ),
+	'directory' => array( 'text', 'classes/PageObject' ),
+	'component' => array( 'text', substr(\srag\DIC\FlashcardQuestions\DICStatic::plugin(\ilFlashcardQuestionsPlugin::class)->directory(), 2) )
 ));
 ?>
 <#3>

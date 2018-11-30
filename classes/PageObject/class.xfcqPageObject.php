@@ -7,9 +7,10 @@
  */
 class xfcqPageObject extends ilPageObject {
 
-    const PARENT_TYPE = 'xfcq';
+	const PARENT_TYPE = ilFlashcardQuestionsPlugin::PLUGIN_ID;
 
-    function getParentType() {
-        return self::PARENT_TYPE;
-    }
+
+	function getParentType() {
+		return self::PARENT_TYPE;
+	}
 }

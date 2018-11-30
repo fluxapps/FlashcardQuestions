@@ -4,9 +4,14 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
+use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\Plugins\FlashcardQuestions\Object\Obj;
+<<<<<<< HEAD
 use srag\DIC\DICTrait;
 use srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
+=======
+
+>>>>>>> origin/develop
 /**
  * Class ilObjFlashcardQuestions
  *
@@ -42,17 +47,20 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 		$this->setType(ilFlashcardQuestionsPlugin::PLUGIN_ID);
 	}
 
-    /**
-     * @return array
-     */
-    public function getTaxonomyIds(): array {
-        return ilObjTaxonomy::getUsageOfObject($this->id);
+
+	/**
+	 * @return array
+	 */
+	public function getTaxonomyIds() {
+		return ilObjTaxonomy::getUsageOfObject($this->id);
 	}
+
 
 	/**
 	 *
 	 */
 	public function doCreate()/*: void*/ {
+<<<<<<< HEAD
 //        // create taxonomy // TODO: move this to gui, maybe create two taxonomies (for WKV)
 //	    $ilObjTaxonomy = new ilObjTaxonomy();
 //        $ilObjTaxonomy->setTitle("Taxonomie");
@@ -62,6 +70,17 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
         // create object settings
         $this->object = new Obj();
         $this->object->setObjId($this->id);
+=======
+		//        // create taxonomy
+		//	    $ilObjTaxonomy = new ilObjTaxonomy();
+		//        $ilObjTaxonomy->setTitle("Taxonomie");
+		//        $ilObjTaxonomy->create();
+		//        ilObjTaxonomy::saveUsage($ilObjTaxonomy->getId(), $this->id);
+
+		// create object settings
+		$this->object = new Obj();
+		$this->object->setObjId($this->id);
+>>>>>>> origin/develop
 		$this->object->store();
 	}
 
@@ -90,6 +109,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 			$this->object->delete();
 		}
 
+<<<<<<< HEAD
         foreach ($this->getTaxonomyIds() as $tax_id) {
             $ilObjTaxonomy = new ilObjTaxonomy($tax_id);
             $ilObjTaxonomy->delete();
@@ -99,15 +119,23 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
             /** @var $xfcqQuestion xfcqQuestion */
             $xfcqQuestion->delete();
         }
+=======
+		foreach ($this->getTaxonomyIds() as $tax_id) {
+			$ilObjTaxonomy = new ilObjTaxonomy($tax_id);
+			$ilObjTaxonomy->delete();
+		}
+		// TODO: delete page objects
+>>>>>>> origin/develop
 	}
 
 
-    /**
-     * @param $new_obj
-     * @param $a_target_id
-     * @param null $a_copy_id
-     * @throws arException
-     */
+	/**
+	 * @param      $new_obj
+	 * @param      $a_target_id
+	 * @param null $a_copy_id
+	 *
+	 * @throws arException
+	 */
 	protected function doCloneObject(/*ilObjFlashcardQuestions*/
 		$new_obj, /*int*/
 		$a_target_id, /*?int*/
@@ -123,7 +151,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	/**
 	 * @return bool
 	 */
-	public function isOnline(): bool {
+	public function isOnline() {
 		return $this->object->isOnline();
 	}
 
@@ -131,7 +159,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	/**
 	 * @param bool $is_online
 	 */
-	public function setOnline(bool $is_online = true)/*: void*/ {
+	public function setOnline($is_online = true)/*: void*/ {
 		$this->object->setOnline($is_online);
 	}
 
