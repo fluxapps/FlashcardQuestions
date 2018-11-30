@@ -10,7 +10,7 @@ git clone git@git.studer-raimann.ch:ILIAS/Plugins/FlashcardQuestions.git Flashca
 Update, activate and config the plugin in the ILIAS Plugin Administration
 
 ### Dependencies
-* ILIAS 5.2 or ILIAS 5.3
+* ILIAS 5.3
 * PHP >=5.6
 * [composer](https://getcomposer.org)
 * [srag/activerecordconfig](https://packagist.org/packages/srag/activerecordconfig)
