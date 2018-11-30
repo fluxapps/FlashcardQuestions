@@ -7,8 +7,8 @@ use ilFlashcardQuestionsPlugin;
 use ilPropertyFormGUI;
 use ilTaxSelectInputGUI;
 use ilTextInputGUI;
-use srag\DIC\DICTrait;
-use srag\DIC\Exception\DICException;
+use srag\DIC\FlashcardQuestions\DICTrait;
+use srag\DIC\FlashcardQuestions\Exception\DICException;
 use xfcqQuestionGUI;
 
 /**
@@ -103,7 +103,7 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
 	/**
 	 * @return bool
 	 */
-	public function saveForm(): bool {
+	public function saveForm() {
 		if (!$this->checkInput()) {
 			return false;
 		}

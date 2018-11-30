@@ -4,7 +4,7 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\DIC\DICTrait;
+use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\Plugins\FlashcardQuestions\Object\Obj;
 
 /**
@@ -28,7 +28,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	/**
 	 * @return self
 	 */
-	public static function getInstance(): self {
+	public static function getInstance() {
 		if (self::$instance === NULL) {
 			self::$instance = new self();
 		}
@@ -59,7 +59,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 		$a_permission, /*?int*/
 		$a_ref_id = NULL, /*?int*/
 		$a_obj_id = NULL, /*?int*/
-		$a_user_id = NULL): bool {
+		$a_user_id = NULL) {
 		if ($a_ref_id === NULL) {
 			$a_ref_id = filter_input(INPUT_GET, "ref_id");
 		}
@@ -99,7 +99,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	 *
 	 * @return bool
 	 */
-	protected static function checkAccess(string $a_cmd, string $a_permission, /*?int*/
+	protected static function checkAccess($a_cmd, $a_permission, /*?int*/
 		$a_ref_id = NULL, /*?int*/
 		$a_obj_id = NULL, /*?int*/
 		$a_user_id = NULL) {
@@ -111,7 +111,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	 * @param object|string $class
 	 * @param string        $cmd
 	 */
-	public static function redirectNonAccess($class, string $cmd = "") {
+	public static function redirectNonAccess($class, $cmd = "") {
 		ilUtil::sendFailure(self::plugin()->translate("permission_denied", ilObjFlashcardQuestionsGUI::LANG_MODULE_OBJECT), true);
 
 		if (is_object($class)) {
@@ -130,7 +130,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	 * @return bool
 	 */
 	public static function _isOffline(/*?int*/
-		$a_obj_id): bool {
+		$a_obj_id) {
 		$object = Obj::getObjectById(intval($a_obj_id));
 
 		if ($object !== NULL) {
@@ -147,7 +147,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	 * @return bool
 	 */
 	public static function hasVisibleAccess(/*?int*/
-		$ref_id = NULL): bool {
+		$ref_id = NULL) {
 		return self::checkAccess("visible", "visible", $ref_id);
 	}
 
@@ -158,7 +158,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	 * @return bool
 	 */
 	public static function hasReadAccess(/*?int*/
-		$ref_id = NULL): bool {
+		$ref_id = NULL) {
 		return self::checkAccess("read", "read", $ref_id);
 	}
 
@@ -169,7 +169,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	 * @return bool
 	 */
 	public static function hasWriteAccess(/*?int*/
-		$ref_id = NULL): bool {
+		$ref_id = NULL) {
 		return self::checkAccess("write", "write", $ref_id);
 	}
 
@@ -180,7 +180,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	 * @return bool
 	 */
 	public static function hasDeleteAccess(/*?int*/
-		$ref_id = NULL): bool {
+		$ref_id = NULL) {
 		return self::checkAccess("delete", "delete", $ref_id);
 	}
 
@@ -191,7 +191,7 @@ class ilObjFlashcardQuestionsAccess extends ilObjectPluginAccess {
 	 * @return bool
 	 */
 	public static function hasEditPermissionAccess(/*?int*/
-		$ref_id = NULL): bool {
+		$ref_id = NULL) {
 		return self::checkAccess("edit_permission", "edit_permission", $ref_id);
 	}
 }

@@ -10,7 +10,7 @@ use ilObjFlashcardQuestionsGUI;
 use ilPropertyFormGUI;
 use ilTextAreaInputGUI;
 use ilTextInputGUI;
-use srag\DIC\DICTrait;
+use srag\DIC\FlashcardQuestions\DICTrait;
 
 /**
  * Class ObjSettingsFormGUI

@@ -4,8 +4,7 @@
 
 require_once __DIR__ . "/../../vendor/autoload.php";
 
-use srag\Plugins\FlashcardQuestions\Config\Config;
-use srag\RemovePluginDataConfirm\AbstractRemovePluginDataConfirm;
+use srag\RemovePluginDataConfirm\FlashcardQuestions\AbstractRemovePluginDataConfirm;
 
 /**
  * Class FlashcardQuestionsRemoveDataConfirm
@@ -20,29 +19,4 @@ use srag\RemovePluginDataConfirm\AbstractRemovePluginDataConfirm;
 class FlashcardQuestionsRemoveDataConfirm extends AbstractRemovePluginDataConfirm {
 
 	const PLUGIN_CLASS_NAME = ilFlashcardQuestionsPlugin::class;
-
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getUninstallRemovesData()/*: ?bool*/ {
-		return Config::getUninstallRemovesData();
-	}
-
-
-	/**
-	 * @inheritdoc
-	 */
-	public function setUninstallRemovesData(/*bool*/
-		$uninstall_removes_data)/*: void*/ {
-		Config::setUninstallRemovesData($uninstall_removes_data);
-	}
-
-
-	/**
-	 * @inheritdoc
-	 */
-	public function removeUninstallRemovesData()/*: void*/ {
-		Config::removeUninstallRemovesData();
-	}
 }

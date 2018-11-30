@@ -8,11 +8,13 @@ use ilObjFlashcardQuestions;
 use ilObjGlossary;
 use ilObjTaxonomy;
 use ilTaxNodeAssignment;
-use srag\DIC\DICTrait;
+use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
 
 /**
  * Class GlossaryMigration
+ *
+ * @package srag\Plugins\FlashcardQuestions\GlossaryMigration
  *
  * @author Theodor Truffer <tt@studer-raimann.ch>
  */
@@ -142,7 +144,7 @@ class GlossaryMigration {
 	/**
 	 * @return ilObjGlossary[]
 	 */
-	protected function fetchGlossaries(): array {
+	protected function fetchGlossaries() {
 		$query = self::dic()->database()->query('SELECT ref_id from object_data d 
                     inner join object_reference r on d.obj_id = r.obj_id 
                     where type = "glo" 
@@ -177,7 +179,7 @@ class GlossaryMigration {
 	 * @return array
 	 * @throws \ilTaxonomyException
 	 */
-	protected function getTaxNodeIds(ilObjGlossary $glossary, array $term): array {
+	protected function getTaxNodeIds(ilObjGlossary $glossary, array $term) {
 		$ta = new ilTaxNodeAssignment("glo", $glossary->getId(), "term", $glossary->getTaxonomyId());
 		$assgnmts = $ta->getAssignmentsOfItem($term['id']);
 		$node_ids = array();

@@ -3,13 +3,16 @@
 namespace srag\Plugins\FlashcardQuestions\Question;
 
 use ActiveRecord;
-use srag\DIC\DICTrait;
+use ilFlashcardQuestionsPlugin;
+use srag\DIC\FlashcardQuestions\DICTrait;
 use xfcqPageObject;
 
 /**
  * Class xfcqQuestion
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
+ * @package srag\Plugins\FlashcardQuestions\Question
+ *
+ * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
 class xfcqQuestion extends ActiveRecord {
 
@@ -89,7 +92,8 @@ class xfcqQuestion extends ActiveRecord {
 	 * @return int
 	 */
 	public function getNextFreePageId() {
-		$query = self::dic()->database()->query("select max(page_id) id from page_object where parent_type = 'xfcq'");
+		$query = self::dic()->database()->query("select max(page_id) id from page_object where parent_type = '"
+			. ilFlashcardQuestionsPlugin::PLUGIN_ID . "'");
 		$set = self::dic()->database()->fetchAssoc($query);
 
 		return $set['id'] + 1;
@@ -178,7 +182,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return int
 	 */
-	public function getPageIdQuestion(): int {
+	public function getPageIdQuestion() {
 		return $this->page_id_qst;
 	}
 
@@ -194,7 +198,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return int
 	 */
-	public function getPageIdAnswer(): int {
+	public function getPageIdAnswer() {
 		return $this->page_id_ans;
 	}
 
@@ -210,7 +214,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return int
 	 */
-	public function getId(): int {
+	public function getId() {
 		return $this->id;
 	}
 
@@ -226,7 +230,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return int
 	 */
-	public function getObjId(): int {
+	public function getObjId() {
 		return $this->obj_id;
 	}
 
@@ -242,7 +246,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return string
 	 */
-	public function getTitle(): string {
+	public function getTitle() {
 		return $this->title;
 	}
 
@@ -250,7 +254,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @param string $title
 	 */
-	public function setTitle(string $title) {
+	public function setTitle($title) {
 		$this->title = $title;
 	}
 
@@ -258,7 +262,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return bool
 	 */
-	public function isActive(): bool {
+	public function isActive() {
 		return $this->active;
 	}
 
@@ -266,7 +270,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @param bool $active
 	 */
-	public function setActive(bool $active) {
+	public function setActive($active) {
 		$this->active = $active;
 	}
 
@@ -274,7 +278,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return int
 	 */
-	public function getOriginGloId(): int {
+	public function getOriginGloId() {
 		return $this->origin_glo_id;
 	}
 
@@ -290,7 +294,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return int
 	 */
-	public function getOriginTermId(): int {
+	public function getOriginTermId() {
 		return $this->origin_term_id;
 	}
 
@@ -306,7 +310,7 @@ class xfcqQuestion extends ActiveRecord {
 	/**
 	 * @return array
 	 */
-	public function getTaxNodes(): array {
+	public function getTaxNodes() {
 		return $this->tax_nodes;
 	}
 
@@ -324,7 +328,7 @@ class xfcqQuestion extends ActiveRecord {
 	 *
 	 * @return array
 	 */
-	public function getTaxNodesForTaxId(Int $tax_id): array {
+	public function getTaxNodesForTaxId(Int $tax_id) {
 		if (isset($this->tax_nodes[$tax_id])) {
 			return $this->tax_nodes[$tax_id];
 		}

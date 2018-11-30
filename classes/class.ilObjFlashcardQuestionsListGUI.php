@@ -4,7 +4,7 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\DIC\DICTrait;
+use srag\DIC\FlashcardQuestions\DICTrait;
 
 /**
  * Class ilObjFlashcardQuestionsListGUI
@@ -33,7 +33,7 @@ class ilObjFlashcardQuestionsListGUI extends ilObjectPluginListGUI {
 	/**
 	 * @return string
 	 */
-	public function getGuiClass(): string {
+	public function getGuiClass() {
 		return ilObjFlashcardQuestionsGUI::class;
 	}
 
@@ -41,7 +41,7 @@ class ilObjFlashcardQuestionsListGUI extends ilObjectPluginListGUI {
 	/**
 	 * @return array
 	 */
-	public function initCommands(): array {
+	public function initCommands() {
 		$this->commands_enabled = true;
 		$this->copy_enabled = true;
 		$this->cut_enabled = true;
@@ -82,7 +82,7 @@ class ilObjFlashcardQuestionsListGUI extends ilObjectPluginListGUI {
 	/**
 	 * @return array
 	 */
-	public function getProperties(): array {
+	public function getProperties() {
 		$props = [];
 
 		if (ilObjFlashcardQuestionsAccess::_isOffline($this->obj_id)) {

@@ -1,15 +1,17 @@
 <?php
 
-namespace srag\DIC;
+namespace srag\DIC\FlashcardQuestions;
 
-use srag\DIC\DIC\DICInterface;
-use srag\DIC\Exception\DICException;
-use srag\DIC\Plugin\PluginInterface;
+use srag\DIC\FlashcardQuestions\DIC\DICInterface;
+use srag\DIC\FlashcardQuestions\Exception\DICException;
+use srag\DIC\FlashcardQuestions\Output\OutputInterface;
+use srag\DIC\FlashcardQuestions\Plugin\PluginInterface;
+use srag\DIC\FlashcardQuestions\Version\VersionInterface;
 
 /**
  * Trait DICTrait
  *
- * @package srag\DIC
+ * @package srag\DIC\FlashcardQuestions
  *
  * @author  studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  */
@@ -35,6 +37,16 @@ trait DICTrait {
 
 
 	/**
+	 * Get output interface
+	 *
+	 * @return OutputInterface Output interface
+	 */
+	protected static final function output()/*: OutputInterface*/ {
+		return DICStatic::output();
+	}
+
+
+	/**
 	 * Get plugin interface
 	 *
 	 * @return PluginInterface Plugin interface
@@ -47,6 +59,16 @@ trait DICTrait {
 		self::checkPluginClassNameConst();
 
 		return DICStatic::plugin(static::PLUGIN_CLASS_NAME);
+	}
+
+
+	/**
+	 * Get version interface
+	 *
+	 * @return VersionInterface Version interface
+	 */
+	protected static final function version()/*: VersionInterface*/ {
+		return DICStatic::version();
 	}
 
 

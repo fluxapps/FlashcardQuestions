@@ -1,6 +1,8 @@
 <?php
 
-use srag\DIC\DICTrait;
+require_once __DIR__ . "/../../vendor/autoload.php";
+
+use srag\DIC\FlashcardQuestions\DICTrait;
 
 /**
  * Class xfcqPageObjectGUI
@@ -27,8 +29,6 @@ class xfcqPageObjectGUI extends ilPageObjectGUI {
 		parent::__construct(xfcqPageObject::PARENT_TYPE, $page_id);
 
 		// content style
-		require_once "Services/Style/Content/classes/class.ilObjStyleSheet.php";
-
 		self::dic()->ui()->mainTemplate()->setCurrentBlock("SyntaxStyle");
 		self::dic()->ui()->mainTemplate()->setVariable("LOCATION_SYNTAX_STYLESHEET", ilObjStyleSheet::getSyntaxStylePath());
 		self::dic()->ui()->mainTemplate()->parseCurrentBlock();

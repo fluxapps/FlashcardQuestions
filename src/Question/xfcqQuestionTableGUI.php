@@ -15,8 +15,8 @@ use ilTaxonomyException;
 use ilTaxSelectInputGUI;
 use ilTextInputGUI;
 use ilUtil;
-use srag\DIC\DICTrait;
-use srag\DIC\Exception\DICException;
+use srag\DIC\FlashcardQuestions\DICTrait;
+use srag\DIC\FlashcardQuestions\Exception\DICException;
 use xfcqContentGUI;
 use xfcqPageObject;
 use xfcqQuestionGUI;
@@ -152,7 +152,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	}
 
 
-	protected function passThroughFilter(array $data): array {
+	protected function passThroughFilter(array $data) {
 		$filtered_array = [];
 		foreach ($data as $set) {
 			// title
@@ -233,7 +233,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 * @return bool
 	 * @throws DICException
 	 */
-	public function isColumnSelected($column): bool {
+	public function isColumnSelected($column) {
 		if (!array_key_exists($column, $this->getSelectableColumns())) {
 			return true;
 		}
@@ -246,7 +246,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 * @return array
 	 * @throws DICException
 	 */
-	public function getSelectableColumns(): array {
+	public function getSelectableColumns() {
 		$columns = [
 			'active' => [
 				'txt' => self::plugin()->translate('row_active', self::LANG_MODULE),
@@ -287,7 +287,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 *
 	 * @return string
 	 */
-	protected function getPagePreview(int $page_id): String {
+	protected function getPagePreview(int $page_id) {
 		$page = new xfcqPageObject($page_id);
 		$page->buildDom();
 		$rendered_content = $page->getRenderedContent();
@@ -303,7 +303,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 *
 	 * @return string
 	 */
-	protected function getActiveIcon(bool $active): String {
+	protected function getActiveIcon($active) {
 		if ($active) {
 			$icon_path = ilUtil::getImagePath('icon_ok.svg');
 		} else {
@@ -314,7 +314,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	}
 
 
-	protected function formatTitle(array $a_set): String {
+	protected function formatTitle(array $a_set) {
 		$link = self::dic()->ctrl()->getLinkTargetByClass(xfcqQuestionGUI::class, xfcqQuestionGUI::CMD_EDIT_SETTINGS);
 
 		return '<a href="' . $link . '">' . $a_set['title'] . '</a>';
@@ -324,10 +324,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	/**
 	 * @param array $a_set
 	 *
-	 * @return String
+	 * @return string
 	 * @throws DICException
 	 */
-	protected function getActionMenu(array $a_set): String {
+	protected function getActionMenu(array $a_set) {
 		$actions = new ilAdvancedSelectionListGUI();
 
 		$actions->setListTitle(self::dic()->language()->txt('actions'));

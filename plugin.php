@@ -9,6 +9,8 @@
  * @author studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  */
 
+require_once __DIR__ . "/vendor/srag/dic/src/PHPVersionChecker.php";
+
 $id = "xfcq";
 $version = "0.5.0";
 $ilias_min_version = "5.3.0";

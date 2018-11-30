@@ -8,11 +8,13 @@ use ilObjFlashcardQuestions;
 use ilObjGlossary;
 use ilObjTaxonomy;
 use ilTaxNodeAssignment;
-use srag\DIC\DICTrait;
+use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
 
 /**
  * Class GlossaryMigrationWKV
+ *
+ * @package srag\Plugins\FlashcardQuestions\GlossaryMigration
  *
  * @author Theodor Truffer <tt@studer-raimann.ch>
  */
@@ -166,7 +168,7 @@ class GlossaryMigrationWKV {
 	/**
 	 * @return ilObjGlossary[]
 	 */
-	protected function fetchGlossaries(): array {
+	protected function fetchGlossaries() {
 		$query = self::dic()->database()->query('SELECT ref_id from object_data d 
                     inner join object_reference r on d.obj_id = r.obj_id 
                     where type = "glo" 
@@ -201,7 +203,7 @@ class GlossaryMigrationWKV {
 	 * @return array
 	 * @throws \ilTaxonomyException
 	 */
-	protected function getTaxNodeIds(ilObjGlossary $glossary, array $term): array {
+	protected function getTaxNodeIds(ilObjGlossary $glossary, array $term) {
 		$ta = new ilTaxNodeAssignment("glo", $glossary->getId(), "term", $glossary->getTaxonomyId());
 		$assgnmts = $ta->getAssignmentsOfItem($term['id']);
 		$node_ids = array();
@@ -213,7 +215,7 @@ class GlossaryMigrationWKV {
 	}
 
 
-	protected function getNodeIdForTitle($title, ilObjTaxonomy $taxonomy): int {
+	protected function getNodeIdForTitle($title, ilObjTaxonomy $taxonomy) {
 		$query = self::dic()->database()->query('SELECT child FROM tax_tree WHERE parent = 0 AND tax_tree_id = ' . $taxonomy->getTree()->getTreeId());
 		$root_node = self::dic()->database()->fetchAssoc($query)['child'];
 		foreach ($taxonomy->getTree()->getChilds($root_node) as $child) {

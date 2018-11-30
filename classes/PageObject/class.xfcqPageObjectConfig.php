@@ -3,7 +3,7 @@
 /**
  * Class xfcqPageObjectConfig
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
+ * @author  Theodor Truffer <tt@studer-raimann.ch>
  */
 class xfcqPageObjectConfig extends ilPageConfig {
 

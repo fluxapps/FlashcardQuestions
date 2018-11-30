@@ -4,10 +4,9 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\Plugins\FlashcardQuestions\Config\Config;
 use srag\Plugins\FlashcardQuestions\Object\Obj;
 use srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
-use srag\RemovePluginDataConfirm\RepositoryObjectPluginUninstallTrait;
+use srag\RemovePluginDataConfirm\FlashcardQuestions\RepositoryObjectPluginUninstallTrait;
 
 /**
  * Class ilFlashcardQuestionsPlugin
@@ -33,7 +32,7 @@ class ilFlashcardQuestionsPlugin extends ilRepositoryObjectPlugin {
 	/**
 	 * @return self
 	 */
-	public static function getInstance(): self {
+	public static function getInstance() {
 		if (self::$instance === NULL) {
 			self::$instance = new self();
 		}
@@ -53,7 +52,7 @@ class ilFlashcardQuestionsPlugin extends ilRepositoryObjectPlugin {
 	/**
 	 * @return string
 	 */
-	public function getPluginName(): string {
+	public function getPluginName() {
 		return self::PLUGIN_NAME;
 	}
 
@@ -62,7 +61,6 @@ class ilFlashcardQuestionsPlugin extends ilRepositoryObjectPlugin {
 	 * @inheritdoc
 	 */
 	protected function deleteData()/*: void*/ {
-		self::dic()->database()->dropTable(Config::TABLE_NAME, false);
 		self::dic()->database()->dropTable(Obj::TABLE_NAME, false);
 		self::dic()->database()->dropTable(xfcqQuestion::TABLE_NAME, false);
 		// TODO: delete page objects

@@ -4,8 +4,8 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\DIC\DICTrait;
-use srag\DIC\Exception\DICException;
+use srag\DIC\FlashcardQuestions\DICTrait;
+use srag\DIC\FlashcardQuestions\Exception\DICException;
 use srag\Plugins\FlashcardQuestions\GlossaryMigration\GlossaryMigration;
 use srag\Plugins\FlashcardQuestions\Object\ObjSettingsFormGUI;
 
@@ -61,7 +61,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	/**
 	 * @return string
 	 */
-	public final function getType(): string {
+	public final function getType() {
 		return ilFlashcardQuestionsPlugin::PLUGIN_ID;
 	}
 
@@ -88,7 +88,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	 * @throws DICException
 	 * @throws ilCtrlException
 	 */
-	public function performCommand(string $cmd)/*: void*/ {
+	public function performCommand($cmd)/*: void*/ {
 		self::dic()->help()->setScreenIdComponent(ilFlashcardQuestionsPlugin::PLUGIN_ID);
 
 		$next_class = self::dic()->ctrl()->getNextClass($this);
@@ -176,7 +176,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	 * @return ilPropertyFormGUI
 	 */
 	public function initCreateForm(/*string*/
-		$a_new_type): ilPropertyFormGUI {
+		$a_new_type) {
 		$form = parent::initCreateForm($a_new_type);
 
 		return $form;
@@ -194,7 +194,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	/**
 	 * @return ObjSettingsFormGUI
 	 */
-	protected function getSettingsForm(): ObjSettingsFormGUI {
+	protected function getSettingsForm() {
 		$form = new ObjSettingsFormGUI($this);
 
 		return $form;
@@ -209,7 +209,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 
 		$form = $this->getSettingsForm();
 
-		self::plugin()->output($form);
+		self::output()->output($form);
 	}
 
 
@@ -224,7 +224,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		$form->setValuesByPost();
 
 		if (!$form->checkInput()) {
-			self::plugin()->output($form);
+			self::output()->output($form);
 
 			return;
 		}
@@ -233,7 +233,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 
 		ilUtil::sendSuccess(self::plugin()->translate("saved", self::LANG_MODULE_SETTINGS), true);
 
-		self::plugin()->output($form);
+		self::output()->output($form);
 	}
 
 
@@ -269,7 +269,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	/**
 	 * @return string
 	 */
-	public static function getStartCmd(): string {
+	public static function getStartCmd() {
 		return self::CMD_SHOW_CONTENTS;
 	}
 
@@ -277,7 +277,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	/**
 	 * @return string
 	 */
-	public function getAfterCreationCmd(): string {
+	public function getAfterCreationCmd() {
 		return self::getStartCmd();
 	}
 
@@ -285,7 +285,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	/**
 	 * @return string
 	 */
-	public function getStandardCmd(): string {
+	public function getStandardCmd() {
 		return self::getStartCmd();
 	}
 
@@ -293,7 +293,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	/**
 	 * @return int
 	 */
-	public function getObjId(): int {
+	public function getObjId() {
 		return $this->obj_id;
 	}
 
@@ -301,7 +301,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	/**
 	 * @return ilObjFlashcardQuestions
 	 */
-	public function getObject(): ilObjFlashcardQuestions {
+	public function getObject() {
 		return $this->object;
 	}
 

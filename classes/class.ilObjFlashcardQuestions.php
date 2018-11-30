@@ -4,7 +4,7 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\DIC\DICTrait;
+use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\Plugins\FlashcardQuestions\Object\Obj;
 
 /**
@@ -46,7 +46,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	/**
 	 * @return array
 	 */
-	public function getTaxonomyIds(): array {
+	public function getTaxonomyIds() {
 		return ilObjTaxonomy::getUsageOfObject($this->id);
 	}
 
@@ -122,7 +122,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	/**
 	 * @return bool
 	 */
-	public function isOnline(): bool {
+	public function isOnline() {
 		return $this->object->isOnline();
 	}
 
@@ -130,7 +130,7 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	/**
 	 * @param bool $is_online
 	 */
-	public function setOnline(bool $is_online = true)/*: void*/ {
+	public function setOnline($is_online = true)/*: void*/ {
 		$this->object->setOnline($is_online);
 	}
 }

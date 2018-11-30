@@ -1,6 +1,8 @@
 <?php
 
-use srag\DIC\DICTrait;
+require_once __DIR__ . "/../../vendor/autoload.php";
+
+use srag\DIC\FlashcardQuestions\DICTrait;
 
 /**
  * Class ilFlashcardQuestionsSelectorInputGUI
@@ -23,7 +25,7 @@ class ilFlashcardQuestionsSelectorInputGUI extends ilRepositorySelectorInputGUI 
 	 */
 	function __construct($a_title = "", $a_postvar = "") {
 		parent::__construct($a_title, $a_postvar);
-		$this->setClickableTypes(array( 'xfcq' ));
+		$this->setClickableTypes(array( ilFlashcardQuestionsPlugin::PLUGIN_ID ));
 	}
 
 
@@ -73,7 +75,6 @@ class ilFlashcardQuestionsSelectorInputGUI extends ilRepositorySelectorInputGUI 
 
 		if ($this->getValue() > 0 && $this->getValue() != ROOT_FOLDER_ID) {
 			// modification:
-			require_once "Services/Locator/classes/class.ilLocatorGUI.php";
 			$loc_gui = new ilLocatorGUI();
 			$loc_gui->addContextItems($this->getValue());
 			$tpl->setVariable("TXT_ITEM", $loc_gui->getHTML());
