@@ -2,6 +2,8 @@
 namespace srag\Plugins\FlashcardQuestions\Question;
 
 use ActiveRecord;
+use ilObjTaxonomy;
+use ilTaxonomyTree;
 use \xfcqPageObject;
 /**
  * Class xfcqQuestion
@@ -315,5 +317,18 @@ class xfcqQuestion extends ActiveRecord {
      */
     public function setTaxNodesForTaxId(array $tax_nodes, Int $tax_id) {
         $this->tax_nodes[$tax_id] = $tax_nodes;
+    }
+
+    /**
+     * @param $tax_title
+     * @return array|mixed
+     */
+    public function getTaxNodesForTaxTitle($tax_title) {
+        foreach ($this->getTaxNodes() as $tax_id => $nodes) {
+            if (ilObjTaxonomy::_lookupTitle($tax_id) == $tax_title) {
+                return $nodes;
+            }
+        }
+        return array();
     }
 }
