@@ -163,7 +163,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 			//taxonomies
 			foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
 				if (count(array_filter($this->filter['taxonomy_' . $tax_id]))
-					&& empty(array_intersect($set['tax_nodes'][$tax_id], $this->filter['taxonomy_' . $tax_id]))) {
+					&& (!is_array($set['tax_nodes'][$tax_id]) || empty(array_intersect($set['tax_nodes'][$tax_id], $this->filter['taxonomy_' . $tax_id])))) {
 					continue 2;
 				}
 			}
