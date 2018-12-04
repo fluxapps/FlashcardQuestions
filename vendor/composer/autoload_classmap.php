@@ -7,10 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'FlashcardQuestionsRemoveDataConfirm' => $baseDir . '/classes/uninstall/class.FlashcardQuestionsRemoveDataConfirm.php',
-<<<<<<< HEAD
     'ilFlashcardQuestionsConfigGUI' => $baseDir . '/classes/class.ilFlashcardQuestionsConfigGUI.php',
-=======
->>>>>>> origin/develop
     'ilFlashcardQuestionsPlugin' => $baseDir . '/classes/class.ilFlashcardQuestionsPlugin.php',
     'ilFlashcardQuestionsSelectorInputGUI' => $baseDir . '/classes/Input/class.ilFlashcardQuestionsSelectorInputGUI.php',
     'ilGlossaryDefinition' => $baseDir . '/../../../../../../../Modules/Glossary/classes/class.ilGlossaryDefinition.php',

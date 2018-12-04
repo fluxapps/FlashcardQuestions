@@ -13,7 +13,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
             'srag\\Plugins\\FlashcardQuestions\\' => 32,
             'srag\\LibrariesNamespaceChanger\\' => 31,
             'srag\\DIC\\FlashcardQuestions\\' => 28,
-            'srag\\CustomInputGUIs\\FlashcardQuestions\\' => 40,
+            'srag\\CustomInputGUIs\\' => 21,
             'srag\\ActiveRecordConfig\\FlashcardQuestions\\' => 43,
         ),
     );
@@ -35,7 +35,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
         array (
             0 => __DIR__ . '/..' . '/srag/dic/src',
         ),
-        'srag\\CustomInputGUIs\\FlashcardQuestions\\' => 
+        'srag\\CustomInputGUIs\\' => 
         array (
             0 => __DIR__ . '/..' . '/srag/custominputguis/src',
         ),
@@ -47,10 +47,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
 
     public static $classMap = array (
         'FlashcardQuestionsRemoveDataConfirm' => __DIR__ . '/../..' . '/classes/uninstall/class.FlashcardQuestionsRemoveDataConfirm.php',
-<<<<<<< HEAD
         'ilFlashcardQuestionsConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilFlashcardQuestionsConfigGUI.php',
-=======
->>>>>>> origin/develop
         'ilFlashcardQuestionsPlugin' => __DIR__ . '/../..' . '/classes/class.ilFlashcardQuestionsPlugin.php',
         'ilFlashcardQuestionsSelectorInputGUI' => __DIR__ . '/../..' . '/classes/Input/class.ilFlashcardQuestionsSelectorInputGUI.php',
         'ilGlossaryDefinition' => __DIR__ . '/../..' . '/../../../../../../../Modules/Glossary/classes/class.ilGlossaryDefinition.php',

@@ -49,24 +49,24 @@
     },
     {
         "name": "srag/custominputguis",
-        "version": "v0.13.19",
-        "version_normalized": "0.13.19.0",
+        "version": "v0.13.20",
+        "version_normalized": "0.13.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/studer-raimann/CustomInputGUIs.git",
-            "reference": "3db75fc743668d35d47ea8fd7889447b9a18e984"
+            "reference": "1d84cfda42824db9a7f86a750cee06cfd5bbf7d8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/studer-raimann/CustomInputGUIs/zipball/3db75fc743668d35d47ea8fd7889447b9a18e984",
-            "reference": "3db75fc743668d35d47ea8fd7889447b9a18e984",
+            "url": "https://api.github.com/repos/studer-raimann/CustomInputGUIs/zipball/1d84cfda42824db9a7f86a750cee06cfd5bbf7d8",
+            "reference": "1d84cfda42824db9a7f86a750cee06cfd5bbf7d8",
             "shasum": ""
         },
         "require": {
             "php": ">=5.6",
             "srag/dic": ">=0.1.0"
         },
-        "time": "2018-11-26T12:16:00+00:00",
+        "time": "2018-12-04T06:43:31+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

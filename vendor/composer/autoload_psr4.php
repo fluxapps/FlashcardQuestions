@@ -10,6 +10,6 @@ return array(
     'srag\\Plugins\\FlashcardQuestions\\' => array($baseDir . '/src'),
     'srag\\LibrariesNamespaceChanger\\' => array($vendorDir . '/srag/librariesnamespacechanger/src'),
     'srag\\DIC\\FlashcardQuestions\\' => array($vendorDir . '/srag/dic/src'),
-    'srag\\CustomInputGUIs\\FlashcardQuestions\\' => array($vendorDir . '/srag/custominputguis/src'),
+    'srag\\CustomInputGUIs\\' => array($vendorDir . '/srag/custominputguis/src'),
     'srag\\ActiveRecordConfig\\FlashcardQuestions\\' => array($vendorDir . '/srag/activerecordconfig/src'),
 );

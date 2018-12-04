@@ -65,7 +65,6 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		return ilFlashcardQuestionsPlugin::PLUGIN_ID;
 	}
 
-<<<<<<< HEAD
     function executeCommand() {
 	    // this is a bit hacky but has to be done, since the 'save' cmd is caught up in the parent::executeCommand()
 	    $cmd = self::dic()->ctrl()->getCmd();
@@ -83,34 +82,6 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
      * @throws ilCtrlException
      */
 	public function performCommand(string $cmd)/*: void*/ {
-=======
-
-	function executeCommand() {
-		// TODO: remove after dev
-		//	    $migration = new GlossaryMigrationWKV();
-		//	    $migration->run();
-
-		// this is a bit hacky but has to be done, since the 'save' cmd is caught up in the parent::executeCommand()
-		$cmd = self::dic()->ctrl()->getCmd();
-		$next_class = self::dic()->ctrl()->getNextClass($this);
-		if ($next_class == strtolower(ilObjTaxonomyGUI::class) && $cmd == 'save') {
-			$this->performCommand($cmd);
-		}
-
-		return parent::executeCommand();
-	}
-
-
-	/**
-	 * @param string $cmd
-	 *
-	 * @throws DICException
-	 * @throws ilCtrlException
-	 */
-	public function performCommand($cmd)/*: void*/ {
-		self::dic()->help()->setScreenIdComponent(ilFlashcardQuestionsPlugin::PLUGIN_ID);
-
->>>>>>> origin/develop
 		$next_class = self::dic()->ctrl()->getNextClass($this);
 		$this->renderTitleAndDescription();
 

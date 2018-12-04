@@ -6,12 +6,8 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\Plugins\FlashcardQuestions\Object\Obj;
-<<<<<<< HEAD
-use srag\DIC\DICTrait;
 use srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
-=======
 
->>>>>>> origin/develop
 /**
  * Class ilObjFlashcardQuestions
  *
@@ -60,7 +56,6 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	 *
 	 */
 	public function doCreate()/*: void*/ {
-<<<<<<< HEAD
 //        // create taxonomy // TODO: move this to gui, maybe create two taxonomies (for WKV)
 //	    $ilObjTaxonomy = new ilObjTaxonomy();
 //        $ilObjTaxonomy->setTitle("Taxonomie");
@@ -70,17 +65,6 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
         // create object settings
         $this->object = new Obj();
         $this->object->setObjId($this->id);
-=======
-		//        // create taxonomy
-		//	    $ilObjTaxonomy = new ilObjTaxonomy();
-		//        $ilObjTaxonomy->setTitle("Taxonomie");
-		//        $ilObjTaxonomy->create();
-		//        ilObjTaxonomy::saveUsage($ilObjTaxonomy->getId(), $this->id);
-
-		// create object settings
-		$this->object = new Obj();
-		$this->object->setObjId($this->id);
->>>>>>> origin/develop
 		$this->object->store();
 	}
 
@@ -109,7 +93,6 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 			$this->object->delete();
 		}
 
-<<<<<<< HEAD
         foreach ($this->getTaxonomyIds() as $tax_id) {
             $ilObjTaxonomy = new ilObjTaxonomy($tax_id);
             $ilObjTaxonomy->delete();
@@ -119,13 +102,6 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
             /** @var $xfcqQuestion xfcqQuestion */
             $xfcqQuestion->delete();
         }
-=======
-		foreach ($this->getTaxonomyIds() as $tax_id) {
-			$ilObjTaxonomy = new ilObjTaxonomy($tax_id);
-			$ilObjTaxonomy->delete();
-		}
-		// TODO: delete page objects
->>>>>>> origin/develop
 	}
 
 
