@@ -71,7 +71,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		$this->setSelectAllCheckbox('id');
 
 		$raw_data = xfcqQuestion::where([ 'obj_id' => $parent_gui->getObjId() ])->getArray();
-		$data = $this->passThroughFilter($raw_data);
+		$data = $this->passThroughFilter($this->formatData($raw_data));
 		$this->setData($data);
 	}
 
@@ -96,7 +96,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 
 		if ($this->isColumnSelected('id')) {
 			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $a_set['obj_id'] . '.' . $a_set['id']);
+			$this->tpl->setVariable('VALUE', $a_set['id']);
 			$this->tpl->parseCurrentBlock();
 		}
 
@@ -134,6 +134,9 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 * @throws ilTaxonomyException
 	 */
 	function initFilter() {
+	    $filter_item = new ilTextInputGUI(self::plugin()->translate('row_id', self::LANG_MODULE), 'id');
+	    $this->addAndReadFilterItem($filter_item);
+
 		$filter_item = new ilSelectInputGUI(self::dic()->language()->txt('active'), 'active');
 		$filter_item->setOptions([
 			'' => self::dic()->language()->txt('please_select'),
@@ -155,6 +158,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	protected function passThroughFilter(array $data) {
 		$filtered_array = [];
 		foreach ($data as $set) {
+		    //id
+            if ($this->filter['id'] && strpos($set['id'], $this->filter['id']) === false) {
+                continue;
+            }
 			//taxonomies
 			foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
 				if (count(array_filter($this->filter['taxonomy_' . $tax_id]))
@@ -174,6 +181,20 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		}
 
 		return $filtered_array;
+	}
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function formatData(array $data) {
+        $formatted_data = array();
+        foreach ($data as $set) {
+            $set['raw_id'] = $set['id'];
+            $set['id'] = $set['obj_id'] . '.' . $set['raw_id'];
+            $formatted_data[] = $set;
+        }
+        return $formatted_data;
 	}
 
 
@@ -236,8 +257,12 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		return in_array($column, $this->getSelectedColumns());
 	}
 
+    function numericOrdering($a_field) {
+        return (bool) $a_field == 'raw_id';
+    }
 
-	/**
+
+    /**
 	 * @return array
 	 * @throws DICException
 	 */
@@ -251,7 +276,8 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 			],
 			'id' => [
 				'txt' => self::plugin()->translate('row_id', self::LANG_MODULE),
-				'sort_field' => 'id',
+				'sort_field' => 'raw_id',
+                'numeric_ordering' => true,
 				'width' => '',
 				'default' => true
 			],
