@@ -84,7 +84,6 @@ class GlossaryMigrationWKV {
                 $answer_definition = $definitions[1];
 
                 $xfcqQuestion = new xfcqQuestion();
-                $xfcqQuestion->setTitle($term['term'] ? $term['term'] : 'Frage');
                 $xfcqQuestion->setActive(true);
                 $xfcqQuestion->setObjId($ilObjFlashcardQuestions->getId());
                 $xfcqQuestion->setOriginGloId($glossary->getId());

@@ -69,7 +69,6 @@ class GlossaryMigration {
                 $answer_definition = $definitions[1];
 
                 $xfcqQuestion = new xfcqQuestion();
-                $xfcqQuestion->setTitle($term['term']);
                 $xfcqQuestion->setActive(true);
                 $xfcqQuestion->setObjId($ilObjFlashcardQuestions->getId());
                 $xfcqQuestion->setOriginGloId($glossary->getId());
