@@ -94,9 +94,9 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 			$this->tpl->parseCurrentBlock();
 		}
 
-		if ($this->isColumnSelected('title')) {
+		if ($this->isColumnSelected('id')) {
 			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $this->formatTitle($a_set));
+			$this->tpl->setVariable('VALUE', $a_set['obj_id'] . '.' . $a_set['id']);
 			$this->tpl->parseCurrentBlock();
 		}
 
@@ -134,9 +134,6 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 * @throws ilTaxonomyException
 	 */
 	function initFilter() {
-		$filter_item = new ilTextInputGUI(self::dic()->language()->txt('title'), 'title');
-		$this->addAndReadFilterItem($filter_item);
-
 		$filter_item = new ilSelectInputGUI(self::dic()->language()->txt('active'), 'active');
 		$filter_item->setOptions([
 			'' => self::dic()->language()->txt('please_select'),
@@ -151,15 +148,13 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		}
 	}
 
-
+    /**
+     * @param array $data
+     * @return array
+     */
 	protected function passThroughFilter(array $data) {
 		$filtered_array = [];
 		foreach ($data as $set) {
-			// title
-			$filter_title = trim($this->filter['title']);
-			if ($filter_title && strpos($set['title'], $filter_title) === false) {
-				continue;
-			}
 			//taxonomies
 			foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
 				if (count(array_filter($this->filter['taxonomy_' . $tax_id]))
@@ -254,9 +249,9 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 				'width' => '',
 				'default' => true
 			],
-			'title' => [
-				'txt' => self::plugin()->translate('row_title', self::LANG_MODULE),
-				'sort_field' => 'title',
+			'id' => [
+				'txt' => self::plugin()->translate('row_id', self::LANG_MODULE),
+				'sort_field' => 'id',
 				'width' => '',
 				'default' => true
 			],
@@ -273,6 +268,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 				'default' => true
 			],
 		];
+
 		foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
 			$ilObjTaxonomy = new ilObjTaxonomy($tax_id);
 			$columns['taxonomy_' . $tax_id] = [ 'txt' => $ilObjTaxonomy->getTitle(), 'sort_field' => false, 'width' => '', 'default' => true ];
@@ -290,7 +286,6 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	protected function getPagePreview(int $page_id) {
 		$page = new xfcqPageObject($page_id);
 		$page->buildDom();
-		$rendered_content = $page->getRenderedContent();
 		$short_str = $page->getFirstParagraphText();
 		$short_str = strip_tags($short_str, "<br>");
 

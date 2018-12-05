@@ -31,6 +31,7 @@ settings_settings#:#Einstellungen
 settings_title#:#Titel
 table_question_table_title#:#Lernkarten-Fragen
 table_row_title#:#Titel
+table_row_id#:#ID
 table_row_question#:#Frage
 table_row_answer#:#Antwort
 table_row_taxonomy#:#Taxonomie
@@ -45,5 +46,6 @@ msg_success#:#Einstellungen erfolgreich gespeichert.
 msg_deleted_successfully#:#Objekt(e) erfolgreich gelöscht.
 msg_no_question_selected#:#Bitte wählen Sie mindestens eine Frage aus.
 msg_enter_title_first#:#Bitte geben Sie erst einen Titel ein und speichern Sie das Formular.
+msg_question_created#:#Neue Frage wurde erstellt. Klicken Sie auf die leeren Felder, um die Frage/Antwort zu bearbeiten.
 delete_confirmation_text#:#Sind Sie sicher, dass folgende Objekte gelöscht werden sollen?
 exit_button#:#Beenden

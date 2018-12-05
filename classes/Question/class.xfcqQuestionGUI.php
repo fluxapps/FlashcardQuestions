@@ -32,25 +32,29 @@ class xfcqQuestionGUI {
 	 * @var xfcqQuestion
 	 */
 	protected $question;
-	/**
-	 * @var bool
-	 */
-	protected $is_new;
+
 	/**
 	 * @var xfcqContentGUI
 	 */
 	protected $parent_gui;
 
 
-	/**
-	 * xfcqQuestionGUI constructor
-	 *
-	 * @param xfcqContentGUI $parent_gui
-	 */
+    /**
+     * xfcqQuestionGUI constructor.
+     * @param xfcqContentGUI $parent_gui
+     * @throws DICException
+     */
 	public function __construct(xfcqContentGUI $parent_gui) {
 		$this->question = new xfcqQuestion((int)$_GET[self::GET_QUESTION_ID]);
-		$this->is_new = !(bool)$_GET[self::GET_QUESTION_ID];
+		$is_new = !(bool)$_GET[self::GET_QUESTION_ID];
 		$this->parent_gui = $parent_gui;
+		if ($is_new) {
+		    $this->question->setObjId($this->getObjId());
+		    $this->question->create();
+            $_GET[self::GET_QUESTION_ID] = $this->question->getId();
+            self::dic()->ctrl()->setParameter($this, self::GET_QUESTION_ID, $this->question->getId());
+		    ilUtil::sendInfo(self::plugin()->translate('msg_question_created'));
+        }
 	}
 
 
@@ -88,8 +92,9 @@ class xfcqQuestionGUI {
 				}
 				break;
 		}
-		$this->removePageEditorTabs();
-	}
+
+        $this->removePageEditorTabs();
+    }
 
 
 	/**
@@ -104,21 +109,17 @@ class xfcqQuestionGUI {
 
 		$template->setVariable('QUESTION_HEADER', self::dic()->language()->txt('question'));
 		$template->setVariable('ANSWER_HEADER', self::dic()->language()->txt('answer', 'assessment'));
-		if (!$this->is_new) {
-			$question_gui = new xfcqPageObjectGUI($this->question->getPageIdQuestion(), $this->getObjId());
-			$template->setVariable('QUESTION', $question_gui->getHTML());
-			$template->setVariable('LINK_EDIT_QUESTION', self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_QUESTION));
+        $question_gui = new xfcqPageObjectGUI($this->question->getPageIdQuestion(), $this->getObjId());
+        $template->setVariable('QUESTION', $question_gui->getHTML());
+        $template->setVariable('LINK_EDIT_QUESTION', self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_QUESTION));
 
-			$answer_gui = new xfcqPageObjectGUI($this->question->getPageIdAnswer(), $this->getObjId());
-			$template->setVariable('ANSWER', $answer_gui->getHTML());
-			$template->setVariable('LINK_EDIT_ANSWER', self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_ANSWER));
+        $answer_gui = new xfcqPageObjectGUI($this->question->getPageIdAnswer(), $this->getObjId());
+        $template->setVariable('ANSWER', $answer_gui->getHTML());
+        $template->setVariable('LINK_EDIT_ANSWER', self::dic()->ctrl()->getLinkTarget($this, self::CMD_EDIT_ANSWER));
 
-			$template->setVariable('LABEL_EDIT', self::dic()->language()->txt('edit'));
-		} else {
-			$template->setVariable('LABEL_EDIT', self::plugin()->translate('msg_enter_title_first'));
-		}
+        $template->setVariable('LABEL_EDIT', self::dic()->language()->txt('edit'));
 
-		self::output()->output($template);
+		self::dic()->mainTemplate()->setContent($template->get());
 	}
 
 
@@ -184,7 +185,7 @@ class xfcqQuestionGUI {
 		$back_button->setCaption(self::plugin()->translate('exit_button'), false);
 		$template->setVariable('EXIT_BUTTON', $back_button->getToolbarHTML());
 
-		self::output()->output($template);
+        self::dic()->mainTemplate()->setContent($template->get());
 	}
 
 
@@ -214,7 +215,7 @@ class xfcqQuestionGUI {
 		$back_button->setCaption(self::plugin()->translate('exit_button'), false);
 		$template->setVariable('EXIT_BUTTON', $back_button->getToolbarHTML());
 
-		self::output()->output($template);
+        self::dic()->mainTemplate()->setContent($template->get());
 	}
 
 
@@ -228,23 +229,8 @@ class xfcqQuestionGUI {
 			ilUtil::sendSuccess(self::plugin()->translate('msg_success'), true);
 			self::dic()->ctrl()->redirect($this, self::CMD_EDIT_SETTINGS);
 		}
-		self::output()->output([ $this->getHeader(), $xfcqQuestionFormGUI ]);
+        self::dic()->mainTemplate()->setContent($xfcqQuestionFormGUI->getHTML());
 	}
-
-
-	/**
-	 * @throws DICException
-	 */
-	protected function saveSettingsAndContinue() {
-		$xfcqQuestionFormGUI = new xfcqQuestionFormGUI($this, $this->question);
-		$xfcqQuestionFormGUI->setValuesByPost();
-		if ($xfcqQuestionFormGUI->saveForm()) {
-			ilUtil::sendSuccess(self::plugin()->translate('msg_success'), true);
-			self::dic()->ctrl()->redirect($this, self::CMD_EDIT_QUESTION);
-		}
-		self::output()->output([ $this->getHeader(), $xfcqQuestionFormGUI ]);
-	}
-
 
 	/**
 	 * @return int

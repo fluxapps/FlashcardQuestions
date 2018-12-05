@@ -31,6 +31,7 @@ settings_settings#:#Settings
 settings_title#:#Title
 table_question_table_title#:#Lernkarten-Fragen
 table_row_title#:#Title
+table_row_id#:#ID
 table_row_question#:#Question
 table_row_answer#:#Answer
 table_row_taxonomy#:#Taxonomy
@@ -45,5 +46,6 @@ msg_success#:#Settings successfully saved.
 msg_deleted_successfully#:#Object(s) deleted successfully.
 msg_no_question_selected#:#Please choose at least one question.
 msg_enter_title_first#:#Please set a title and save the form first.
+msg_question_created#:#New question was created. Click on the empty fields to edit the question/answer.
 delete_confirmation_text#:#Do you really want to delete the following objects?
 exit_button#:#Beenden

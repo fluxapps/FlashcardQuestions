@@ -124,15 +124,6 @@ class xfcqQuestion extends ActiveRecord {
      */
     protected $obj_id;
     /**
-     * @var string
-     *
-     * @db_has_field           true
-     * @db_is_notnull          true
-     * @db_fieldtype           text
-     * @db_length              2048
-     */
-    protected $title;
-    /**
      * @var bool
      *
      * @db_has_field           true
@@ -234,20 +225,6 @@ class xfcqQuestion extends ActiveRecord {
      */
     public function setObjId(int $obj_id) {
         $this->obj_id = $obj_id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle(): string {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title) {
-        $this->title = $title;
     }
 
     /**
