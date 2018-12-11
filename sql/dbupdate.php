@@ -27,3 +27,11 @@
 <?php
 \srag\Plugins\FlashcardQuestions\Question\xfcqQuestion::updateDB();
 ?>
+<#4>
+<?php
+\srag\Plugins\FlashcardQuestions\Config\Config::updateDB();
+?>
+<#5>
+<?php
+\srag\Plugins\FlashcardQuestions\Object\Obj::updateDB();
+?>

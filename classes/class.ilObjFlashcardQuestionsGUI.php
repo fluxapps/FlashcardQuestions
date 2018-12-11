@@ -249,8 +249,8 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		}
 
 		if (ilObjFlashcardQuestionsAccess::hasWriteAccess()) {
-			self::dic()->tabs()->addTab(self::TAB_TAXONOMY, self::plugin()->translate("taxonomy", self::LANG_MODULE_OBJECT)
-				. ilGlyphGUI::get('next'), self::dic()->ctrl()->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listTaxonomies'));
+			self::dic()->tabs()->addTab(self::TAB_TAXONOMY, self::plugin()->translate("taxonomy", self::LANG_MODULE_OBJECT),
+                self::dic()->ctrl()->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listTaxonomies'));
 		}
 
 		self::dic()->tabs()->manual_activation = true; // Show all tabs as links when no activation

@@ -6,8 +6,11 @@ namespace srag\Plugins\FlashcardQuestions\Object;
 
 use ilCheckboxInputGUI;
 use ilFlashcardQuestionsPlugin;
+use ilObjFlashcardQuestions;
 use ilObjFlashcardQuestionsGUI;
+use ilObjTaxonomy;
 use ilPropertyFormGUI;
+use ilSelectInputGUI;
 use ilTextAreaInputGUI;
 use ilTextInputGUI;
 use srag\DIC\FlashcardQuestions\DICTrait;
@@ -31,17 +34,15 @@ class ObjSettingsFormGUI extends ilPropertyFormGUI {
 	 */
 	protected $parent;
 
-
-	/**
-	 * ObjSettingsFormGUI constructor
-	 *
-	 * @param ilObjFlashcardQuestionsGUI $parent
-	 */
+    /**
+     * ObjSettingsFormGUI constructor.
+     * @param ilObjFlashcardQuestionsGUI $parent
+     * @throws \srag\DIC\FlashcardQuestions\Exception\DICException
+     */
 	public function __construct(ilObjFlashcardQuestionsGUI $parent) {
 		parent::__construct();
-
 		$this->parent = $parent;
-
+        self::dic()->mainTemplate()->addJavaScript(self::plugin()->directory() . '/templates/js/object_settings.js');
 		$this->setForm();
 	}
 
@@ -70,6 +71,30 @@ class ObjSettingsFormGUI extends ilPropertyFormGUI {
 		$online = new ilCheckboxInputGUI(self::plugin()->translate("online", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS), "online");
 		$online->setChecked($this->parent->object->isOnline());
 		$this->addItem($online);
+
+		$report_lvl_1 = new ilSelectInputGUI(self::plugin()->translate("report_lvl_1", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS), "report_lvl_1");
+		$report_lvl_1->setInfo(self::plugin()->translate("report_lvl_1_info", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS));
+		$options = array(0 => self::dic()->language()->txt("please_choose"));
+		foreach ($this->parent->getObject()->getTaxonomyIds() as $tax_id) {
+		    $options[$tax_id] = ilObjTaxonomy::_lookupTitle($tax_id);
+        }
+		$report_lvl_1->setOptions($options);
+		$report_lvl_1->setValue($this->parent->object->getReportLvl1());
+		$report_lvl_1->setDisabled(count($options) == 0);
+        $this->addItem($report_lvl_1);
+
+		$report_lvl_2 = new ilSelectInputGUI(self::plugin()->translate("report_lvl_2", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS), "report_lvl_2");
+        $report_lvl_2->setInfo(self::plugin()->translate("report_lvl_2_info", ilObjFlashcardQuestionsGUI::LANG_MODULE_SETTINGS));
+        $options = array(0 => self::dic()->language()->txt("please_choose"));
+		foreach ($this->parent->getObject()->getTaxonomyIds() as $tax_id) {
+		    $options[$tax_id] = ilObjTaxonomy::_lookupTitle($tax_id);
+        }
+        $report_lvl_2->setOptions($options);
+		$report_lvl_2->setDisabled(count($options) == 1);
+		$report_lvl_2->setValue($this->parent->object->getReportLvl2());
+		$this->addItem($report_lvl_2);
+
+
 	}
 
 
@@ -77,15 +102,11 @@ class ObjSettingsFormGUI extends ilPropertyFormGUI {
 	 *
 	 */
 	public function updateSettings()/*: void*/ {
-		$title = $this->getInput("title");
-		$this->parent->object->setTitle($title);
-
-		$description = $this->getInput("description");
-		$this->parent->object->setDescription($description);
-
-		$online = boolval($this->getInput("online"));
-		$this->parent->object->setOnline($online);
-
+		$this->parent->object->setTitle($this->getInput("title"));
+		$this->parent->object->setDescription($this->getInput("description"));
+		$this->parent->object->setOnline(boolval($this->getInput("online")));
+		$this->parent->object->setReportLvl1($this->getInput('report_lvl_1'));
+		$this->parent->object->setReportLvl2($this->getInput('report_lvl_2'));
 		$this->parent->object->update();
 	}
 }

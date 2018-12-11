@@ -17,6 +17,7 @@ use ilTextInputGUI;
 use ilUtil;
 use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\DIC\FlashcardQuestions\Exception\DICException;
+use srag\Plugins\FlashcardQuestions\Report\xfcqMPDF;
 use xfcqContentGUI;
 use xfcqPageObject;
 use xfcqQuestionGUI;
@@ -36,6 +37,22 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	const PREFIX = 'xfcq_qst_';
 	const FILTER_ACTIVE_TRUE = 1;
 	const FILTER_ACTIVE_FALSE = 2;
+
+    const EXPORT_QUESTIONS_ANSWERS_ID = 1000;
+    const EXPORT_QUESTIONS_ANSWERS = 2000;
+    const EXPORT_QUESTIONS_ID = 3000;
+    const EXPORT_QUESTIONS = 4000;
+
+    /**
+     * @var array
+     */
+    protected static $exports = array(
+        self::EXPORT_QUESTIONS_ANSWERS_ID => 'export_pdf_format_1',
+        self::EXPORT_QUESTIONS_ANSWERS => 'export_pdf_format_2',
+        self::EXPORT_QUESTIONS_ID => 'export_pdf_format_3',
+        self::EXPORT_QUESTIONS => 'export_pdf_format_4',
+    );
+
 	/**
 	 * @var array
 	 */
@@ -70,10 +87,12 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		$this->addMultiCommand(xfcqContentGUI::CMD_DEACTIVATE, self::dic()->language()->txt('deactivate'));
 		$this->setSelectAllCheckbox('id');
 
-		$raw_data = xfcqQuestion::where([ 'obj_id' => $parent_gui->getObjId() ])->getArray();
-		$data = $this->passThroughFilter($this->formatData($raw_data));
-		$this->setData($data);
-	}
+        foreach (static::$exports as $id => $lang_key) {
+            $this->export_formats[$id] = self::plugin()->getPluginObject()->getPrefix() . '_' . $lang_key;
+        }
+
+        $this->buildData();
+    }
 
 
 	/**
@@ -102,13 +121,13 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 
 		if ($this->isColumnSelected('question')) {
 			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $this->getPagePreview($a_set['page_id_qst']));
+			$this->tpl->setVariable('VALUE', $a_set['question']);
 			$this->tpl->parseCurrentBlock();
 		}
 
 		if ($this->isColumnSelected('answer')) {
 			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $this->getPagePreview($a_set['page_id_ans']));
+			$this->tpl->setVariable('VALUE', $a_set['answer']);
 			$this->tpl->parseCurrentBlock();
 		}
 
@@ -130,9 +149,9 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	}
 
 
-	/**
-	 * @throws ilTaxonomyException
-	 */
+    /**
+     * @throws DICException
+     */
 	function initFilter() {
 	    $filter_item = new ilTextInputGUI(self::plugin()->translate('row_id', self::LANG_MODULE), 'id');
 	    $this->addAndReadFilterItem($filter_item);
@@ -192,11 +211,12 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         foreach ($data as $set) {
             $set['raw_id'] = $set['id'];
             $set['id'] = $set['obj_id'] . '.' . $set['raw_id'];
+            $set['question'] = $this->getPagePreview($set['page_id_qst']);
+            $set['answer'] = $this->getPagePreview($set['page_id_ans']);
             $formatted_data[] = $set;
         }
         return $formatted_data;
 	}
-
 
 	/**
 	 * @param $item
@@ -334,7 +354,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		return '<img src="' . $icon_path . '">';
 	}
 
-
+    /**
+     * @param array $a_set
+     * @return string
+     */
 	protected function formatTitle(array $a_set) {
 		$link = self::dic()->ctrl()->getLinkTargetByClass(xfcqQuestionGUI::class, xfcqQuestionGUI::CMD_EDIT_SETTINGS);
 
@@ -366,4 +389,39 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 
 		return $actions->getHTML();
 	}
+
+    /**
+     * @param int $format
+     * @param bool $send
+     * @throws DICException
+     * @throws \Mpdf\MpdfException
+     */
+    public function exportData($format, $send = false)
+    {
+        $pdf = new xfcqMPDF($this->parent_gui->getObject(), $this->getData());
+        switch ($format) {
+            case self::EXPORT_QUESTIONS_ANSWERS:
+                $pdf->printID(false);
+                break;
+            case self::EXPORT_QUESTIONS_ID:
+                $pdf->printAnswers(false);
+                break;
+            case self::EXPORT_QUESTIONS:
+                $pdf->printID(false);
+                $pdf->printAnswers(false);
+                break;
+        }
+        $pdf->parse();
+        $pdf->download(date('d-m-Y') . '-glossary_export.pdf');
+        exit();
+    }
+
+    /**
+     *
+     */
+    protected function buildData() {
+        $raw_data = xfcqQuestion::where(['obj_id' => $this->parent_gui->getObjId()])->getArray();
+        $data = $this->passThroughFilter($this->formatData($raw_data));
+        $this->setData($data);
+    }
 }

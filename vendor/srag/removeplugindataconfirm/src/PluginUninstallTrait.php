@@ -2,6 +2,8 @@
 
 namespace srag\RemovePluginDataConfirm\FlashcardQuestions;
 
+use srag\RemovePluginDataConfirm\FlashcardQuestions\Exception\RemovePluginDataConfirmException;
+
 /**
  * Trait PluginUninstallTrait
  *
