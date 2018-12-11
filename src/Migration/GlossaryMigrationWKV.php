@@ -46,7 +46,6 @@ class GlossaryMigrationWKV {
             $ilObjFlashcardQuestions->putInTree($parent_id);
             $ilObjFlashcardQuestions->setPermissions($parent_id);
             $ilObjFlashcardQuestions->setOnline($glossary->getOnline());
-            $ilObjFlashcardQuestions->update();
 
             $old_taxonomy = new ilObjTaxonomy($glossary->getTaxonomyId());
             $new_taxonomies = [];
@@ -68,7 +67,14 @@ class GlossaryMigrationWKV {
                 $new_taxonomy->update();
 
                 $new_taxonomies[$new_taxonomy->getId()] = $new_taxonomy;
+                if ($node_title == 'Module') {
+                    $ilObjFlashcardQuestions->setReportLvl1($new_taxonomy->getId());
+                } elseif ($node_title == 'Themen') {
+                    $ilObjFlashcardQuestions->setReportLvl2($new_taxonomy->getId());
+                }
             }
+
+            $ilObjFlashcardQuestions->update();
 
             $node_mapping = $old_taxonomy->getNodeMapping();
 
@@ -154,7 +160,7 @@ class GlossaryMigrationWKV {
 	 * @param int $term_id
 	 * @param int $xfcq_qst_id
 	 */
-	protected function migrateFlashCards(int $term_id, int $xfcq_qst_id) {
+	protected function migrateFlashCards(int $term_id, int $xfcq_qst_id) {  //TODO: funktioniert nicht, falls ein term die selbe id wie eine xfcqQuestion hat
 		self::dic()->database()->query('UPDATE rep_robj_xflc_cards 
                         SET term_id = ' . $term_id . ' 
                         WHERE term_id = ' . $xfcq_qst_id);

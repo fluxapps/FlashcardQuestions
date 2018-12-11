@@ -35,7 +35,7 @@ class ConfigFormGUI extends ActiveRecordConfigFormGUI {
                     self::dic()->filesystem()->web()->deleteDir(self::DIR_LOGO);
                 }
                 $result = array_shift(self::dic()->upload()->getResults());
-                self::dic()->upload()->moveOneFileTo($result, self::DIR_LOGO, Location::STORAGE);
+                self::dic()->upload()->moveOneFileTo($result, self::DIR_LOGO, Location::STORAGE);   // TODO create file object
         }
     }
 
