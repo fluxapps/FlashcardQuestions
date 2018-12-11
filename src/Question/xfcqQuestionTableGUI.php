@@ -329,7 +329,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 *
 	 * @return string
 	 */
-	protected function getPagePreview(int $page_id) {
+	protected function getPagePreview($page_id) {
 		$page = new xfcqPageObject($page_id);
 		$page->buildDom();
 		$short_str = $page->getFirstParagraphText();

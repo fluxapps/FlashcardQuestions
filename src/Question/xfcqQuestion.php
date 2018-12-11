@@ -175,104 +175,104 @@ class xfcqQuestion extends ActiveRecord {
     /**
      * @return int
      */
-    public function getPageIdQuestion(): int {
+    public function getPageIdQuestion() {
         return $this->page_id_qst;
     }
 
     /**
      * @param int $page_id_qst
      */
-    public function setPageIdQuestion(int $page_id_qst) {
+    public function setPageIdQuestion($page_id_qst) {
         $this->page_id_qst = $page_id_qst;
     }
 
     /**
      * @return int
      */
-    public function getPageIdAnswer(): int {
+    public function getPageIdAnswer() {
         return $this->page_id_ans;
     }
 
     /**
      * @param int $page_id_ans
      */
-    public function setPageIdAnswer(int $page_id_ans) {
+    public function setPageIdAnswer($page_id_ans) {
         $this->page_id_ans = $page_id_ans;
     }
     /**
      * @return int
      */
-    public function getId(): int {
+    public function getId() {
         return $this->id;
     }
 
     /**
      * @param int $id
      */
-    public function setId(int $id) {
+    public function setId($id) {
         $this->id = $id;
     }
 
     /**
      * @return int
      */
-    public function getObjId(): int {
+    public function getObjId() {
         return $this->obj_id;
     }
 
     /**
      * @param int $obj_id
      */
-    public function setObjId(int $obj_id) {
+    public function setObjId($obj_id) {
         $this->obj_id = $obj_id;
     }
 
     /**
      * @return bool
      */
-    public function isActive(): bool {
+    public function isActive() {
         return $this->active;
     }
 
     /**
      * @param bool $active
      */
-    public function setActive(bool $active) {
+    public function setActive($active) {
         $this->active = $active;
     }
 
     /**
      * @return int
      */
-    public function getOriginGloId(): int {
+    public function getOriginGloId() {
         return $this->origin_glo_id;
     }
 
     /**
      * @param int $origin_glo_id
      */
-    public function setOriginGloId(int $origin_glo_id) {
+    public function setOriginGloId($origin_glo_id) {
         $this->origin_glo_id = $origin_glo_id;
     }
 
     /**
      * @return int
      */
-    public function getOriginTermId(): int {
+    public function getOriginTermId() {
         return $this->origin_term_id;
     }
 
     /**
      * @param int $origin_term_id
      */
-    public function setOriginTermId(int $origin_term_id) {
+    public function setOriginTermId($origin_term_id) {
         $this->origin_term_id = $origin_term_id;
     }
 
     /**
      * @return array
      */
-    public function getTaxNodes(): array {
+    public function getTaxNodes() {
         return $this->tax_nodes;
     }
 
@@ -287,7 +287,7 @@ class xfcqQuestion extends ActiveRecord {
      * @param Int $tax_id
      * @return array
      */
-    public function getTaxNodesForTaxId(Int $tax_id): array {
+    public function getTaxNodesForTaxId(Int $tax_id) {
         if (isset($this->tax_nodes[$tax_id])) {
             return $this->tax_nodes[$tax_id];
         }

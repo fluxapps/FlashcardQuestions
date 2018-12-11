@@ -139,7 +139,7 @@ class GlossaryMigrationWKV {
      * @param int $xfcq_ref_id
      * @return array
      */
-    protected function migrateFlashCardObjects(int $glo_ref_id, int $xfcq_ref_id) {
+    protected function migrateFlashCardObjects($glo_ref_id, $xfcq_ref_id) {
         $migrated_obj_ids = array();
         $query = self::dic()->database()->query('SELECT obj_id, glossary_ref_id, card_pool_type, xfcq_ref_id FROM rep_robj_xflc_data where glossary_ref_id = ' . $glo_ref_id);
         while ($set = self::dic()->database()->fetchAssoc($query)) {
@@ -160,7 +160,7 @@ class GlossaryMigrationWKV {
 	 * @param int $term_id
 	 * @param int $xfcq_qst_id
 	 */
-	protected function migrateFlashCards(int $term_id, int $xfcq_qst_id) {  //TODO: funktioniert nicht, falls ein term die selbe id wie eine xfcqQuestion hat
+	protected function migrateFlashCards($term_id, $xfcq_qst_id) {  //TODO: funktioniert nicht, falls ein term die selbe id wie eine xfcqQuestion hat
 		self::dic()->database()->query('UPDATE rep_robj_xflc_cards 
                         SET term_id = ' . $term_id . ' 
                         WHERE term_id = ' . $xfcq_qst_id);
@@ -188,7 +188,7 @@ class GlossaryMigrationWKV {
      * @param int $old_page_id
      * @param int $new_parent_id
      */
-    protected function migratePageObject(int $old_page_id, int $new_page_id, int $new_parent_id) {
+    protected function migratePageObject($old_page_id, $new_page_id, $new_parent_id) {
         self::dic()->database()->query(
             'INSERT INTO page_object (page_id, parent_id, content, parent_type, last_change_user, view_cnt, last_change, created, create_user, render_md5, rendered_content, rendered_time, activation_start, activation_end, active, is_empty, inactive_elements, int_links, show_activation_info, lang, edit_lock_user, edit_lock_ts)'
             . ' select ' . $new_page_id . ', ' . $new_parent_id . ', content, "xfcq", last_change_user, view_cnt, last_change, created, create_user, render_md5, rendered_content, rendered_time, activation_start, activation_end, active, is_empty, inactive_elements, int_links, show_activation_info, lang, edit_lock_user, edit_lock_ts'
@@ -204,7 +204,7 @@ class GlossaryMigrationWKV {
      * @return array
      * @throws \ilTaxonomyException
      */
-    protected function getTaxNodeIds(ilObjGlossary $glossary, array $term): array {
+    protected function getTaxNodeIds(ilObjGlossary $glossary, array $term) {
         $ta = new ilTaxNodeAssignment("glo", $glossary->getId(), "term", $glossary->getTaxonomyId());
         $assgnmts = $ta->getAssignmentsOfItem($term['id']);
         $node_ids = array();
@@ -219,7 +219,7 @@ class GlossaryMigrationWKV {
      * @param ilObjTaxonomy $taxonomy
      * @return int
      */
-    protected function getNodeIdForTitle($title, ilObjTaxonomy $taxonomy): int {
+    protected function getNodeIdForTitle($title, ilObjTaxonomy $taxonomy) {
         $root_node = $this->getRootNode($taxonomy);
         foreach ($taxonomy->getTree()->getChilds($root_node) as $child) {
             if ($child['title'] == $title) {

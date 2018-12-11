@@ -81,7 +81,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
      * @throws \srag\DIC\Exception\DICException
      * @throws ilCtrlException
      */
-	public function performCommand(string $cmd)/*: void*/ {
+	public function performCommand($cmd)/*: void*/ {
 		$next_class = self::dic()->ctrl()->getNextClass($this);
 		$this->renderTitleAndDescription();
 

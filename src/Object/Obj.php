@@ -49,7 +49,7 @@ class Obj extends ActiveRecord {
 	 *
 	 * @return self|null
 	 */
-	public static function getObjectById(int $obj_id)/*: ?self*/ {
+	public static function getObjectById($obj_id)/*: ?self*/ {
 		/**
 		 * @var self|null $object
 		 */
@@ -166,7 +166,7 @@ class Obj extends ActiveRecord {
 	/**
 	 * @param int $obj_id
 	 */
-	public function setObjId(int $obj_id)/*: void*/ {
+	public function setObjId($obj_id)/*: void*/ {
 		$this->obj_id = $obj_id;
 	}
 
