@@ -316,6 +316,7 @@ return array(
     'srag\\Plugins\\FlashcardQuestions\\Config\\ConfigFormGUI' => $baseDir . '/src/Config/ConfigFormGUI.php',
     'srag\\Plugins\\FlashcardQuestions\\GlossaryMigration\\GlossaryMigration' => $baseDir . '/src/Migration/GlossaryMigration.php',
     'srag\\Plugins\\FlashcardQuestions\\GlossaryMigration\\GlossaryMigrationWKV' => $baseDir . '/src/Migration/GlossaryMigrationWKV.php',
+    'srag\\Plugins\\FlashcardQuestions\\GlossaryMigration\\MigrationFormGUI' => $baseDir . '/src/Migration/MigrationFormGUI.php',
     'srag\\Plugins\\FlashcardQuestions\\Object\\Obj' => $baseDir . '/src/Object/Obj.php',
     'srag\\Plugins\\FlashcardQuestions\\Object\\ObjSettingsFormGUI' => $baseDir . '/src/Object/ObjSettingsFormGUI.php',
     'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => $baseDir . '/src/Question/xfcqQuestion.php',

@@ -58,6 +58,11 @@ config_report_logo#:#Report Logo
 config_report_logo_info#:#Shown as header in the PDF report.
 config_configuration#:#Configuration
 config_save#:#Save
+config_migration#:#Glossary Migration
+config_title_pattern#:#Title Pattern
+config_title_pattern_info#:#Use '%%' as a wildcard. E.g.: '%%Flashcard Questions%%'.
+confirmMigrate#:#Migration Startenexport_pdf_format_1#:#Questions, Answers and ID
+migrate#:#Migration Starten
 export_pdf_format_1#:#Questions, Answers and ID
 export_pdf_format_2#:#Questions and Answers
 export_pdf_format_3#:#Questions and ID

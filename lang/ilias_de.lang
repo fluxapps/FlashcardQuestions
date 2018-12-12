@@ -52,12 +52,19 @@ msg_deleted_successfully#:#Objekt(e) erfolgreich gelöscht.
 msg_no_question_selected#:#Bitte wählen Sie mindestens eine Frage aus.
 msg_enter_title_first#:#Bitte geben Sie erst einen Titel ein und speichern Sie das Formular.
 msg_question_created#:#Neue Frage wurde erstellt. Klicken Sie auf die leeren Felder, um die Frage/Antwort zu bearbeiten.
+msg_migration_failed#:#Die Migration ist fehlgeschlagen, mit folgender Fehlermeldung:<br><br>
+msg_migration_succeeded#:#Die Migration ist erfolgreich abgeschlossen. Folgende Objekte wurden migriert:<br><br>
 delete_confirmation_text#:#Sind Sie sicher, dass folgende Objekte gelöscht werden sollen?
 exit_button#:#Beenden
 config_report_logo#:#Report Logo
 config_report_logo_info#:#Wird im PDF-Report als Header angezeigt.
 config_configuration#:#Einstellungen
 config_save#:#Speichern
+config_migration#:#Glossar-Migration
+config_title_pattern#:#Titel Suchbegriff
+config_title_pattern_info#:#Als Wildcard kann '%%' benutzt werden. Z.B.: '%%Offizielle Prüfungsfragen%%'.
+confirmMigrate#:#Migration Starten
+migrate#:#Migration Starten
 export_pdf_format_1#:#Fragen, Antworten und ID
 export_pdf_format_2#:#Fragen und Antworten
 export_pdf_format_3#:#Fragen und ID

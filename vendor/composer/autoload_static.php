@@ -384,6 +384,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
         'srag\\Plugins\\FlashcardQuestions\\Config\\ConfigFormGUI' => __DIR__ . '/../..' . '/src/Config/ConfigFormGUI.php',
         'srag\\Plugins\\FlashcardQuestions\\GlossaryMigration\\GlossaryMigration' => __DIR__ . '/../..' . '/src/Migration/GlossaryMigration.php',
         'srag\\Plugins\\FlashcardQuestions\\GlossaryMigration\\GlossaryMigrationWKV' => __DIR__ . '/../..' . '/src/Migration/GlossaryMigrationWKV.php',
+        'srag\\Plugins\\FlashcardQuestions\\GlossaryMigration\\MigrationFormGUI' => __DIR__ . '/../..' . '/src/Migration/MigrationFormGUI.php',
         'srag\\Plugins\\FlashcardQuestions\\Object\\Obj' => __DIR__ . '/../..' . '/src/Object/Obj.php',
         'srag\\Plugins\\FlashcardQuestions\\Object\\ObjSettingsFormGUI' => __DIR__ . '/../..' . '/src/Object/ObjSettingsFormGUI.php',
         'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => __DIR__ . '/../..' . '/src/Question/xfcqQuestion.php',

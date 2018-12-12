@@ -30,12 +30,13 @@ class GlossaryMigrationWKV {
     }
 
     /**
-     *
+     * @param $pattern
+     * @throws \ilTaxonomyException
      */
-    public function run() {
+    public function run($pattern) {
         $mapping_ref_ids = array();
         $mapping_term_ids = array();
-        $glossaries = $this->fetchGlossaries();
+        $glossaries = $this->fetchGlossaries($pattern);
         foreach ($glossaries as $glossary) {
             $parent_id = self::dic()->tree()->getParentId($glossary->getRefId());
             $ilObjFlashcardQuestions = new ilObjFlashcardQuestions();
@@ -131,7 +132,7 @@ class GlossaryMigrationWKV {
             self::dic()->tree()->moveToTrash($glossary->getRefId(), true);
         }
 
-        var_dump($mapping_ref_ids);exit;
+        return $mapping_ref_ids;
     }
 
     /**
@@ -167,14 +168,15 @@ class GlossaryMigrationWKV {
 	}
 
 
-	/**
-	 * @return ilObjGlossary[]
-	 */
-	protected function fetchGlossaries() {
+    /**
+     * @param $pattern
+     * @return ilObjGlossary[]
+     */
+	protected function fetchGlossaries($pattern) {
 		$query = self::dic()->database()->query('SELECT ref_id from object_data d 
                     inner join object_reference r on d.obj_id = r.obj_id 
                     where type = "glo" 
-                    and d.title LIKE "%Offizielle Prüfungsfragen%"
+                    and d.title LIKE ' . self::dic()->database()->quote($pattern, 'text') . '
                     and deleted is null'
         );
         $glossaries = [];
