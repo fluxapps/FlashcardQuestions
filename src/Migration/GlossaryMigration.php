@@ -32,10 +32,10 @@ class GlossaryMigration {
     /**
      *
      */
-    public function run() {
+    public function run($pattern) {
         $mapping_ref_ids = array();
         $mapping_term_ids = array();
-        $glossaries = $this->fetchGlossaries();
+        $glossaries = $this->fetchGlossaries($pattern);
         foreach ($glossaries as $glossary) {
             $parent_id = self::dic()->tree()->getParentId($glossary->getRefId());
             $ilObjFlashcardQuestions = new ilObjFlashcardQuestions();
@@ -139,14 +139,15 @@ class GlossaryMigration {
     }
 
     /**
+     * @param $pattern
      * @return ilObjGlossary[]
      */
-    protected function fetchGlossaries() {
-        $query = self::dic()->database()->query(        // TODO: evtl. via config ein Suchwort eingeben (Statt "Offizielle Prüfungsfragen")
+    protected function fetchGlossaries($pattern) {
+        $query = self::dic()->database()->query(
             'SELECT ref_id from object_data d 
                     inner join object_reference r on d.obj_id = r.obj_id 
                     where type = "glo" 
-                    and d.title LIKE "%Offizielle Prüfungsfragen%"
+                    and d.title LIKE ' . self::dic()->database()->quote($pattern, 'text') . '
                     and deleted is null'
         );
         $glossaries = [];

@@ -2,6 +2,7 @@
 
 namespace srag\Plugins\FlashcardQuestions\GlossaryMigration;
 
+use gl2tstTest;
 use ilFlashcardQuestionsPlugin;
 use ilGlossaryDefinition;
 use ilObjFlashcardQuestions;
@@ -147,7 +148,7 @@ class GlossaryMigrationWKV {
             if (($set['card_pool_type'] == 0) && ($set['xfcq_ref_id'] == 0)) {
                 self::dic()->database()->query(
                     'UPDATE rep_robj_xflc_data 
-                            SET card_pool_type = 1, xfcq_ref_id = ' . $xfcq_ref_id . ' 
+                            SET card_pool_type = 1, glossary_ref_id = 0, xfcq_ref_id = ' . $xfcq_ref_id . ' 
                             WHERE obj_id = ' . $set['obj_id']);
 				$migrated_obj_ids[] = $set['obj_id'];
 			}
@@ -247,6 +248,7 @@ class GlossaryMigrationWKV {
      */
     protected function migrateGl2Tests($glo_ref_id, $xfcq_ref_id, $node_mapping) {
         /** @var gl2tstTest $gl2tstTest */
+        require_once 'Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Glossary2Test/classes/Test/class.gl2tstTest.php';
         foreach (gl2tstTest::where(array('glossary_ref_id' => $glo_ref_id))->get() as $gl2tstTest) {
             $new_content = array();
             foreach ($gl2tstTest->getContent() as $old_content) {

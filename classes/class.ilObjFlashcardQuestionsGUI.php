@@ -301,7 +301,6 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	 *
 	 */
 	protected function migrate() {
-		// TODO: start migration via config
 		$migration = new GlossaryMigration();
 		$migration->run();
 	}

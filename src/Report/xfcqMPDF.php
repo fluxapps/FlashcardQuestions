@@ -1,10 +1,12 @@
 <?php
 namespace srag\Plugins\FlashcardQuestions\Report;
 use ilFlashcardQuestionsPlugin;
+use ilObjFile;
 use ilObjFlashcardQuestions;
 use ilTaxonomyNode;
 use \Mpdf\Mpdf;
 use srag\DIC\FlashcardQuestions\DICTrait;
+use srag\Plugins\FlashcardQuestions\Config\Config;
 
 /**
  * @author Stefan Wanzenried <sw@studer-raimann.ch>
@@ -68,13 +70,9 @@ class xfcqMPDF implements xfcqPDF
 
         $this->lvl_1 = $this->flashcard_questions->getReportLvl1();
         $this->lvl_2 = $this->flashcard_questions->getReportLvl2();
-        if (!$this->lvl_1) {
-            if (!$this->lvl_2) {
-                return;
-            } else {
-                $this->lvl_1 = $this->lvl_2;
-                $this->lvl_2 = null;
-            }
+        if (!$this->lvl_1 && $this->lvl_2) {
+            $this->lvl_1 = $this->lvl_2;
+            $this->lvl_2 = null;
         }
 
         $this->structureData();
@@ -86,6 +84,10 @@ class xfcqMPDF implements xfcqPDF
     }
 
 
+    /**
+     * @throws \ilTemplateException
+     * @throws \srag\DIC\FlashcardQuestions\Exception\DICException
+     */
     protected function setPageHeader()
     {
         $tpl = self::plugin()->template('reports/tpl.pdf_header.html', false, false);
@@ -93,6 +95,10 @@ class xfcqMPDF implements xfcqPDF
     }
 
 
+    /**
+     * @throws \ilTemplateException
+     * @throws \srag\DIC\FlashcardQuestions\Exception\DICException
+     */
     protected function setPageFooter()
     {
         $tpl = self::plugin()->template('reports/tpl.pdf_footer.html', false, false);
@@ -101,10 +107,15 @@ class xfcqMPDF implements xfcqPDF
     }
 
 
+    /**
+     * @throws \ilTemplateException
+     * @throws \srag\DIC\FlashcardQuestions\Exception\DICException
+     */
     protected function writeFirstPage()
     {
         $tpl = self::plugin()->template('reports/tpl.pdf_frontpage.html');
-        $tpl->setVariable('LOGO_SRC', ILIAS_WEB_DIR . '/xfcq/logo/logo.jpg');
+        $file_id = Config::getField(Config::C_REPORT_LOGO);
+        $tpl->setVariable('LOGO_SRC', ilObjFile::_lookupAbsolutePath($file_id));
         $tpl->setVariable('REPORT_TITLE', $this->flashcard_questions->getProfessionTitle());
         $tpl->setVariable('REPORT_SUBTITLE', $this->flashcard_questions->getTitle());
         $tpl->setVariable('CONTENT_OVERVIEW', $this->renderContentOverview());
@@ -115,6 +126,10 @@ class xfcqMPDF implements xfcqPDF
     }
 
 
+    /**
+     * @throws \ilTemplateException
+     * @throws \srag\DIC\FlashcardQuestions\Exception\DICException
+     */
     public function parse()
     {
         $this->writeFirstPage();
@@ -131,10 +146,10 @@ class xfcqMPDF implements xfcqPDF
             if (!$this->lvl_2) {
                 $tpl = self::plugin()->template('reports/tpl.pdf_question_answer.html');
                 $tpl->setVariable('NUMBER', sprintf('%04d', $this->current_number++));
-                $tpl->setVariable('ID', ($this->isPrintID()) ? $data['id'] : '&nbsp;');
-                $tpl->setVariable('QUESTION', "{$data['question']}");
+                $tpl->setVariable('ID', ($this->isPrintID()) ? $lvl_2['id'] : '&nbsp;');
+                $tpl->setVariable('QUESTION', "{$lvl_2['question']}");
                 if ($this->isPrintAnswers()) {
-                    $tpl->setVariable('ANSWER', "{$data['answer']}");
+                    $tpl->setVariable('ANSWER', "{$lvl_2['answer']}");
                 }
                 $this->html($tpl->get());
                 continue;
@@ -320,6 +335,10 @@ class xfcqMPDF implements xfcqPDF
      *      ...
      */
     protected function structureData() {
+        if (!$this->lvl_1) {
+            return;
+        }
+
         $structured_data = array();
 
         foreach ($this->data as $set) {

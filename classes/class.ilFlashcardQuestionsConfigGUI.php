@@ -45,7 +45,7 @@ class ilFlashcardQuestionsConfigGUI extends ActiveRecordConfigGUI {
         $confirmationGUI->setFormAction(self::dic()->ctrl()->getFormAction($this));
         $confirmationGUI->setCancel(self::dic()->language()->txt('cancel'), $this->getCmdForTab(self::TAB_MIGRATION));
         $confirmationGUI->setConfirm(self::plugin()->translate(self::CMD_MIGRATE), self::CMD_MIGRATE);
-        $confirmationGUI->addItem(MigrationFormGUI::F_TITLE_PATTERN, MigrationFormGUI::F_TITLE_PATTERN, self::plugin()->translate(MigrationFormGUI::F_TITLE_PATTERN, self::LANG_MODULE_CONFIG) . ': ' . $_POST[MigrationFormGUI::F_TITLE_PATTERN]);
+        $confirmationGUI->addItem(MigrationFormGUI::F_TITLE_PATTERN, $_POST[MigrationFormGUI::F_TITLE_PATTERN], self::plugin()->translate(MigrationFormGUI::F_TITLE_PATTERN, self::LANG_MODULE_CONFIG) . ': ' . $_POST[MigrationFormGUI::F_TITLE_PATTERN]);
         self::output()->output($confirmationGUI->getHTML());
     }
 
@@ -64,16 +64,12 @@ class ilFlashcardQuestionsConfigGUI extends ActiveRecordConfigGUI {
 
         $message = '';
         foreach ($mapping as $glo_ref_id => $xfcq_ref_id) {
-            foreach(self::dic()->tree()->getPathFull($xfcq_ref_id) as $node_info) {
-                $message .= $node_info['title'] . ' » ';
-            }
-            self::dic()->ctrl()->setParameterByClass(ilObjFlashcardQuestionsGUI::class, 'ref_id', $xfcq_ref_id);
-            $message .= '<a href="' . self::dic()->ctrl()->getLinkTargetByClass(ilObjFlashcardQuestionsGUI::class) . '">';
-            $message .= ilObjFlashcardQuestions::_lookupTitle($xfcq_ref_id);
-            $message .= '</a>';
-            $message .= '<br>';
+            $loc_gui = new ilLocatorGUI();
+            $loc_gui->addContextItems($this->getValue());
+            $message .= $loc_gui->getHTML() . '<br>';
         }
 
-        ilUtil::sendSuccess(self::plugin()->translate('msg_migration_succeeded') . $message);
+        ilUtil::sendSuccess(self::plugin()->translate('msg_migration_succeeded') . $message, true);
+        self::redirectToTab(self::TAB_MIGRATION);
     }
 }
