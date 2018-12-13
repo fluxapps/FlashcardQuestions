@@ -62,14 +62,25 @@ class ilFlashcardQuestionsConfigGUI extends ActiveRecordConfigGUI {
             self::redirectToTab(self::TAB_MIGRATION);
         }
 
-        $message = '';
+        $message = self::plugin()->translate('msg_migration_succeeded');
         foreach ($mapping as $glo_ref_id => $xfcq_ref_id) {
             $loc_gui = new ilLocatorGUI();
-            $loc_gui->addContextItems($this->getValue());
+            $loc_gui->addContextItems($xfcq_ref_id);
             $message .= $loc_gui->getHTML() . '<br>';
         }
 
-        ilUtil::sendSuccess(self::plugin()->translate('msg_migration_succeeded') . $message, true);
+        ilUtil::sendSuccess($message, true);
+        $mail = new ilMail(ANONYMOUS_USER_ID);
+        $mail->sendMail(
+            self::dic()->user()->getLogin(),
+            '',
+            '',
+            'Migration Summary',
+            str_replace('<br>', "\n", $message),
+            [],
+            ['system']
+        );
+
         self::redirectToTab(self::TAB_MIGRATION);
     }
 }
