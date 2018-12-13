@@ -20,6 +20,7 @@ use srag\DIC\FlashcardQuestions\Exception\DICException;
 use srag\Plugins\FlashcardQuestions\Report\xfcqMPDF;
 use xfcqContentGUI;
 use xfcqPageObject;
+use xfcqPageObjectGUI;
 use xfcqQuestionGUI;
 
 /**
@@ -102,10 +103,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 */
 	protected function fillRow($a_set) {
 
-		self::dic()->ctrl()->setParameterByClass(xfcqQuestionGUI::class, 'qst_id', $a_set['id']);
-		self::dic()->ctrl()->setParameterByClass(xfcqContentGUI::class, 'qst_id', $a_set['id']);
+		self::dic()->ctrl()->setParameterByClass(xfcqQuestionGUI::class, 'qst_id', $a_set['raw_id']);
+		self::dic()->ctrl()->setParameterByClass(xfcqContentGUI::class, 'qst_id', $a_set['raw_id']);
 
-		$this->tpl->setVariable('ROW_ID', $a_set['id']);
+		$this->tpl->setVariable('ROW_ID', $a_set['raw_id']);
 
 		if ($this->isColumnSelected('active')) {
 			$this->tpl->setCurrentBlock('row');
@@ -330,13 +331,19 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 * @return string
 	 */
 	protected function getPagePreview($page_id) {
-		$page = new xfcqPageObject($page_id);
-		$page->buildDom();
-		$short_str = $page->getFirstParagraphText();
-		$short_str = strip_tags($short_str, "<br>");
+//        $page = new xfcqPageObject($page_id);
+//        $page->buildDom();
+//        $short_str = $page->getFirstParagraphText();
+//        $short_str = strip_tags($short_str, "<br>");
+//        return $short_str;
 
-		return $short_str;
-	}
+        $page = new xfcqPageObjectGUI($page_id, $this->parent_gui->getObjId());
+        $page->setTemplateOutput(true);
+        $page->setEnableEditing(false);
+        $page->setOutputMode(IL_PAGE_PRINT);
+        $page->setEnabledTabs(false);
+        return $page->getHTML();
+    }
 
 
 	/**
@@ -412,7 +419,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
                 break;
         }
         $pdf->parse();
-        $pdf->download(date('d-m-Y') . '-glossary_export.pdf');
+        $pdf->download(date('d-m-Y') . '-question_pool_export.pdf');
         exit();
     }
 

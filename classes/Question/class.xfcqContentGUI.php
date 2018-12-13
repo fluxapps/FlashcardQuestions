@@ -150,7 +150,7 @@ class xfcqContentGUI {
 		foreach ($ids as $id) {
 			/** @var xfcqQuestion $xfcqQuestion */
 			$xfcqQuestion = xfcqQuestion::find($id);
-			$text = self::dic()->language()->txt('title') . ": {$xfcqQuestion->getTitle()}<br>";
+			$text = "ID: {$xfcqQuestion->getId()}<br>";
 			$confirmationGUI->addItem('qst_id[]', $id, $text);
 		}
 

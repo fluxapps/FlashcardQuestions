@@ -169,48 +169,6 @@ class xfcqMPDF implements xfcqPDF
                 $this->html($tpl->get());
             }
         }
-//
-//        $group_module = $this->data[0]['module'];
-//        $group_topic = $this->data[0]['topic'];
-//        $group_section = $this->data[0]['section'];
-//        foreach ($this->data as $i => $data) {
-//            $module_changed = ($data['module'] != $group_module);
-//            $topic_changed = ($data['topic'] != $group_topic);
-//            $section_changed = ($data['section'] != $group_section);
-//            if ($module_changed || $i == 0) {
-//                // If a new module starts, always insert a page break, except for the first
-//                if ($i != 0) {
-//                    $this->pageBreak();
-//                }
-//                if ($data['module']) {
-//                    $this->mpdf->TOC_Entry($data['module'], 0);
-//                    $this->html("<h1>" . $data['module'] . "</h1>");
-//                }
-//            }
-//            if ($topic_changed || $i == 0 || ($module_changed && !$topic_changed)) {
-//                if ($data['topic']) {
-//                    $this->mpdf->TOC_Entry($data['topic'], 1);
-//                    $this->html("<h2>Thema: " . $data['topic'] . "</h2>");
-//                }
-//            }
-//            if ($section_changed || $i == 0 || (($module_changed || $topic_changed) && !$section_changed)) {
-//                if ($data['section']) {
-//                    $this->mpdf->TOC_Entry($data['section'], 2);
-//                    $this->html("<h3>" . $data['section'] . "</h3>");
-//                }
-//            }
-//            $tpl = self::plugin()->template('reports/tpl.pdf_question_answer.html');
-//            $tpl->setVariable('NUMBER', sprintf('%04d', $data['number']));
-//            $tpl->setVariable('ID', ($this->isPrintID()) ? $data['id'] : '&nbsp;');
-//            $tpl->setVariable('QUESTION', "{$data['question']}");
-//            if ($this->isPrintAnswers()) {
-//                $tpl->setVariable('ANSWER', "{$data['answer']}");
-//            }
-//            $this->html($tpl->get());
-//            $group_module = $data['module'];
-//            $group_topic = $data['topic'];
-//            $group_section = $data['section'];
-//        }
     }
 
 

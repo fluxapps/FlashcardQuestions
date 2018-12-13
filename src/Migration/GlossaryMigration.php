@@ -132,10 +132,21 @@ class GlossaryMigration {
 	 * @param int $xfcq_qst_id
 	 */
 	protected function migrateFlashCards($term_id, $xfcq_qst_id) {
-		self::dic()->database()->query('UPDATE rep_robj_xflc_cards 
-                        SET term_id = ' . $term_id . ' 
-                        WHERE term_id = ' . $xfcq_qst_id
-        );
+        static $migrated_card_ids;
+        if (!is_array($migrated_card_ids)) {
+            $migrated_card_ids = array();
+        }
+
+        $query = self::dic()->database()->query('SELECT * FROM rep_robj_xflc_cards WHERE term_id = ' . $term_id);
+        while ($set = self::dic()->database()->fetchAssoc($query)) {
+            $card_id = $set['card_id'];
+            if (!in_array($card_id, $migrated_card_ids)) {
+                self::dic()->database()->query('UPDATE rep_robj_xflc_cards 
+                        SET term_id = ' . $xfcq_qst_id . ' 
+                        WHERE card_id = ' . $card_id);
+                $migrated_card_ids[] = $card_id;
+            }
+        }
     }
 
     /**
