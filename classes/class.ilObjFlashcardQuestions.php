@@ -56,12 +56,6 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	 *
 	 */
 	public function doCreate()/*: void*/ {
-//        // create taxonomy // TODO: move this to gui, maybe create two taxonomies (for WKV)
-//	    $ilObjTaxonomy = new ilObjTaxonomy();
-//        $ilObjTaxonomy->setTitle("Taxonomie");
-//        $ilObjTaxonomy->create();
-//        ilObjTaxonomy::saveUsage($ilObjTaxonomy->getId(), $this->id);
-
         // create object settings
         $this->object = new Obj();
         $this->object->setObjId($this->id);

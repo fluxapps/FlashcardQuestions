@@ -58,7 +58,18 @@ class ilFlashcardQuestionsConfigGUI extends ActiveRecordConfigGUI {
         try {
             $mapping = $migration->run($pattern);
         } catch (Exception $e) {
-            ilUtil::sendFailure(self::plugin()->translate('msg_migration_failed') . $e->getMessage(), true);
+            $message = self::plugin()->translate('msg_migration_failed') . $e->getMessage();
+            ilUtil::sendFailure($message, true);
+            $mail = new ilMail(ANONYMOUS_USER_ID);
+            $mail->sendMail(
+                self::dic()->user()->getLogin(),
+                '',
+                '',
+                'Migration Summary',
+                str_replace('<br>', "\n", $message),
+                [],
+                ['system']
+            );
             self::redirectToTab(self::TAB_MIGRATION);
         }
 

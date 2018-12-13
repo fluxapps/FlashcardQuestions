@@ -4,6 +4,7 @@ use ilFlashcardQuestionsPlugin;
 use ilObjFile;
 use ilObjFlashcardQuestions;
 use ilTaxonomyNode;
+use ilUtil;
 use \Mpdf\Mpdf;
 use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\Plugins\FlashcardQuestions\Config\Config;
@@ -76,7 +77,8 @@ class xfcqMPDF implements xfcqPDF
         }
 
         $this->structureData();
-        $this->mpdf = new Mpdf();
+        $tmp_name = ilUtil::ilTempnam();
+        $this->mpdf = new Mpdf(['tempDir' => $tmp_name]);
         // Add global styles to style the reports HTML
         $this->mpdf->WriteHTML(file_get_contents(self::plugin()->directory() . '/templates/css/report.css'), 1);
         $this->setPageHeader();
