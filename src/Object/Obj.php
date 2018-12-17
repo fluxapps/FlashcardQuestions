@@ -49,7 +49,7 @@ class Obj extends ActiveRecord {
 	 *
 	 * @return self|null
 	 */
-	public static function getObjectById(int $obj_id)/*: ?self*/ {
+	public static function getObjectById($obj_id)/*: ?self*/ {
 		/**
 		 * @var self|null $object
 		 */
@@ -81,6 +81,24 @@ class Obj extends ActiveRecord {
 	 * @con_is_notnull   true
 	 */
 	protected $is_online = false;
+    /**
+     * @var int
+     *
+     * @con_has_field    true
+     * @con_fieldtype    integer
+     * @con_length       8
+     * @con_is_notnull   true
+     */
+	protected $report_lvl_1 = 0;
+    /**
+     * @var int
+     *
+     * @con_has_field    true
+     * @con_fieldtype    integer
+     * @con_length       8
+     * @con_is_notnull   true
+     */
+	protected $report_lvl_2 = 0;
 
 
 	/**
@@ -148,7 +166,7 @@ class Obj extends ActiveRecord {
 	/**
 	 * @param int $obj_id
 	 */
-	public function setObjId(int $obj_id)/*: void*/ {
+	public function setObjId($obj_id)/*: void*/ {
 		$this->obj_id = $obj_id;
 	}
 
@@ -167,4 +185,32 @@ class Obj extends ActiveRecord {
 	public function setOnline($is_online = true)/*: void*/ {
 		$this->is_online = $is_online;
 	}
+
+    /**
+     * @return int
+     */
+    public function getReportLvl1() {
+        return $this->report_lvl_1;
+    }
+
+    /**
+     * @param int $report_lvl_1
+     */
+    public function setReportLvl1($report_lvl_1) {
+        $this->report_lvl_1 = $report_lvl_1;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReportLvl2() {
+        return $this->report_lvl_2;
+    }
+
+    /**
+     * @param int $report_lvl_2
+     */
+    public function setReportLvl2($report_lvl_2) {
+        $this->report_lvl_2 = $report_lvl_2;
+    }
 }

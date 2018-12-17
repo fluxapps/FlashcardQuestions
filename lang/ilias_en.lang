@@ -29,12 +29,18 @@ settings_save#:#Save
 settings_saved#:#Settings saved
 settings_settings#:#Settings
 settings_title#:#Title
+settings_report_lvl_1#:#Report Division (Level 1)
+settings_report_lvl_1_info#:#The report / export of the question table is categorized by the nodes of this taxonomy.
+settings_report_lvl_2#:#Report Division (Level 2)
+settings_report_lvl_2_info#:#The report / export of the question table is subcategorized by the nodes of this taxonomy.
 table_question_table_title#:#Lernkarten-Fragen
 table_row_title#:#Title
+table_row_id#:#ID
 table_row_question#:#Question
 table_row_answer#:#Answer
-table_row_taxonomy#:#Taxonomy
+table_row_taxonomy#:#Taxonomies
 table_row_active#:#Active
+table_row_number#:#Nr. (Report)
 button_add_new_question#:#Add New Question
 button_saveSettings#:#Save
 button_saveSettingsAndContinue#:#Save And Continue
@@ -45,5 +51,19 @@ msg_success#:#Settings successfully saved.
 msg_deleted_successfully#:#Object(s) deleted successfully.
 msg_no_question_selected#:#Please choose at least one question.
 msg_enter_title_first#:#Please set a title and save the form first.
+msg_question_created#:#New question was created. Click on the empty fields to edit the question/answer.
 delete_confirmation_text#:#Do you really want to delete the following objects?
 exit_button#:#Beenden
+config_report_logo#:#Report Logo
+config_report_logo_info#:#Shown as header in the PDF report.
+config_configuration#:#Configuration
+config_save#:#Save
+config_migration#:#Glossary Migration
+config_title_pattern#:#Title Pattern
+config_title_pattern_info#:#Use '%%' as a wildcard. E.g.: '%%Flashcard Questions%%'.
+confirmMigrate#:#Migration Startenexport_pdf_format_1#:#Questions, Answers and ID
+migrate#:#Migration Starten
+export_pdf_format_1#:#Questions, Answers and ID
+export_pdf_format_2#:#Questions and Answers
+export_pdf_format_3#:#Questions and ID
+export_pdf_format_4#:#Questions Only

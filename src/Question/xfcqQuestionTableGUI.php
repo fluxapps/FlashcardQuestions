@@ -17,8 +17,10 @@ use ilTextInputGUI;
 use ilUtil;
 use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\DIC\FlashcardQuestions\Exception\DICException;
+use srag\Plugins\FlashcardQuestions\Report\xfcqMPDF;
 use xfcqContentGUI;
 use xfcqPageObject;
+use xfcqPageObjectGUI;
 use xfcqQuestionGUI;
 
 /**
@@ -36,6 +38,22 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	const PREFIX = 'xfcq_qst_';
 	const FILTER_ACTIVE_TRUE = 1;
 	const FILTER_ACTIVE_FALSE = 2;
+
+    const EXPORT_QUESTIONS_ANSWERS_ID = 1000;
+    const EXPORT_QUESTIONS_ANSWERS = 2000;
+    const EXPORT_QUESTIONS_ID = 3000;
+    const EXPORT_QUESTIONS = 4000;
+
+    /**
+     * @var array
+     */
+    protected static $exports = array(
+        self::EXPORT_QUESTIONS_ANSWERS_ID => 'export_pdf_format_1',
+        self::EXPORT_QUESTIONS_ANSWERS => 'export_pdf_format_2',
+        self::EXPORT_QUESTIONS_ID => 'export_pdf_format_3',
+        self::EXPORT_QUESTIONS => 'export_pdf_format_4',
+    );
+
 	/**
 	 * @var array
 	 */
@@ -71,10 +89,12 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		$this->setSelectAllCheckbox('id');
 		$this->disable_filter_hiding(true);
 
-		$raw_data = xfcqQuestion::where([ 'obj_id' => $parent_gui->getObjId() ])->getArray();
-		$data = $this->passThroughFilter($raw_data);
-		$this->setData($data);
-	}
+        foreach (static::$exports as $id => $lang_key) {
+            $this->export_formats[$id] = self::plugin()->getPluginObject()->getPrefix() . '_' . $lang_key;
+        }
+
+        $this->buildData();
+    }
 
 
 	/**
@@ -84,10 +104,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 */
 	protected function fillRow($a_set) {
 
-		self::dic()->ctrl()->setParameterByClass(xfcqQuestionGUI::class, 'qst_id', $a_set['id']);
-		self::dic()->ctrl()->setParameterByClass(xfcqContentGUI::class, 'qst_id', $a_set['id']);
+		self::dic()->ctrl()->setParameterByClass(xfcqQuestionGUI::class, 'qst_id', $a_set['raw_id']);
+		self::dic()->ctrl()->setParameterByClass(xfcqContentGUI::class, 'qst_id', $a_set['raw_id']);
 
-		$this->tpl->setVariable('ROW_ID', $a_set['id']);
+		$this->tpl->setVariable('ROW_ID', $a_set['raw_id']);
 
 		if ($this->isColumnSelected('active')) {
 			$this->tpl->setCurrentBlock('row');
@@ -95,21 +115,21 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 			$this->tpl->parseCurrentBlock();
 		}
 
-		if ($this->isColumnSelected('title')) {
+		if ($this->isColumnSelected('id')) {
 			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $this->formatTitle($a_set));
+			$this->tpl->setVariable('VALUE', $a_set['id']);
 			$this->tpl->parseCurrentBlock();
 		}
 
 		if ($this->isColumnSelected('question')) {
 			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $this->getPagePreview($a_set['page_id_qst']));
+			$this->tpl->setVariable('VALUE', $a_set['question']);
 			$this->tpl->parseCurrentBlock();
 		}
 
 		if ($this->isColumnSelected('answer')) {
 			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $this->getPagePreview($a_set['page_id_ans']));
+			$this->tpl->setVariable('VALUE', $a_set['answer']);
 			$this->tpl->parseCurrentBlock();
 		}
 
@@ -131,12 +151,12 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	}
 
 
-	/**
-	 * @throws ilTaxonomyException
-	 */
+    /**
+     * @throws DICException
+     */
 	function initFilter() {
-		$filter_item = new ilTextInputGUI(self::dic()->language()->txt('title'), 'title');
-		$this->addAndReadFilterItem($filter_item);
+	    $filter_item = new ilTextInputGUI(self::plugin()->translate('row_id', self::LANG_MODULE), 'id');
+	    $this->addAndReadFilterItem($filter_item);
 
 		$filter_item = new ilSelectInputGUI(self::dic()->language()->txt('active'), 'active');
 		$filter_item->setOptions([
@@ -152,15 +172,17 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		}
 	}
 
-
+    /**
+     * @param array $data
+     * @return array
+     */
 	protected function passThroughFilter(array $data) {
 		$filtered_array = [];
 		foreach ($data as $set) {
-			// title
-			$filter_title = trim($this->filter['title']);
-			if ($filter_title && strpos($set['title'], $filter_title) === false) {
-				continue;
-			}
+		    //id
+            if ($this->filter['id'] && strpos($set['id'], $this->filter['id']) === false) {
+                continue;
+            }
 			//taxonomies
 			foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
 				if (count(array_filter($this->filter['taxonomy_' . $tax_id]))
@@ -182,6 +204,21 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		return $filtered_array;
 	}
 
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function formatData(array $data) {
+        $formatted_data = array();
+        foreach ($data as $set) {
+            $set['raw_id'] = $set['id'];
+            $set['id'] = $set['obj_id'] . '.' . $set['raw_id'];
+            $set['question'] = $this->getPagePreview($set['page_id_qst']);
+            $set['answer'] = $this->getPagePreview($set['page_id_ans']);
+            $formatted_data[] = $set;
+        }
+        return $formatted_data;
+	}
 
 	/**
 	 * @param $item
@@ -242,8 +279,12 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		return in_array($column, $this->getSelectedColumns());
 	}
 
+    function numericOrdering($a_field) {
+        return (bool) $a_field == 'raw_id';
+    }
 
-	/**
+
+    /**
 	 * @return array
 	 * @throws DICException
 	 */
@@ -255,9 +296,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 				'width' => '',
 				'default' => true
 			],
-			'title' => [
-				'txt' => self::plugin()->translate('row_title', self::LANG_MODULE),
-				'sort_field' => 'title',
+			'id' => [
+				'txt' => self::plugin()->translate('row_id', self::LANG_MODULE),
+				'sort_field' => 'raw_id',
+                'numeric_ordering' => true,
 				'width' => '',
 				'default' => true
 			],
@@ -274,6 +316,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 				'default' => true
 			],
 		];
+
 		foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
 			$ilObjTaxonomy = new ilObjTaxonomy($tax_id);
 			$columns['taxonomy_' . $tax_id] = [ 'txt' => $ilObjTaxonomy->getTitle(), 'sort_field' => false, 'width' => '', 'default' => true ];
@@ -288,15 +331,20 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 *
 	 * @return string
 	 */
-	protected function getPagePreview(int $page_id) {
-		$page = new xfcqPageObject($page_id);
-		$page->buildDom();
-		$rendered_content = $page->getRenderedContent();
-		$short_str = $page->getFirstParagraphText();
-		$short_str = strip_tags($short_str, "<br>");
+	protected function getPagePreview($page_id) {
+//        $page = new xfcqPageObject($page_id);
+//        $page->buildDom();
+//        $short_str = $page->getFirstParagraphText();
+//        $short_str = strip_tags($short_str, "<br>");
+//        return $short_str;
 
-		return $short_str;
-	}
+        $page = new xfcqPageObjectGUI($page_id, $this->parent_gui->getObjId());
+        $page->setTemplateOutput(true);
+        $page->setEnableEditing(false);
+        $page->setOutputMode(IL_PAGE_PRINT);
+        $page->setEnabledTabs(false);
+        return $page->getHTML();
+    }
 
 
 	/**
@@ -314,7 +362,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		return '<img src="' . $icon_path . '">';
 	}
 
-
+    /**
+     * @param array $a_set
+     * @return string
+     */
 	protected function formatTitle(array $a_set) {
 		$link = self::dic()->ctrl()->getLinkTargetByClass(xfcqQuestionGUI::class, xfcqQuestionGUI::CMD_EDIT_SETTINGS);
 
@@ -346,4 +397,39 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 
 		return $actions->getHTML();
 	}
+
+    /**
+     * @param int $format
+     * @param bool $send
+     * @throws DICException
+     * @throws \Mpdf\MpdfException
+     */
+    public function exportData($format, $send = false)
+    {
+        $pdf = new xfcqMPDF($this->parent_gui->getObject(), $this->getData());
+        switch ($format) {
+            case self::EXPORT_QUESTIONS_ANSWERS:
+                $pdf->printID(false);
+                break;
+            case self::EXPORT_QUESTIONS_ID:
+                $pdf->printAnswers(false);
+                break;
+            case self::EXPORT_QUESTIONS:
+                $pdf->printID(false);
+                $pdf->printAnswers(false);
+                break;
+        }
+        $pdf->parse();
+        $pdf->download(date('d-m-Y') . '-question_pool_export.pdf');
+        exit();
+    }
+
+    /**
+     *
+     */
+    protected function buildData() {
+        $raw_data = xfcqQuestion::where(['obj_id' => $this->parent_gui->getObjId()])->getArray();
+        $data = $this->passThroughFilter($this->formatData($raw_data));
+        $this->setData($data);
+    }
 }

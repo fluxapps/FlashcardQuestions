@@ -9,7 +9,7 @@ use srag\DIC\FlashcardQuestions\DICTrait;
  *
  * @author            Theodor Truffer <tt@studer-raimann.ch>
  *
- * @ilCtrl_isCalledBy xfcqPageObjectGUI: xfcqQuestionGUI
+ * @ilCtrl_isCalledBy xfcqPageObjectGUI: xfcqQuestionGUI, ilObjFlashcardQuestionsGUI
  * @ilCtrl_Calls      xfcqPageObjectGUI: ilPageEditorGUI, ilEditClipboardGUI, ilMediaPoolTargetSelector
  * @ilCtrl_Calls      xfcqPageObjectGUI: ilPublicUserProfileGUI, ilPageObjectGUI
  *

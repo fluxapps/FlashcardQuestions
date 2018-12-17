@@ -13,7 +13,11 @@ div.xfcq_block {
 }
 
 div#xfcq_question {
-    margin-right: 53px;
+    margin-right: 26px;
+}
+
+div#xfcq_answer, h3#xfcq_answer_header {
+    margin-left: 26px;
 }
 
 h3#xfcq_question_header {

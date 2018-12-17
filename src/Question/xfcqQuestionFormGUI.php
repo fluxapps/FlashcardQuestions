@@ -68,10 +68,6 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
 	 *
 	 */
 	protected function initForm() {
-		$input = new ilTextInputGUI(self::plugin()->translate(self::F_TITLE, self::LANG_MODULE), self::F_TITLE);
-		$input->setRequired(true);
-		$this->addItem($input);
-
 		foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
 			$input = new ilTaxSelectInputGUI($tax_id, self::F_TAXONOMY . "_$tax_id", true);
 			$this->addItem($input);
@@ -90,7 +86,6 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
 	 */
 	protected function fillForm() {
 		$array = array(
-			self::F_TITLE => $this->question->getTitle(),
 			self::F_ACTIVE => $this->question->isActive()
 		);
 		foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
@@ -108,9 +103,7 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
 			return false;
 		}
 
-		$this->question->setTitle($this->getInput(self::F_TITLE));
 		$this->question->setActive($this->getInput(self::F_ACTIVE));
-		$this->question->setObjId($this->parent_gui->getObjId());
 		foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
 			$this->question->setTaxNodesForTaxId($this->getInput(self::F_TAXONOMY . "_$tax_id"), $tax_id);
 		}

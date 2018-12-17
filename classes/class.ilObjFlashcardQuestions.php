@@ -56,12 +56,6 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	 *
 	 */
 	public function doCreate()/*: void*/ {
-//        // create taxonomy // TODO: move this to gui, maybe create two taxonomies (for WKV)
-//	    $ilObjTaxonomy = new ilObjTaxonomy();
-//        $ilObjTaxonomy->setTitle("Taxonomie");
-//        $ilObjTaxonomy->create();
-//        ilObjTaxonomy::saveUsage($ilObjTaxonomy->getId(), $this->id);
-
         // create object settings
         $this->object = new Obj();
         $this->object->setObjId($this->id);
@@ -140,9 +134,48 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
 	}
 
     /**
+     * @param $report_lvl_1 int
+     */
+    public function setReportLvl1($report_lvl_1) {
+        $this->object->setReportLvl1($report_lvl_1);
+	}
+
+    /**
+     * @return int
+     */
+    public function getReportLvl1() {
+        return $this->object->getReportLvl1();
+	}
+
+    /**
+     * @param $report_lvl_2 int
+     */
+    public function setReportLvl2($report_lvl_2) {
+        $this->object->setReportLvl2($report_lvl_2);
+	}
+
+    /**
+     * @return int
+     */
+    public function getReportLvl2() {
+        return $this->object->getReportLvl2();
+    }
+
+    /**
      * @return xfcqQuestion[]
      */
-    public function getQuestions(): array {
+    public function getQuestions()/*: array*/ {
         return xfcqQuestion::where(['obj_id' => $this->id])->get();
 	}
+
+    /**
+     * Return the profession (category title of the category where the flashcard questions object lives in the tree)
+     *
+     * @return string
+     */
+    public function getProfessionTitle()
+    {
+        $parent = self::dic()->tree()->getParentNodeData($this->getRefId());
+        return $parent['title'];
+    }
 }

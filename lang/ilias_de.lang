@@ -29,12 +29,18 @@ settings_save#:#Speichern
 settings_saved#:#Einstellungen gespeichert
 settings_settings#:#Einstellungen
 settings_title#:#Titel
+settings_report_lvl_1#:#Unterteilung Report (1. Ebene)
+settings_report_lvl_1_info#:#Der Report / Export der Fragen-Tabelle wird unterteilt in die Kategorien der hier angegebenen Taxonomie.
+settings_report_lvl_2#:#Unterteilung Report (2. Ebene)
+settings_report_lvl_2_info#:#Der Report / Export der Fragen-Tabelle wird zusätzlich unterteilt in die Kategorien der hier angegebenen Taxonomie.
 table_question_table_title#:#Lernkarten-Fragen
 table_row_title#:#Titel
+table_row_id#:#ID
 table_row_question#:#Frage
 table_row_answer#:#Antwort
-table_row_taxonomy#:#Taxonomie
+table_row_taxonomy#:#Taxonomien
 table_row_active#:#Aktiv
+table_row_number#:#Nr. (Report)
 button_add_new_question#:#Neue Frage hinzufügen
 button_saveSettings#:#Speichern
 button_saveSettingsAndContinue#:#Speichern und Weiter
@@ -45,5 +51,21 @@ msg_success#:#Einstellungen erfolgreich gespeichert.
 msg_deleted_successfully#:#Objekt(e) erfolgreich gelöscht.
 msg_no_question_selected#:#Bitte wählen Sie mindestens eine Frage aus.
 msg_enter_title_first#:#Bitte geben Sie erst einen Titel ein und speichern Sie das Formular.
+msg_question_created#:#Neue Frage wurde erstellt. Klicken Sie auf die leeren Felder, um die Frage/Antwort zu bearbeiten.
+msg_migration_failed#:#Die Migration ist fehlgeschlagen, mit folgender Fehlermeldung:<br><br>
+msg_migration_succeeded#:#Die Migration ist erfolgreich abgeschlossen. Folgende Objekte wurden migriert:<br><br>
 delete_confirmation_text#:#Sind Sie sicher, dass folgende Objekte gelöscht werden sollen?
 exit_button#:#Beenden
+config_report_logo#:#Report Logo
+config_report_logo_info#:#Wird im PDF-Report als Header angezeigt.
+config_configuration#:#Einstellungen
+config_save#:#Speichern
+config_migration#:#Glossar-Migration
+config_title_pattern#:#Titel Suchbegriff
+config_title_pattern_info#:#Als Wildcard kann '%%' benutzt werden. Z.B.: '%%Offizielle Prüfungsfragen%%'.
+confirmMigrate#:#Migration Starten
+migrate#:#Migration Starten
+export_pdf_format_1#:#Fragen, Antworten und ID
+export_pdf_format_2#:#Fragen und Antworten
+export_pdf_format_3#:#Fragen und ID
+export_pdf_format_4#:#Nur Fragen

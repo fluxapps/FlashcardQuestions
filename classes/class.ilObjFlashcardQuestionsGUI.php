@@ -81,7 +81,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
      * @throws \srag\DIC\Exception\DICException
      * @throws ilCtrlException
      */
-	public function performCommand(string $cmd)/*: void*/ {
+	public function performCommand($cmd)/*: void*/ {
 		$next_class = self::dic()->ctrl()->getNextClass($this);
 		$this->renderTitleAndDescription();
 
@@ -249,8 +249,8 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 		}
 
 		if (ilObjFlashcardQuestionsAccess::hasWriteAccess()) {
-			self::dic()->tabs()->addTab(self::TAB_TAXONOMY, self::plugin()->translate("taxonomy", self::LANG_MODULE_OBJECT)
-				. ilGlyphGUI::get('next'), self::dic()->ctrl()->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listTaxonomies'));
+			self::dic()->tabs()->addTab(self::TAB_TAXONOMY, self::plugin()->translate("taxonomy", self::LANG_MODULE_OBJECT),
+                self::dic()->ctrl()->getLinkTargetByClass(ilObjTaxonomyGUI::class, 'listTaxonomies'));
 		}
 
 		self::dic()->tabs()->manual_activation = true; // Show all tabs as links when no activation
@@ -301,7 +301,6 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	 *
 	 */
 	protected function migrate() {
-		// TODO: start migration via config
 		$migration = new GlossaryMigration();
 		$migration->run();
 	}

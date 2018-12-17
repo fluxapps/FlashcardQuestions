@@ -61,8 +61,14 @@ class ilFlashcardQuestionsPlugin extends ilRepositoryObjectPlugin {
 	 * @inheritdoc
 	 */
 	protected function deleteData()/*: void*/ {
+	    /** @var xfcqQuestion $xfcqQuestion */
+        foreach (xfcqQuestion::get() as $xfcqQuestion) {
+	        $page = new xfcqPageObject($xfcqQuestion->getPageIdQuestion());
+	        $page->delete();
+	        $page = new xfcqPageObject($xfcqQuestion->getPageIdAnswer());
+	        $page->delete();
+        }
 		self::dic()->database()->dropTable(Obj::TABLE_NAME, false);
 		self::dic()->database()->dropTable(xfcqQuestion::TABLE_NAME, false);
-		// TODO: delete page objects
 	}
 }

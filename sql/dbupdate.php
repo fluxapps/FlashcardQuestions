@@ -18,7 +18,7 @@
 \srag\DIC\FlashcardQuestions\DICStatic::dic()->database()->modifyTableColumn('copg_pobj_def', 'component', array( 'length' => 120 ));
 \srag\DIC\FlashcardQuestions\DICStatic::dic()->database()->insert('copg_pobj_def', array(
 	'parent_type' => array( 'text', ilFlashcardQuestionsPlugin::PLUGIN_ID ),
-	'class_name' => array( 'text', 'xfcqPageObject' ),
+	'class_name' => array( 'text', xfcqPageObject::class ),
 	'directory' => array( 'text', 'classes/PageObject' ),
 	'component' => array( 'text', substr(\srag\DIC\FlashcardQuestions\DICStatic::plugin(\ilFlashcardQuestionsPlugin::class)->directory(), 2) )
 ));
@@ -26,4 +26,12 @@
 <#3>
 <?php
 \srag\Plugins\FlashcardQuestions\Question\xfcqQuestion::updateDB();
+?>
+<#4>
+<?php
+\srag\Plugins\FlashcardQuestions\Config\Config::updateDB();
+?>
+<#5>
+<?php
+\srag\Plugins\FlashcardQuestions\Object\Obj::updateDB();
 ?>
