@@ -69,6 +69,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		$this->addMultiCommand(xfcqContentGUI::CMD_ACTIVATE, self::dic()->language()->txt('activate'));
 		$this->addMultiCommand(xfcqContentGUI::CMD_DEACTIVATE, self::dic()->language()->txt('deactivate'));
 		$this->setSelectAllCheckbox('id');
+		$this->disable_filter_hiding(true);
 
 		$raw_data = xfcqQuestion::where([ 'obj_id' => $parent_gui->getObjId() ])->getArray();
 		$data = $this->passThroughFilter($raw_data);
