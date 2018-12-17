@@ -87,7 +87,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		$this->addMultiCommand(xfcqContentGUI::CMD_ACTIVATE, self::dic()->language()->txt('activate'));
 		$this->addMultiCommand(xfcqContentGUI::CMD_DEACTIVATE, self::dic()->language()->txt('deactivate'));
 		$this->setSelectAllCheckbox('id');
-		$this->disable_filter_hiding(true);
+		$this->setDisableFilterHiding(true);
 
         foreach (static::$exports as $id => $lang_key) {
             $this->export_formats[$id] = self::plugin()->getPluginObject()->getPrefix() . '_' . $lang_key;
