@@ -61,6 +61,8 @@ config_save#:#Save
 config_migration#:#Glossary Migration
 config_title_pattern#:#Title Pattern
 config_title_pattern_info#:#Use '%%' as a wildcard. E.g.: '%%Flashcard Questions%%'.
+config_max_img_width#:#Maximum Width for Images
+config_max_img_width_info#:#The maximum width will be used in Flashcard Training. The height will be calculated automatically.
 confirmMigrate#:#Migration Startenexport_pdf_format_1#:#Questions, Answers and ID
 migrate#:#Migration Starten
 export_pdf_format_1#:#Questions, Answers and ID

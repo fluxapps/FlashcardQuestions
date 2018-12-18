@@ -3,13 +3,14 @@
 require_once __DIR__ . "/../../vendor/autoload.php";
 
 use srag\DIC\FlashcardQuestions\DICTrait;
+use srag\Plugins\FlashcardQuestions\Config\Config;
 
 /**
  * Class xfcqPageObjectGUI
  *
  * @author            Theodor Truffer <tt@studer-raimann.ch>
  *
- * @ilCtrl_isCalledBy xfcqPageObjectGUI: xfcqQuestionGUI, ilObjFlashcardQuestionsGUI
+ * @ilCtrl_isCalledBy xfcqPageObjectGUI: xfcqQuestionGUI, ilObjFlashcardQuestionsGUI, ilObjFlashcardsGUI
  * @ilCtrl_Calls      xfcqPageObjectGUI: ilPageEditorGUI, ilEditClipboardGUI, ilMediaPoolTargetSelector
  * @ilCtrl_Calls      xfcqPageObjectGUI: ilPublicUserProfileGUI, ilPageObjectGUI
  *
@@ -38,4 +39,11 @@ class xfcqPageObjectGUI extends ilPageObjectGUI {
 			->setVariable("LOCATION_CONTENT_STYLESHEET", ilObjStyleSheet::getContentStylePath(ilObjStyleSheet::lookupObjectStyle($obj_id)));
 		self::dic()->ui()->mainTemplate()->parseCurrentBlock();
 	}
+
+    function showPage() {
+        self::dic()->mainTemplate()->addInlineCss('div.xflcFlashcardPage img { max-width: ' . Config::getField(Config::C_MAX_IMG_WIDTH) . 'px !important; }');
+        return parent::showPage();
+    }
+
+
 }

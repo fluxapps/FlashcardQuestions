@@ -63,6 +63,8 @@ config_save#:#Speichern
 config_migration#:#Glossar-Migration
 config_title_pattern#:#Titel Suchbegriff
 config_title_pattern_info#:#Als Wildcard kann '%%' benutzt werden. Z.B.: '%%Offizielle Prüfungsfragen%%'.
+config_max_img_width#:#Maximale Breite von Bildern (in px)
+config_max_img_width_info#:#Die Maximale Breite wird beim Training der Lernkarten gesetzt. Die Höhe wird dabei automatisch berechnet.
 confirmMigrate#:#Migration Starten
 migrate#:#Migration Starten
 export_pdf_format_1#:#Fragen, Antworten und ID

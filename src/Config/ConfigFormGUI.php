@@ -1,9 +1,9 @@
 <?php
 namespace srag\Plugins\FlashcardQuestions\Config;
 use ilFileInputGUI;
-use ilFileUploadGUI;
 use ilFlashcardQuestionsPlugin;
 use ilMimeTypeUtil;
+use ilNumberInputGUI;
 use ilObjFile;
 use srag\ActiveRecordConfig\FlashcardQuestions\ActiveRecordConfigFormGUI;
 
@@ -26,6 +26,10 @@ class ConfigFormGUI extends ActiveRecordConfigFormGUI {
         $this->fields = [
             Config::C_REPORT_LOGO => [
                 self::PROPERTY_CLASS => ilFileInputGUI::class,
+            ],
+            Config::C_MAX_IMG_WIDTH => [
+                self::PROPERTY_CLASS => ilNumberInputGUI::class,
+                self::PROPERTY_REQUIRED => true
             ]
         ];
     }
@@ -42,6 +46,9 @@ class ConfigFormGUI extends ActiveRecordConfigFormGUI {
     protected function storeValue($key, $value) {
         switch ($key) {
             case CONFIG::C_REPORT_LOGO:
+                if ($_FILES[Config::C_REPORT_LOGO]['error'] == UPLOAD_ERR_NO_FILE) {
+                    return;
+                }
                 $file_obj_id = Config::getField(Config::C_REPORT_LOGO);
                 if ($file_obj_id) {
                     $file_obj = new ilObjFile($file_obj_id, false);
@@ -63,6 +70,8 @@ class ConfigFormGUI extends ActiveRecordConfigFormGUI {
                 }
 
                 Config::setField(Config::C_REPORT_LOGO, $file_obj->getId());
+            default:
+                parent::storeValue($key, $value);
         }
     }
 
@@ -73,12 +82,14 @@ class ConfigFormGUI extends ActiveRecordConfigFormGUI {
      */
     protected function getValue($key) {
         switch ($key) {
-            case CONFIG::C_REPORT_LOGO:
+            case Config::C_REPORT_LOGO:
                $file_obj_id = Config::getField(Config::C_REPORT_LOGO);
                if ($file_obj_id) {
                    return ilObjFile::_lookupFileName($file_obj_id);
                }
                return '';
+            default:
+                return parent::getValue($key);
         }
     }
 
