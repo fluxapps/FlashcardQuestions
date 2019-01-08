@@ -35,3 +35,10 @@
 <?php
 \srag\Plugins\FlashcardQuestions\Object\Obj::updateDB();
 ?>
+<#6>
+<?php
+if (\srag\DIC\FlashcardQuestions\DICStatic::dic()->database()->tableColumnExists('xfcq_question', 'tax_nodes')) {
+    \srag\DIC\FlashcardQuestions\DICStatic::dic()->database()->dropTableColumn('xfcq_question', 'tax_nodes');
+}
+\srag\Plugins\FlashcardQuestions\Question\xfcqQuestionTaxNode::updateDB();
+?>

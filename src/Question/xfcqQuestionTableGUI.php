@@ -12,6 +12,7 @@ use ilObjTaxonomy;
 use ilSelectInputGUI;
 use ilTable2GUI;
 use ilTaxonomyException;
+use ilTaxonomyNode;
 use ilTaxSelectInputGUI;
 use ilTextInputGUI;
 use ilUtil;
@@ -19,7 +20,6 @@ use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\DIC\FlashcardQuestions\Exception\DICException;
 use srag\Plugins\FlashcardQuestions\Report\xfcqMPDF;
 use xfcqContentGUI;
-use xfcqPageObject;
 use xfcqPageObjectGUI;
 use xfcqQuestionGUI;
 
@@ -76,14 +76,18 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 		$this->parent_gui = $parent_gui;
 		$this->setPrefix(self::PREFIX);
 		$this->setId(self::PREFIX . '_' . $_GET['ref_id']);
-		$this->setTitle(self::plugin()->translate('question_table_title', 'table'));
-		parent::__construct($parent_gui);
-		$this->setFilterCommand(xfcqContentGUI::CMD_APPLY_FILTER);
-		$this->setFormAction(self::dic()->ctrl()->getFormAction($parent_gui));
-		$this->setRowTemplate(self::plugin()->directory() . '/templates/default/tpl.generic_table_row.html');
-		$this->initColumns();
-		$this->initFilter();
-		$this->addMultiCommand(xfcqContentGUI::CMD_DELETE, self::dic()->language()->txt('delete'));
+        $this->setTitle(self::plugin()->translate('question_table_title', 'table'));
+        parent::__construct($parent_gui);
+        $this->setFilterCommand(xfcqContentGUI::CMD_APPLY_FILTER);
+        $this->setFormAction(self::dic()->ctrl()->getFormAction($parent_gui));
+        $this->setRowTemplate(self::plugin()->directory() . '/templates/default/tpl.generic_table_row.html');
+        $this->initColumns();
+        $this->initFilter();
+        $this->setExternalSegmentation(true);
+        $this->setExternalSorting(true);
+        $this->determineOffsetAndOrder();
+        $this->determineLimit();
+        $this->addMultiCommand(xfcqContentGUI::CMD_DELETE, self::dic()->language()->txt('delete'));
 		$this->addMultiCommand(xfcqContentGUI::CMD_ACTIVATE, self::dic()->language()->txt('activate'));
 		$this->addMultiCommand(xfcqContentGUI::CMD_DEACTIVATE, self::dic()->language()->txt('deactivate'));
 		$this->setSelectAllCheckbox('id');
@@ -105,50 +109,49 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 */
 	protected function fillRow($a_set) {
 
-		self::dic()->ctrl()->setParameterByClass(xfcqQuestionGUI::class, 'qst_id', $a_set['raw_id']);
-		self::dic()->ctrl()->setParameterByClass(xfcqContentGUI::class, 'qst_id', $a_set['raw_id']);
+		self::dic()->ctrl()->setParameterByClass(xfcqQuestionGUI::class, 'qst_id', $a_set['id']);
+		self::dic()->ctrl()->setParameterByClass(xfcqContentGUI::class, 'qst_id', $a_set['id']);
 
-		$this->tpl->setVariable('ROW_ID', $a_set['raw_id']);
+		$this->tpl->setVariable('ROW_ID', $a_set['id']);
 
-		if ($this->isColumnSelected('active')) {
-			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $this->getActiveIcon($a_set['active']));
-			$this->tpl->parseCurrentBlock();
-		}
-
-		if ($this->isColumnSelected('id')) {
-			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $a_set['id']);
-			$this->tpl->parseCurrentBlock();
-		}
-
-		if ($this->isColumnSelected('question')) {
-			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $a_set['question']);
-			$this->tpl->parseCurrentBlock();
-		}
-
-		if ($this->isColumnSelected('answer')) {
-			$this->tpl->setCurrentBlock('row');
-			$this->tpl->setVariable('VALUE', $a_set['answer']);
-			$this->tpl->parseCurrentBlock();
-		}
-
-		foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
-			if ($this->isColumnSelected('taxonomy_' . $tax_id)) {
-				$this->tpl->setCurrentBlock('row');
-				if (isset($a_set['tax_nodes'][$tax_id])) {
-					$this->tpl->setVariable('VALUE', implode(', ', array_map('ilTaxonomyNode::_lookupTitle', $a_set['tax_nodes'][$tax_id])));
-				} else {
-					$this->tpl->setVariable('VALUE', '&nbsp');
-				}
-				$this->tpl->parseCurrentBlock();
-			}
-		}
+        foreach ($this->getSelectableColumns() as $title => $props) {
+            if ($this->isColumnSelected($title)) {
+                $this->tpl->setCurrentBlock('row');
+                $this->tpl->setVariable('VALUE', $this->formatValue($a_set, $title));
+                $this->tpl->parseCurrentBlock();
+            }
+        }
 
 		$this->tpl->setCurrentBlock('row');
 		$this->tpl->setVariable('VALUE', $this->getActionMenu($a_set));
 		$this->tpl->parseCurrentBlock();
+	}
+
+    /**
+     * @param $a_set array
+     * @param $title string
+     * @return string
+     */
+    protected function formatValue($a_set, $title) {
+        switch ($title) {
+            case 'active':
+                return $this->getActiveIcon($a_set['active']);
+            case 'id':
+                return $a_set['obj_id'] . '.' . $a_set['id'];
+            case 'question':
+                return $this->getPagePreview($a_set['page_id_qst']);
+            case 'answer':
+                return $this->getPagePreview($a_set['page_id_ans']);
+            default:
+                if (strpos($title, 'taxonomy_') !== false) {
+                    $tax_id = array_pop(explode('_', $title));
+                    if (isset($a_set['tax_node_ids'][$tax_id])) {
+                        return implode(', ', array_map('ilTaxonomyNode::_lookupTitle', $a_set['tax_node_ids'][$tax_id]));
+                    } else {
+                        return '&nbsp';
+                    }
+                }
+        }
 	}
 
 
@@ -171,54 +174,6 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 			$filter_item = new ilTaxSelectInputGUI($tax_id, "taxonomy_$tax_id", true);
 			$this->addAndReadFilterItem($filter_item);
 		}
-	}
-
-    /**
-     * @param array $data
-     * @return array
-     */
-	protected function passThroughFilter(array $data) {
-		$filtered_array = [];
-		foreach ($data as $set) {
-		    //id
-            if ($this->filter['id'] && strpos($set['id'], $this->filter['id']) === false) {
-                continue;
-            }
-			//taxonomies
-			foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
-				if (count(array_filter($this->filter['taxonomy_' . $tax_id]))
-					&& (!is_array($set['tax_nodes'][$tax_id]) || empty(array_intersect($set['tax_nodes'][$tax_id], $this->filter['taxonomy_' . $tax_id])))) {
-					continue 2;
-				}
-			}
-			// active
-			if ($this->filter['active'] == self::FILTER_ACTIVE_TRUE && !$set['active']) {
-				continue;
-			}
-			// inactive
-			if ($this->filter['active'] == self::FILTER_ACTIVE_FALSE && $set['active']) {
-				continue;
-			}
-			$filtered_array[] = $set;
-		}
-
-		return $filtered_array;
-	}
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function formatData(array $data) {
-        $formatted_data = array();
-        foreach ($data as $set) {
-            $set['raw_id'] = $set['id'];
-            $set['id'] = $set['obj_id'] . '.' . $set['raw_id'];
-            $set['question'] = $this->getPagePreview($set['page_id_qst']);
-            $set['answer'] = $this->getPagePreview($set['page_id_ans']);
-            $formatted_data[] = $set;
-        }
-        return $formatted_data;
 	}
 
 	/**
@@ -333,12 +288,6 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 * @return string
 	 */
 	protected function getPagePreview($page_id) {
-//        $page = new xfcqPageObject($page_id);
-//        $page->buildDom();
-//        $short_str = $page->getFirstParagraphText();
-//        $short_str = strip_tags($short_str, "<br>");
-//        return $short_str;
-
         $page = new xfcqPageObjectGUI($page_id, $this->parent_gui->getObjId());
         $page->setTemplateOutput(true);
         $page->setEnableEditing(false);
@@ -429,8 +378,101 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
      *
      */
     protected function buildData() {
-        $raw_data = xfcqQuestion::where(['obj_id' => $this->parent_gui->getObjId()])->getArray();
-        $data = $this->passThroughFilter($this->formatData($raw_data));
+        $count_query = self::dic()->database()->query($this->buildQuery(true));
+        $this->setMaxCount((int) $count_query->fetchAssoc()['total_rows']);
+
+        $data_query = self::dic()->database()->query($this->buildQuery(false));
+        $data = self::dic()->database()->fetchAll($data_query);
+        $data = $this->formatTaxNodes($data);
         $this->setData($data);
     }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    protected function formatTaxNodes($data) {
+        $return = [];
+        foreach ($data as $set) {
+            $node_ids = explode(',', $set['tax_node_ids']);
+            $node_ids_formatted = [];
+            foreach ($node_ids as $node_id) {
+                $node = new ilTaxonomyNode($node_id);
+                $node_ids_formatted[$node->getTaxonomyId()][] = $node_id;
+            }
+            $set['tax_node_ids'] = $node_ids_formatted;
+            $return[] = $set;
+        }
+        return $return;
+    }
+
+    /**
+     * @param $count bool
+     * @return string
+     */
+    protected function buildQuery($count) {
+        $query = $count ? 'SELECT count(*) as total_rows FROM (' : '';
+        $query .= 'SELECT qst.*, GROUP_CONCAT(tax_nodes.tax_node_id) tax_node_ids ';
+        $query .= 'FROM ' . xfcqQuestion::TABLE_NAME . ' qst ';
+        $query .= 'LEFT JOIN ' . xfcqQuestionTaxNode::TABLE_NAME . ' tax_nodes ON tax_nodes.qst_id = qst.id ';
+
+        $where_statement = $this->buildWhereStatement();
+        $query .= 'WHERE obj_id = ' . $this->parent_gui->getObjId() . ' ';
+        $query .= $where_statement ? $where_statement : '';
+        $query .= 'GROUP BY qst.id ';
+        $having_statement = $this->buildHavingStatement();
+        $query .= $having_statement ? $having_statement : '';
+        $query .= $count ? ') as subtable' : 'LIMIT ' . (int) $this->getLimit() . ' OFFSET ' . (int) $this->getOffset();
+
+        self::dic()->log()->write($query);
+        return $query;
+    }
+
+    /**
+     * @return string
+     */
+    protected function buildWhereStatement() {
+        $where = '';
+
+        // id
+        if ($id = $this->filter['id']) {
+            $where .= 'AND CONCAT(obj_id, ".", qst.id) LIKE "%' . $id . '%" ';
+        }
+
+        // active
+        if ($this->filter['active'] == self::FILTER_ACTIVE_TRUE) {
+            $where .= 'AND qst.active = 1 ';
+        }
+
+        // inactive
+        if ($this->filter['active'] == self::FILTER_ACTIVE_FALSE) {
+            $where .= 'AND qst.active = 0 ';
+        }
+
+        return $where;
+    }
+
+    /**
+     * @return bool|string
+     */
+    protected function buildHavingStatement() {
+        $having = '';
+        //taxonomies
+        $and = '';
+        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+            $tax_nodes = array_filter($this->filter['taxonomy_' . $tax_id]);
+            $or = '';
+            if (count($tax_nodes)) {
+                $having .= $and;
+                foreach ($tax_nodes as $tax_node) {
+                    $having .= $or . '(tax_node_ids LIKE "%,' .$tax_node . '" OR tax_node_ids LIKE "' .$tax_node . ',%" OR tax_node_ids LIKE "%,' .$tax_node . ',%") ';
+                    $or = 'OR ';
+                    $and = 'AND ';
+                }
+            }
+        }
+
+        return $having ? 'HAVING ' . $having : false;
+    }
+
 }

@@ -390,6 +390,7 @@ class ComposerStaticInit05fdcde5cf7b9d84691abcd500488dbe
         'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => __DIR__ . '/../..' . '/src/Question/xfcqQuestion.php',
         'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestionFormGUI' => __DIR__ . '/../..' . '/src/Question/xfcqQuestionFormGUI.php',
         'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestionTableGUI' => __DIR__ . '/../..' . '/src/Question/xfcqQuestionTableGUI.php',
+        'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestionTaxNode' => __DIR__ . '/../..' . '/src/Question/xfcqQuestionTaxNode.php',
         'srag\\Plugins\\FlashcardQuestions\\Report\\xfcqMPDF' => __DIR__ . '/../..' . '/src/Report/xfcqMPDF.php',
         'srag\\Plugins\\FlashcardQuestions\\Report\\xfcqPDF' => __DIR__ . '/../..' . '/src/Report/xfcqPDF.php',
         'srag\\RemovePluginDataConfirm\\FlashcardQuestions\\AbstractPluginUninstallTrait' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/AbstractPluginUninstallTrait.php',

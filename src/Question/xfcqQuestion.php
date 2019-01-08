@@ -3,6 +3,7 @@
 namespace srag\Plugins\FlashcardQuestions\Question;
 
 use ActiveRecord;
+use arConnector;
 use ilObjTaxonomy;
 use ilTaxonomyTree;
 use \xfcqPageObject;
@@ -27,31 +28,9 @@ class xfcqQuestion extends ActiveRecord {
         return self::TABLE_NAME;
     }
 
-    /**
-     * @param $field_name
-     * @return mixed|null|string
-     */
-    public function sleep($field_name) {
-        switch ($field_name) {
-            case 'tax_nodes':
-                return serialize($this->tax_nodes);
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * @param $field_name
-     * @param $field_value
-     * @return array|mixed|null
-     */
-    public function wakeUp($field_name, $field_value) {
-        switch ($field_name) {
-            case 'tax_nodes':
-                return unserialize($field_value);
-            default:
-                return null;
-        }
+    public function __construct($primary_key = 0, arConnector $connector = null) {
+        parent::__construct($primary_key, $connector);
+        $this->loadTaxNodes();
     }
 
     /**
@@ -80,6 +59,18 @@ class xfcqQuestion extends ActiveRecord {
             $page_obj->setParentId($this->getObjId());
             $page_obj->create();
         }
+
+        if (!empty($this->tax_nodes)) {
+            xfcqQuestionTaxNode::setNodesForQuestion($this->getId(), $this->getTaxNodes());
+        }
+    }
+
+    /**
+     *
+     */
+    public function update() {
+        parent::update();
+        xfcqQuestionTaxNode::setNodesForQuestion($this->getId(), $this->getTaxNodes());
     }
 
     /**
@@ -132,14 +123,6 @@ class xfcqQuestion extends ActiveRecord {
      */
     protected $active = 0;
     /**
-     * @var array
-     *
-     * @db_has_field           true
-     * @db_fieldtype           text
-     * @db_length              4000
-     */
-    protected $tax_nodes = array();
-    /**
      * @var int
      *
      * @db_has_field        true
@@ -171,6 +154,12 @@ class xfcqQuestion extends ActiveRecord {
      * @db_length           8
      */
     protected $origin_term_id;
+
+
+    /**
+     * @var array
+     */
+    protected $tax_nodes = array();
 
     /**
      * @return int
@@ -313,5 +302,17 @@ class xfcqQuestion extends ActiveRecord {
             }
         }
         return array();
+    }
+
+    /**
+     *
+     */
+    public function loadTaxNodes() {
+        $tax_nodes = [];
+        /** @var xfcqQuestionTaxNode $qst_tax_node */
+        foreach (xfcqQuestionTaxNode::where(['qst_id' => $this->getId()])->get() as $qst_tax_node) {
+            $tax_nodes[$qst_tax_node->getTaxId()][] = $qst_tax_node->getTaxNodeId();
+        }
+        $this->setTaxNodes($tax_nodes);
     }
 }

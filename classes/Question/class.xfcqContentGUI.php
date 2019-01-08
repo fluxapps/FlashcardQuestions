@@ -107,7 +107,7 @@ class xfcqContentGUI {
 		$xfcqQuestionTableGUI = new xfcqQuestionTableGUI($this);
 		$xfcqQuestionTableGUI->resetOffset();
 		$xfcqQuestionTableGUI->writeFilterToSession();
-		self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
+		$this->show();
 	}
 
 
@@ -119,7 +119,7 @@ class xfcqContentGUI {
 		$xfcqQuestionTableGUI = new xfcqQuestionTableGUI($this);
 		$xfcqQuestionTableGUI->resetOffset();
 		$xfcqQuestionTableGUI->resetFilter();
-		self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
+        $this->show();
 	}
 
 

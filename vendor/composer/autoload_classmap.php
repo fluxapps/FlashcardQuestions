@@ -322,6 +322,7 @@ return array(
     'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestion' => $baseDir . '/src/Question/xfcqQuestion.php',
     'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestionFormGUI' => $baseDir . '/src/Question/xfcqQuestionFormGUI.php',
     'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestionTableGUI' => $baseDir . '/src/Question/xfcqQuestionTableGUI.php',
+    'srag\\Plugins\\FlashcardQuestions\\Question\\xfcqQuestionTaxNode' => $baseDir . '/src/Question/xfcqQuestionTaxNode.php',
     'srag\\Plugins\\FlashcardQuestions\\Report\\xfcqMPDF' => $baseDir . '/src/Report/xfcqMPDF.php',
     'srag\\Plugins\\FlashcardQuestions\\Report\\xfcqPDF' => $baseDir . '/src/Report/xfcqPDF.php',
     'srag\\RemovePluginDataConfirm\\FlashcardQuestions\\AbstractPluginUninstallTrait' => $vendorDir . '/srag/removeplugindataconfirm/src/AbstractPluginUninstallTrait.php',
