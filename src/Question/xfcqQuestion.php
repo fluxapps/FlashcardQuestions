@@ -30,7 +30,9 @@ class xfcqQuestion extends ActiveRecord {
 
     public function __construct($primary_key = 0, arConnector $connector = null) {
         parent::__construct($primary_key, $connector);
-        $this->loadTaxNodes();
+        if ($primary_key != 0) {
+            $this->loadTaxNodes();
+        }
     }
 
     /**
