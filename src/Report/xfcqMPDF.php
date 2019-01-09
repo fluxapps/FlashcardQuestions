@@ -161,14 +161,16 @@ class xfcqMPDF implements xfcqPDF
                 $this->mpdf->TOC_Entry(ilTaxonomyNode::_lookupTitle($lvl_2_key), 1);
                 $this->html("<h2>Thema: " . ilTaxonomyNode::_lookupTitle($lvl_2_key) . "</h2>");
 
-                $tpl = self::plugin()->template('reports/tpl.pdf_question_answer.html');
-                $tpl->setVariable('NUMBER', sprintf('%04d', $this->current_number++));
-                $tpl->setVariable('ID', ($this->isPrintID()) ? $data['id'] : '&nbsp;');
-                $tpl->setVariable('QUESTION', "{$data['question']}");
-                if ($this->isPrintAnswers()) {
-                    $tpl->setVariable('ANSWER', "{$data['answer']}");
+                foreach ($data as $set) {
+                    $tpl = self::plugin()->template('reports/tpl.pdf_question_answer.html');
+                    $tpl->setVariable('NUMBER', sprintf('%04d', $this->current_number++));
+                    $tpl->setVariable('ID', ($this->isPrintID()) ? $set['id'] : '&nbsp;');
+                    $tpl->setVariable('QUESTION', "{$set['question']}");
+                    if ($this->isPrintAnswers()) {
+                        $tpl->setVariable('ANSWER', "{$set['answer']}");
+                    }
+                    $this->html($tpl->get());
                 }
-                $this->html($tpl->get());
             }
         }
     }
@@ -321,7 +323,7 @@ class xfcqMPDF implements xfcqPDF
                     if (!is_array($structured_data[$node_1])) {
                         $structured_data[$node_1] = array();
                     }
-                    $structured_data[$node_1][$node_2] = $set;
+                    $structured_data[$node_1][$node_2][] = $set;
                 }
             }
         }
