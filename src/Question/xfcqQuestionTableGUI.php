@@ -143,7 +143,8 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
             $formatted_set['answer'] =  $this->getPagePreview($a_set['page_id_ans']);
 
             foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
-                $tax_node_ids = $a_set['tax_node_ids'];
+                $tax_node_ids = $formatted_set['tax_node_ids'] = $a_set['tax_node_ids'];
+
                 if (isset($tax_node_ids[$tax_id])) {
                     $formatted_set['taxonomy_' . $tax_id] =  implode(', ', array_map('ilTaxonomyNode::_lookupTitle', $tax_node_ids[$tax_id]));
                 } else {
