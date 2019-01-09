@@ -264,6 +264,9 @@ class xfcqQuestion extends ActiveRecord {
      * @return array
      */
     public function getTaxNodes() {
+        if (empty($this->tax_nodes())) {
+            $this->loadTaxNodes();
+        }
         return $this->tax_nodes;
     }
 
