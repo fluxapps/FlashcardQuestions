@@ -302,22 +302,22 @@ class xfcqMPDF implements xfcqPDF
         $structured_data = array();
 
         foreach ($this->data as $set) {
-            if(!is_array($set['tax_nodes'])) {
-                $set['tax_nodes'] = array();
+            if(!is_array($set['tax_node_ids'])) {
+                $set['tax_node_ids'] = array();
             }
-            if (!is_array($set['tax_nodes'][$this->lvl_1]) || empty($set['tax_nodes'][$this->lvl_1])) {
-                $set['tax_nodes'][$this->lvl_1] = array(0);
+            if (!is_array($set['tax_node_ids'][$this->lvl_1]) || empty($set['tax_node_ids'][$this->lvl_1])) {
+                $set['tax_node_ids'][$this->lvl_1] = array(0);
             }
-            if (!is_array($set['tax_nodes'][$this->lvl_2]) || empty($set['tax_nodes'][$this->lvl_2])) {
-                $set['tax_nodes'][$this->lvl_2] = array(0);
+            if (!is_array($set['tax_node_ids'][$this->lvl_2]) || empty($set['tax_node_ids'][$this->lvl_2])) {
+                $set['tax_node_ids'][$this->lvl_2] = array(0);
             }
 
-            foreach ($set['tax_nodes'][$this->lvl_1] as $node_1) {
+            foreach ($set['tax_node_ids'][$this->lvl_1] as $node_1) {
                 if (!$this->lvl_2) {
                     $structured_data[$node_1] = $set;
                     continue;
                 }
-                foreach ($set['tax_nodes'][$this->lvl_2] as $node_2) {
+                foreach ($set['tax_node_ids'][$this->lvl_2] as $node_2) {
                     if (!is_array($structured_data[$node_1])) {
                         $structured_data[$node_1] = array();
                     }

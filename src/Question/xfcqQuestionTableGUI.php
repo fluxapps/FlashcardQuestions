@@ -35,7 +35,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	use DICTrait;
 	const PLUGIN_CLASS_NAME = ilFlashcardQuestionsPlugin::class;
 	const LANG_MODULE = 'table';
-	const PREFIX = 'xfcq_qst_';
+	const PREFIX = 'xfcq_qst';
 	const FILTER_ACTIVE_TRUE = 1;
 	const FILTER_ACTIVE_FALSE = 2;
 
@@ -62,7 +62,6 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 * @var xfcqContentGUI
 	 */
 	protected $parent_gui;
-
 
 	/**
 	 * xfcqQuestionTableGUI constructor
@@ -109,15 +108,15 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	 */
 	protected function fillRow($a_set) {
 
-		self::dic()->ctrl()->setParameterByClass(xfcqQuestionGUI::class, 'qst_id', $a_set['id']);
-		self::dic()->ctrl()->setParameterByClass(xfcqContentGUI::class, 'qst_id', $a_set['id']);
+		self::dic()->ctrl()->setParameterByClass(xfcqQuestionGUI::class, 'qst_id', $a_set['qst_id']);
+		self::dic()->ctrl()->setParameterByClass(xfcqContentGUI::class, 'qst_id', $a_set['qst_id']);
 
-		$this->tpl->setVariable('ROW_ID', $a_set['id']);
+		$this->tpl->setVariable('ROW_ID', $a_set['qst_id']);
 
         foreach ($this->getSelectableColumns() as $title => $props) {
             if ($this->isColumnSelected($title)) {
                 $this->tpl->setCurrentBlock('row');
-                $this->tpl->setVariable('VALUE', $this->formatValue($a_set, $title));
+                $this->tpl->setVariable('VALUE', $a_set[$title]);
                 $this->tpl->parseCurrentBlock();
             }
         }
@@ -128,30 +127,33 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	}
 
     /**
-     * @param $a_set array
-     * @param $title string
-     * @return string
+     * @param $data
+     * @return array
+     * @throws DICException
      */
-    protected function formatValue($a_set, $title) {
-        switch ($title) {
-            case 'active':
-                return $this->getActiveIcon($a_set['active']);
-            case 'id':
-                return $a_set['obj_id'] . '.' . $a_set['id'];
-            case 'question':
-                return $this->getPagePreview($a_set['page_id_qst']);
-            case 'answer':
-                return $this->getPagePreview($a_set['page_id_ans']);
-            default:
-                if (strpos($title, 'taxonomy_') !== false) {
-                    $tax_id = array_pop(explode('_', $title));
-                    if (isset($a_set['tax_node_ids'][$tax_id])) {
-                        return implode(', ', array_map('ilTaxonomyNode::_lookupTitle', $a_set['tax_node_ids'][$tax_id]));
-                    } else {
-                        return '&nbsp';
-                    }
+    protected function formatData($data) {
+        $formatted_data = [];
+        $data = $this->formatTaxNodes($data);
+        foreach ($data as $a_set) {
+            $formatted_set = [];
+            $formatted_set['active'] = $this->getActiveIcon($a_set['active']);
+            $formatted_set['id'] =  $a_set['obj_id'] . '.' . $a_set['id'];
+            $formatted_set['qst_id'] = $a_set['id'];
+            $formatted_set['question'] =  $this->getPagePreview($a_set['page_id_qst']);
+            $formatted_set['answer'] =  $this->getPagePreview($a_set['page_id_ans']);
+
+            foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+                $tax_node_ids = $a_set['tax_node_ids'];
+                if (isset($tax_node_ids[$tax_id])) {
+                    $formatted_set['taxonomy_' . $tax_id] =  implode(', ', array_map('ilTaxonomyNode::_lookupTitle', $tax_node_ids[$tax_id]));
+                } else {
+                    $formatted_set['taxonomy_' . $tax_id] =  '&nbsp';
                 }
+            }
+
+            $formatted_data[] = $formatted_set;
         }
+        return $formatted_data;
 	}
 
 
@@ -236,7 +238,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	}
 
     function numericOrdering($a_field) {
-        return (bool) $a_field == 'raw_id';
+        return (bool) $a_field == 'qst_id';
     }
 
 
@@ -254,7 +256,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 			],
 			'id' => [
 				'txt' => self::plugin()->translate('row_id', self::LANG_MODULE),
-				'sort_field' => 'raw_id',
+				'sort_field' => 'qst_id',
                 'numeric_ordering' => true,
 				'width' => '',
 				'default' => true
@@ -311,17 +313,6 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 
 		return '<img src="' . $icon_path . '">';
 	}
-
-    /**
-     * @param array $a_set
-     * @return string
-     */
-	protected function formatTitle(array $a_set) {
-		$link = self::dic()->ctrl()->getLinkTargetByClass(xfcqQuestionGUI::class, xfcqQuestionGUI::CMD_EDIT_SETTINGS);
-
-		return '<a href="' . $link . '">' . $a_set['title'] . '</a>';
-	}
-
 
 	/**
 	 * @param array $a_set
@@ -383,27 +374,29 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 
         $data_query = self::dic()->database()->query($this->buildQuery(false));
         $data = self::dic()->database()->fetchAll($data_query);
-        $data = $this->formatTaxNodes($data);
+        $data = $this->formatData($data);
         $this->setData($data);
     }
 
     /**
-     * @param $data
+     * @param $data array
      * @return array
      */
     protected function formatTaxNodes($data) {
-        $return = [];
+        $qst_by_id = [];
         foreach ($data as $set) {
-            $node_ids = explode(',', $set['tax_node_ids']);
-            $node_ids_formatted = [];
-            foreach ($node_ids as $node_id) {
-                $node = new ilTaxonomyNode($node_id);
-                $node_ids_formatted[$node->getTaxonomyId()][] = $node_id;
-            }
-            $set['tax_node_ids'] = $node_ids_formatted;
-            $return[] = $set;
+            $qst_by_id[$set['id']] = $set;
         }
-        return $return;
+        $tax_query = self::dic()->database()->query(
+            'SELECT GROUP_CONCAT(tax_node_id) AS tax_node_ids, tax_id, qst_id FROM xfcq_question_tax_node WHERE qst_id IN (' . implode(',', array_keys($qst_by_id)) . ') GROUP BY tax_id, qst_id'
+        );
+        while ($rec = $tax_query->fetchAssoc()) {
+            if (!is_array($qst_by_id[$rec['qst_id']]['tax_node_ids'])) {
+                $qst_by_id[$rec['qst_id']]['tax_node_ids'] = [];
+            }
+            $qst_by_id[$rec['qst_id']]['tax_node_ids'][$rec['tax_id']] = explode(',', $rec['tax_node_ids']);
+        }
+        return $qst_by_id;
     }
 
     /**
@@ -422,9 +415,12 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         $query .= 'GROUP BY qst.id ';
         $having_statement = $this->buildHavingStatement();
         $query .= $having_statement ? $having_statement : '';
-        $query .= $count ? ') as subtable' : 'LIMIT ' . (int) $this->getLimit() . ' OFFSET ' . (int) $this->getOffset();
+        $query .= $count ? ') as subtable' : '';
+        $query .= isset($_GET[$this->getPrefix() . '_xpt']) || $count ? '' : 'LIMIT ' . (int) $this->getLimit() . ' OFFSET ' . (int) $this->getOffset();
 
-        self::dic()->log()->write($query);
+        // DEBUG
+//        self::dic()->log()->write($query);
+
         return $query;
     }
 
