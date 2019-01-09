@@ -406,16 +406,15 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
      */
     protected function buildQuery($count) {
         $query = $count ? 'SELECT count(*) as total_rows FROM (' : '';
-        $query .= 'SELECT qst.*, GROUP_CONCAT(tax_nodes.tax_node_id) tax_node_ids ';
+        $query .= 'SELECT qst.*, tax_nodes.tax_node_ids ';
         $query .= 'FROM ' . xfcqQuestion::TABLE_NAME . ' qst ';
-        $query .= 'LEFT JOIN ' . xfcqQuestionTaxNode::TABLE_NAME . ' tax_nodes ON tax_nodes.qst_id = qst.id ';
+        $query .= 'LEFT JOIN ';
+        $query .= '(SELECT GROUP_CONCAT(tax_node_id) as tax_node_ids, qst_id FROM ' . xfcqQuestionTaxNode::TABLE_NAME . ' GROUP BY qst_id) tax_nodes ON tax_nodes.qst_id = qst.id ';
 
         $where_statement = $this->buildWhereStatement();
         $query .= 'WHERE obj_id = ' . $this->parent_gui->getObjId() . ' ';
         $query .= $where_statement ? $where_statement : '';
         $query .= 'GROUP BY qst.id ';
-        $having_statement = $this->buildHavingStatement();
-        $query .= $having_statement ? $having_statement : '';
         $query .= $count ? ') as subtable' : '';
         $query .= isset($_GET[$this->getPrefix() . '_xpt']) || $count ? '' : 'LIMIT ' . (int) $this->getLimit() . ' OFFSET ' . (int) $this->getOffset();
 
@@ -444,6 +443,20 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         // inactive
         if ($this->filter['active'] == self::FILTER_ACTIVE_FALSE) {
             $where .= 'AND qst.active = 0 ';
+        }
+
+        //taxonomies
+        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+            $tax_nodes = array_filter($this->filter['taxonomy_' . $tax_id]);
+            $or = '';
+            if (count($tax_nodes)) {
+                $where .= 'AND (';
+                foreach ($tax_nodes as $tax_node) {
+                    $where .= $or . 'tax_node_ids LIKE "%,' .$tax_node . '" OR tax_node_ids LIKE "' .$tax_node . ',%" OR tax_node_ids LIKE "%,' .$tax_node . ',%" ';
+                    $or = 'OR ';
+                }
+                $where .= ') ';
+            }
         }
 
         return $where;
