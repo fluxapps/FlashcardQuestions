@@ -375,7 +375,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 
         $data_query = self::dic()->database()->query($this->buildQuery(false));
         $data = self::dic()->database()->fetchAll($data_query);
-        $data = $this->formatData($data);
+        if(count($data) > 0) {
+	        $data = $this->formatData($data);
+        }
+
         $this->setData($data);
     }
 
