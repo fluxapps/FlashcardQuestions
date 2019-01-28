@@ -41,7 +41,7 @@ class xfcqPageObjectGUI extends ilPageObjectGUI {
 	}
 
     function showPage() {
-        self::dic()->mainTemplate()->addInlineCss('div.xflcFlashcardPage img { max-width: ' . Config::getField(Config::C_MAX_IMG_WIDTH) . 'px !important; } div.xflcFlashcardPage .il-modal-lightbox img { max-width: 100% !important;}');
+        self::dic()->mainTemplate()->addInlineCss('div.xflcFlashcardPage img { max-width: ' . Config::getField(Config::C_MAX_IMG_WIDTH) . 'px !important; } div.xflcFlashcardPage .carousel-inner img { max-width: 100% !important;}');
         return parent::showPage();
     }
 
