@@ -97,7 +97,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         }
 
         $this->buildData();
-        self::dic()->mainTemplate()->addInlineCss('tr.xfcq_table_row img { max-width: 400px !important; }');
+        self::dic()->mainTemplate()->addInlineCss('tr.xfcq_table_row img { max-width: 400px !important; } tr.xfcq_table_row .carousel-inner img { max-width: 100% !important;}');
     }
 
 
