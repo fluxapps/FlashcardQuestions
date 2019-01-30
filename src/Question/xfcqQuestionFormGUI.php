@@ -105,9 +105,16 @@ class xfcqQuestionFormGUI extends ilPropertyFormGUI {
 
 		$this->question->setActive($this->getInput(self::F_ACTIVE));
 		foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
-			$this->question->setTaxNodesForTaxId($this->getInput(self::F_TAXONOMY . "_$tax_id"), $tax_id);
-		}
 
+			if(is_array($this->getInput(self::F_TAXONOMY . "_".$tax_id."_sel"))) {
+				$this->question->setTaxNodesForTaxId($this->getInput(self::F_TAXONOMY . "_".$tax_id."_sel"), $tax_id);
+			}
+			else {
+				$this->question->setTaxNodesForTaxId(array(), $tax_id);
+			}
+
+
+		}
 		$this->question->store();
 		self::dic()->ctrl()->setParameter($this->parent_gui, 'qst_id', $this->question->getId());
 

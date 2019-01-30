@@ -67,6 +67,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 
     function executeCommand() {
 	    // this is a bit hacky but has to be done, since the 'save' cmd is caught up in the parent::executeCommand()
+
 	    $cmd = self::dic()->ctrl()->getCmd();
 	    $next_class = self::dic()->ctrl()->getNextClass($this);
 	    if ($next_class == strtolower(ilObjTaxonomyGUI::class) && $cmd == 'save') {
