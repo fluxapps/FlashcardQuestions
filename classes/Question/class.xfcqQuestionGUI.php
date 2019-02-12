@@ -66,7 +66,12 @@ class xfcqQuestionGUI {
 		$next_class = self::dic()->ctrl()->getNextClass();
 
 		self::dic()->tabs()->clearTargets();
-		self::dic()->tabs()->setBackTarget(self::dic()->language()->txt('back'), self::dic()->ctrl()->getLinkTargetByClass(xfcqContentGUI::class));
+		self::dic()->tabs()->setBack2Target(self::plugin()->translate('back_to_list'), self::dic()->ctrl()->getLinkTargetByClass(xfcqContentGUI::class));
+		self::dic()->tabs()->setBackTarget(self::plugin()->translate('button_add_new_question'), self::dic()->ctrl()->getLinkTargetByClass(xfcqContentGUI::class,xfcqContentGUI::CMD_ADD));
+
+
+
+
 		self::dic()->ctrl()->saveParameter($this, self::GET_QUESTION_ID);
 		self::dic()->ctrl()->saveParameter($this, self::GET_PAGE_ID);
 
