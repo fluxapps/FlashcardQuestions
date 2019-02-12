@@ -348,7 +348,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
      */
     public function exportData($format, $send = false)
     {
-        $pdf = new xfcqMPDF($this->parent_gui->getObject(), $this->getData());
+        $pdf = new xfcqMPDF($this->parent_gui->getObject(), $this->getData(),$this->filter);
         switch ($format) {
             case self::EXPORT_QUESTIONS_ANSWERS:
                 $pdf->printID(false);
@@ -449,20 +449,35 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         }
 
         //taxonomies
-        foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
-            $tax_nodes = array_filter($this->filter['taxonomy_' . $tax_id]);
-            $or = '';
-            if (count($tax_nodes)) {
-                $where .= 'AND (';
-                foreach ($tax_nodes as $tax_node) {
-                    $where .= $or . 'tax_node_ids LIKE "%,' .$tax_node . '" OR tax_node_ids LIKE "' .$tax_node . ',%" OR tax_node_ids LIKE "%,' .$tax_node . ',%" ';
-                    $or = 'OR ';
-                }
-                $where .= ') ';
-            }
+
+	    $tax_id_tax_nodes = $this->getTaxNodesByFilter();
+
+        if(count($tax_id_tax_nodes)) {
+	        foreach ($tax_id_tax_nodes as $tax_nodes) {
+
+	            $or = '';
+	            if (count($tax_nodes)) {
+	                $where .= 'AND (';
+	                foreach ($tax_nodes as $tax_node) {
+	                    $where .= $or . 'tax_node_ids LIKE "%,' .$tax_node . '" OR tax_node_ids LIKE "' .$tax_node . ',%" OR tax_node_ids LIKE "%,' .$tax_node . ',%" ';
+	                    $or = 'OR ';
+	                }
+	                $where .= ') ';
+	            }
+	        }
         }
 
+
         return $where;
+    }
+
+    protected function getTaxNodesByFilter() {
+	    $tax_id_tax_nodes = array();
+	    foreach ($this->parent_gui->getObject()->getTaxonomyIds() as $tax_id) {
+		    $tax_id_tax_nodes[$tax_id] = array_filter($this->filter['taxonomy_' . $tax_id]);
+	    }
+
+	    return $tax_id_tax_nodes;
     }
 
     /**

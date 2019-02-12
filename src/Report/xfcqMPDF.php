@@ -61,10 +61,11 @@ class xfcqMPDF implements xfcqPDF
     /**
      * @param ilObjFlashcardQuestions $flashcard_questions
      * @param array $data
+     * @param array $tax_id_tax_nodes
      * @throws \Mpdf\MpdfException
      * @throws \srag\DIC\FlashcardQuestions\Exception\DICException
      */
-    public function __construct($flashcard_questions, $data)
+    public function __construct($flashcard_questions, $data,$tax_id_tax_nodes)
     {
         $this->data = $data;
         $this->flashcard_questions = $flashcard_questions;
@@ -76,7 +77,7 @@ class xfcqMPDF implements xfcqPDF
             $this->lvl_2 = null;
         }
 
-        $this->structureData();
+        $this->structureData($tax_id_tax_nodes);
         $tmp_name = ilUtil::ilTempnam();
         $this->mpdf = new Mpdf(['tempDir' => $tmp_name]);
         // Add global styles to style the reports HTML
@@ -296,7 +297,7 @@ class xfcqMPDF implements xfcqPDF
      *          ...
      *      ...
      */
-    protected function structureData() {
+    protected function structureData($tax_id_tax_nodes) {
         if (!$this->lvl_1) {
             return;
         }
@@ -315,14 +316,31 @@ class xfcqMPDF implements xfcqPDF
             }
 
             foreach ($set['tax_node_ids'][$this->lvl_1] as $node_1) {
+
+	            if(is_array($tax_id_tax_nodes["taxonomy_$this->lvl_1"])) {
+		            if(!in_array($node_1,$tax_id_tax_nodes["taxonomy_$this->lvl_1"])) {
+			            continue;
+		            }
+	            }
+
+
                 if (!$this->lvl_2) {
                     $structured_data[$node_1] = $set;
                     continue;
                 }
                 foreach ($set['tax_node_ids'][$this->lvl_2] as $node_2) {
+	                if(is_array($tax_id_tax_nodes["taxonomy_$this->lvl_2"])) {
+		                if(!in_array($node_2,$tax_id_tax_nodes["taxonomy_$this->lvl_2"])) {
+			                continue;
+		                }
+	                }
+
+
                     if (!is_array($structured_data[$node_1])) {
                         $structured_data[$node_1] = array();
                     }
+
+
                     $structured_data[$node_1][$node_2][] = $set;
                 }
             }
