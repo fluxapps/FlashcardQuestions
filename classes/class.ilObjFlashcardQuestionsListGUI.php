@@ -43,7 +43,7 @@ class ilObjFlashcardQuestionsListGUI extends ilObjectPluginListGUI {
 	 */
 	public function initCommands() {
 		$this->commands_enabled = true;
-		$this->copy_enabled = true;
+		$this->copy_enabled = false;
 		$this->cut_enabled = true;
 		$this->delete_enabled = true;
 		$this->description_enabled = true;

@@ -180,8 +180,6 @@ class ilObjFlashcardQuestions extends ilObjectPlugin {
     }
 
 	protected function beforeCloneObject() {
-		ilUtil::sendFailure(self::plugin()->translate('copy_not_possible'), true);
-		self::dic()->ctrl()->setParameterByClass(ilObjFlashcardQuestionsGUI::class,'ref_id',$this->getRefId());
-		self::dic()->ctrl()->redirectByClass([ilUIPluginRouterGUI::class,ilObjPluginDispatchGUI::class,ilObjFlashcardQuestionsGUI::class], ilObjFlashcardQuestionsGUI::CMD_SHOW_CONTENTS);
-	}
+
+    }
 }
