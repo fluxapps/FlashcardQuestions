@@ -35,6 +35,7 @@ class ilObjFlashcardQuestionsGUI extends ilObjectPluginGUI {
 	const CMD_SETTINGS_STORE = "settingsStore";
 	const CMD_SHOW_CONTENTS = "showContents";
 	const CMD_MIGRATE = 'migrate';
+
 	// TABS
 	const TAB_PERMISSIONS = "perm_settings";
 	const TAB_SETTINGS = "settings";
