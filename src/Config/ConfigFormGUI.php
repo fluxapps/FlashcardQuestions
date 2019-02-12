@@ -68,8 +68,8 @@ class ConfigFormGUI extends ActiveRecordConfigFormGUI {
                     $file_obj->create();
                     $file_obj->getUploadFile($_FILES[Config::C_REPORT_LOGO]["tmp_name"], $_FILES[Config::C_REPORT_LOGO]["name"]);
                 }
-
-                Config::setField(Config::C_REPORT_LOGO, $file_obj->getId());
+                parent::storeValue(Config::C_REPORT_LOGO,$file_obj->getId());
+                break;
             default:
                 parent::storeValue($key, $value);
         }
