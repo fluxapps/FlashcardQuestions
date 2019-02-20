@@ -22,9 +22,9 @@ Please use it for further development!
 
 ### Adjustment suggestions
 * Adjustment suggestions by pull requests
-* Adjustment suggestions which are not yet worked out in detail by Jira tasks under https://jira.studer-raimann.ch/projects/PLFlashcardQuestions
-* Bug reports under https://jira.studer-raimann.ch/projects/PLFlashcardQuestions
-* For external users you can report it at https://plugins.studer-raimann.ch/goto.php?target=uihk_srsu_PLFlashcardQuestions
+* Adjustment suggestions which are not yet worked out in detail by Jira tasks under https://jira.studer-raimann.ch/projects/PLFCQ
+* Bug reports under https://jira.studer-raimann.ch/projects/PLFCQ
+* For external users you can report it at https://plugins.studer-raimann.ch/goto.php?target=uihk_srsu_PLFCQ
 
 ### Plugin SLA
 Wir lieben und leben die Philosophie von Open Source Software! Die meisten unserer Entwicklungen, welche wir im Kundenauftrag oder in Eigenleistung entwickeln, stellen wir öffentlich allen Interessierten kostenlos unter https://github.com/studer-raimann zur Verfügung.
