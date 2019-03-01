@@ -135,6 +135,7 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         $formatted_data = [];
         $data = $this->formatTaxNodes($data);
         foreach ($data as $a_set) {
+
             $formatted_set = [];
             $formatted_set['active'] = $this->getActiveIcon($a_set['active']);
             $formatted_set['id'] =  $a_set['obj_id'] . '.' . $a_set['id'];

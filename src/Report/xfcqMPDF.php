@@ -317,7 +317,7 @@ class xfcqMPDF implements xfcqPDF
 
             foreach ($set['tax_node_ids'][$this->lvl_1] as $node_1) {
 
-	            if(is_array($tax_id_tax_nodes["taxonomy_$this->lvl_1"])) {
+	            if(is_array($tax_id_tax_nodes["taxonomy_$this->lvl_1"]) && count($tax_id_tax_nodes["taxonomy_$this->lvl_1"]) > 0) {
 		            if(!in_array($node_1,$tax_id_tax_nodes["taxonomy_$this->lvl_1"])) {
 			            continue;
 		            }
@@ -329,7 +329,7 @@ class xfcqMPDF implements xfcqPDF
                     continue;
                 }
                 foreach ($set['tax_node_ids'][$this->lvl_2] as $node_2) {
-	                if(is_array($tax_id_tax_nodes["taxonomy_$this->lvl_2"])) {
+	                if(is_array($tax_id_tax_nodes["taxonomy_$this->lvl_2"]) && count($tax_id_tax_nodes["taxonomy_$this->lvl_2"]) > 0) {
 		                if(!in_array($node_2,$tax_id_tax_nodes["taxonomy_$this->lvl_2"])) {
 			                continue;
 		                }
