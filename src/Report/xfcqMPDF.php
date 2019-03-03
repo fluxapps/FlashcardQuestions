@@ -105,7 +105,7 @@ class xfcqMPDF implements xfcqPDF
     protected function setPageFooter()
     {
         $tpl = self::plugin()->template('reports/tpl.pdf_footer.html', false, false);
-        $tpl->setVariable('DATE', strftime('%e.%d.%Y'));
+        $tpl->setVariable('DATE', strftime('%d.%m.%Y'));
         $this->mpdf->SetHTMLFooter($tpl->get());
     }
 
