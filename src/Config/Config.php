@@ -19,17 +19,6 @@ class Config extends ActiveRecordConfig {
      */
     protected static $fields = [
         self::C_REPORT_LOGO => self::TYPE_INTEGER,
-        self::C_MAX_IMG_WIDTH => self::TYPE_INTEGER
+        self::C_MAX_IMG_WIDTH => [self::TYPE_INTEGER, 500]
     ];
-
-    protected static function getDefaultValue($name, $type, $default_value) {
-        switch ($name) {
-            case self::C_MAX_IMG_WIDTH:
-                return 500;
-            default:
-                return $default_value;
-        }
-    }
-
-
 }
