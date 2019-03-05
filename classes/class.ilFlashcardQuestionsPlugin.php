@@ -4,6 +4,7 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
+use srag\Plugins\FlashcardQuestions\Config\Config;
 use srag\Plugins\FlashcardQuestions\Object\Obj;
 use srag\Plugins\FlashcardQuestions\Question\xfcqQuestion;
 use srag\RemovePluginDataConfirm\FlashcardQuestions\RepositoryObjectPluginUninstallTrait;
@@ -70,5 +71,6 @@ class ilFlashcardQuestionsPlugin extends ilRepositoryObjectPlugin {
         }
 		self::dic()->database()->dropTable(Obj::TABLE_NAME, false);
 		self::dic()->database()->dropTable(xfcqQuestion::TABLE_NAME, false);
+		self::dic()->database()->dropTable(Config::TABLE_NAME, false);
 	}
 }
