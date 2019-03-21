@@ -121,6 +121,9 @@ class xfcqMPDF implements xfcqPDF
         $tpl->setVariable('LOGO_SRC', ilObjFile::_lookupAbsolutePath($file_id));
         $tpl->setVariable('REPORT_TITLE', $this->flashcard_questions->getProfessionTitle());
         $tpl->setVariable('REPORT_SUBTITLE', $this->flashcard_questions->getTitle());
+
+        $tpl->setVariable('REPORT_WITHOUT_GUARANTEE',self::plugin()->translate("without guarantee"));
+
         $tpl->setVariable('CONTENT_OVERVIEW', $this->renderContentOverview());
         $this->html($tpl->get());
         $this->mpdf->TOCpagebreakByArray(array(

@@ -24,6 +24,13 @@ h4 {
     padding-bottom: 0;
 }
 
+.without_guarantee {
+    background-color: #ADADAD;
+    padding: 20px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
 .warning {
     color: #EB1C23;
     font-weight: bold;
