@@ -4,6 +4,7 @@ namespace srag\Plugins\FlashcardQuestions\GlossaryMigration;
 
 use ilFlashcardQuestionsPlugin;
 use ilGlossaryDefinition;
+use ilObject;
 use ilObjFlashcardQuestions;
 use ilObjGlossary;
 use ilObjTaxonomy;
@@ -98,8 +99,16 @@ class GlossaryMigration {
 
             $mapping_ref_ids[$glossary->getRefId()] = $ilObjFlashcardQuestions->getRefId();
 
-            // move glossary to trash
-            self::dic()->tree()->moveToTrash($glossary->getRefId());
+            // Read the Parent Title and RefId
+	        // Add the Perent Title and RefId to Glossary Title
+	        // Move the Glossary to the Repository Root for manual archiving
+	        $parent_ref_id = self::dic()->tree()->getParentId($glossary->getRefId());
+	        $parent_object = new ilObject($parent_ref_id);
+
+	        $glossary->setTitle($parent_object->getTitle()." / ".$parent_object->getRefId()." | ".$glossary->getTitle());
+	        $glossary->update();
+	        // $parent_object
+            self::dic()->tree()->moveTree($glossary->getRefId(),1);
         }
 
         var_dump($mapping_ref_ids);exit;
