@@ -5,6 +5,7 @@ namespace srag\Plugins\FlashcardQuestions\GlossaryMigration;
 use gl2tstTest;
 use ilFlashcardQuestionsPlugin;
 use ilGlossaryDefinition;
+use ilObjCategory;
 use ilObject;
 use ilObjFlashcardQuestions;
 use ilObjGlossary;
@@ -134,12 +135,16 @@ class GlossaryMigrationWKV {
 	        // Add the Perent Title and RefId to Glossary Title
 	        // Move the Glossary to the Repository Root for manual archiving
 	        $parent_ref_id = self::dic()->tree()->getParentId($glossary->getRefId());
-	        $parent_object = new ilObject($parent_ref_id);
+	        if(ilObject::_lookupType($parent_ref_id, true) == "cat") {
+		        $parent_object = new ilObjCategory($parent_ref_id);
 
-	        $glossary->setTitle($parent_object->getTitle()." / ".$parent_object->getRefId()." | ".$glossary->getTitle());
-	        $glossary->update();
-	        // $parent_object
-	        self::dic()->tree()->moveTree($glossary->getRefId(),1);
+		        $glossary->setTitle($parent_object->getTitle()." / ".$parent_object->getRefId()." | ".$glossary->getTitle());
+		        $glossary->update();
+		        // $parent_object
+		        self::dic()->tree()->moveTree($glossary->getRefId(),1);
+	        }
+
+
         }
 
         return $mapping_ref_ids;
