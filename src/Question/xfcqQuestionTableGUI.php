@@ -349,6 +349,11 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
      */
     public function exportData($format, $send = false)
     {
+        // increase token lifetime for big exports
+        require_once('./Services/WebAccessChecker/classes/class.ilWACSignedPath.php');
+        \ilWACSignedPath::setTokenMaxLifetimeInSeconds(\ilWACSignedPath::MAX_LIFETIME);
+        \ilWACSignedPath::setCookieMaxLifetimeInSeconds(\ilWACSignedPath::MAX_LIFETIME);
+
         $pdf = new xfcqMPDF($this->parent_gui->getObject(), $this->getData(),$this->filter);
         switch ($format) {
             case self::EXPORT_QUESTIONS_ANSWERS:
