@@ -16,6 +16,9 @@ use ilTaxonomyNode;
 use ilTaxSelectInputGUI;
 use ilTextInputGUI;
 use ilUtil;
+use ilWACException;
+use ilWACSignedPath;
+use Mpdf\MpdfException;
 use srag\DIC\FlashcardQuestions\DICTrait;
 use srag\DIC\FlashcardQuestions\Exception\DICException;
 use srag\Plugins\FlashcardQuestions\Report\xfcqMPDF;
@@ -345,15 +348,10 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
      * @param int $format
      * @param bool $send
      * @throws DICException
-     * @throws \Mpdf\MpdfException
+     * @throws MpdfException
      */
     public function exportData($format, $send = false)
     {
-        // increase token lifetime for big exports
-        require_once('./Services/WebAccessChecker/classes/class.ilWACSignedPath.php');
-        \ilWACSignedPath::setTokenMaxLifetimeInSeconds(\ilWACSignedPath::MAX_LIFETIME);
-        \ilWACSignedPath::setCookieMaxLifetimeInSeconds(\ilWACSignedPath::MAX_LIFETIME);
-
         $pdf = new xfcqMPDF($this->parent_gui->getObject(), $this->getData(),$this->filter);
         switch ($format) {
             case self::EXPORT_QUESTIONS_ANSWERS:
@@ -376,6 +374,11 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
      *
      */
     protected function buildData() {
+        if ($this->getExportMode()) {
+            // the export can take very long, so we need longer web access checker token lifetimes
+            $this->increaseWACTokenLifetime();
+        }
+
         $count_query = self::dic()->database()->query($this->buildQuery(true));
         $this->setMaxCount((int) $count_query->fetchAssoc()['total_rows']);
 
@@ -513,4 +516,15 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
         return $having ? 'HAVING ' . $having : false;
     }
 
+
+    /**
+     * @throws ilWACException
+     */
+    protected function increaseWACTokenLifetime()
+    {
+        // increase token lifetime for big exports
+        require_once('./Services/WebAccessChecker/classes/class.ilWACSignedPath.php');
+        ilWACSignedPath::setTokenMaxLifetimeInSeconds(ilWACSignedPath::MAX_LIFETIME);
+        ilWACSignedPath::setCookieMaxLifetimeInSeconds(ilWACSignedPath::MAX_LIFETIME);
+    }
 }
