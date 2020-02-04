@@ -468,7 +468,11 @@ class xfcqQuestionTableGUI extends ilTable2GUI {
 	            if (count($tax_nodes)) {
 	                $where .= 'AND (';
 	                foreach ($tax_nodes as $tax_node) {
-	                    $where .= $or . 'tax_node_ids LIKE "%,' .$tax_node . '" OR tax_node_ids LIKE "' .$tax_node . ',%" OR tax_node_ids LIKE "%,' .$tax_node . ',%" ';
+	                    $where .= $or
+                            . 'tax_node_ids LIKE "%,'  . $tax_node . '" ' .
+                            'OR tax_node_ids LIKE "' . $tax_node . ',%" ' .
+                            'OR tax_node_ids LIKE "%,' . $tax_node . ',%" ' .
+                            'OR tax_node_ids = "' . $tax_node .'"';
 	                    $or = 'OR ';
 	                }
 	                $where .= ') ';
